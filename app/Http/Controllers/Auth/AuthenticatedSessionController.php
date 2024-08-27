@@ -32,10 +32,22 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-
-        return redirect()->intended(route('dashboard', absolute: false));
+        $user = auth()->user();
+        if ($user->role === 'admin') {
+            // If the user is an admin, redirect to the admin dashboard
+            return redirect()->intended(route('admin.dashboard', absolute: false));
+        } elseif ($user->role === 'farmer') {
+            // If the user is a farmer, redirect to the farmer dashboard
+            return redirect()->intended(route('farmer.dashboard', absolute: false));
+        } elseif ($user->role === 'buyer') {
+            // If the user is a buyer, redirect to the buyer dashboard
+            return redirect()->intended(route('buyer.dashboard', absolute: false));
+        } else {
+            // Handle other roles or redirect to a default dashboard
+            return redirect()->intended(route('dashboard', absolute: false));
+        }
     }
-
+   
     /**
      * Destroy an authenticated session.
      */

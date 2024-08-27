@@ -8,6 +8,7 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
     name: '',
+    role: '',
     email: '',
     password: '',
     password_confirmation: '',
@@ -19,7 +20,6 @@ const submit = () => {
     });
 };
 </script>
-
 <template>
     <GuestLayout>
         <Head title="Register" />
@@ -84,6 +84,17 @@ const submit = () => {
                 />
 
                 <InputError class="mt-2" :message="form.errors.password_confirmation" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="role" value="Role" />
+
+                <select id="role" v-model="form.role" class="mt-1 block w-full">
+                    <option value="farmer">Farmer</option>
+                    <option value="buyer">Buyer</option>
+                </select>
+
+                <InputError class="mt-2" :message="form.errors.role" />
             </div>
 
             <div class="flex items-center justify-end mt-4">
