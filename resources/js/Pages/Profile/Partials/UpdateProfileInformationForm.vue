@@ -4,6 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 defineProps({
     mustVerifyEmail: {
@@ -20,13 +21,29 @@ const form = useForm({
     name: user.name,
     email: user.email,
 });
+
+// For handling the profile picture
+const profilePicture = ref(null);
+const imageUrl = ref(user.profile_picture || ''); // Assuming you have a default or existing image URL
+
+const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            imageUrl.value = e.target.result; // Set the image URL to display
+        };
+        reader.readAsDataURL(file);
+        profilePicture.value = file; // Store the file for form submission
+    }
+};
 </script>
 
 <template>
     <section>
+
         <header>
             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Profile Information</h2>
-
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                 Update your account's profile information and email address.
             </p>
@@ -35,7 +52,6 @@ const form = useForm({
         <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
             <div>
                 <InputLabel for="name" value="Name" />
-
                 <TextInput
                     id="name"
                     type="text"
@@ -45,13 +61,11 @@ const form = useForm({
                     autofocus
                     autocomplete="name"
                 />
-
                 <InputError class="mt-2" :message="form.errors.name" />
             </div>
 
             <div>
                 <InputLabel for="email" value="Email" />
-
                 <TextInput
                     id="email"
                     type="email"
@@ -60,9 +74,10 @@ const form = useForm({
                     required
                     autocomplete="username"
                 />
-
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
+
+            
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
                 <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
