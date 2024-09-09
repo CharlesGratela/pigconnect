@@ -41,7 +41,8 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended(route('farmer.dashboard', absolute: false));
         } elseif ($user->role === 'buyer') {
             // If the user is a buyer, redirect to the buyer dashboard
-            return redirect()->intended(route('buyer.dashboard', absolute: false));
+            
+            return redirect()->intended(route('buyer.dashboard', absolute: false))->with('success', 'Login successful');
         } else {
             // Handle other roles or redirect to a default dashboard
             return redirect()->intended(route('dashboard', absolute: false));

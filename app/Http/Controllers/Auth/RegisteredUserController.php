@@ -48,7 +48,16 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+        if($user->role == 'farmer')
+        {
+        return redirect(route('farmer.dashboard', absolute: false));
+        }
+        else if($user->role == 'buyer')
+        {
+            return redirect(route('buyer.dashboard', absolute: false));
+        }
+        else{
+            return redirect(route('/', absolute: false));
+        }
     }
 }
