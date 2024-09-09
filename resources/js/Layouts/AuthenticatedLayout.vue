@@ -10,9 +10,7 @@ import { Link } from '@inertiajs/vue3';
 const showingNavigationDropdown = ref(false);
 const showingSidebar = ref(false);
 
-function toggleSidebar() {
-  showingSidebar.value = !showingSidebar.value;
-}
+
 
 </script>
 
@@ -40,10 +38,10 @@ function toggleSidebar() {
                                 </NavLink>
                                 <template v-if=" $page.props.auth.user.role == 'farmer'">
                       
-        <NavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
+        <NavLink :href="route('farmer.pigfarminformation')">
             Farm Information
         </NavLink>
-        <NavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
+        <NavLink :href="redirectToPigFarmInformation">
             Pig Information
         </NavLink>
     </template>
@@ -53,7 +51,7 @@ function toggleSidebar() {
                           Buyer Information
                       </NavLink>
                       <NavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
-                          Pig Information
+                          Favorites
                       </NavLink>
                   </template>
                             </div>
@@ -136,12 +134,27 @@ function toggleSidebar() {
                     class="sm:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
-                            Dashboard
+                       
+                        <template v-if=" $page.props.auth.user.role == 'farmer'">
+                            <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
+                         Home
+                        </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
+                            Farm Information
                         </ResponsiveNavLink>
                         <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
                             Pig Information
                         </ResponsiveNavLink>
+                  </template>
+                  <template v-if=" $page.props.auth.user.role == 'buyer'">
+                                    
+                    <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
+                         Buyer Information
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
+                           Favorites
+                        </ResponsiveNavLink>
+                                </template>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -182,8 +195,10 @@ function toggleSidebar() {
 export default {
    
     computed: {
-        // Define a computed property to determine the dashboard route based on the user's role
-
+         // Define a computed property to determine the dashboard route based on the user's role
+         redirectToPigFarmInformation() {
+        return route('farmer.pigfarminformation');
+     },
 
         dashboardRoute() {
             const role = this.$page.props.auth.user.role;

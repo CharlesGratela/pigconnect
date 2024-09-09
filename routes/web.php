@@ -18,6 +18,9 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/pigfarminformation', function () {
+    return Inertia::render('FarmerView/FarmInformation');
+})->middleware(['auth', 'verified'])->name('farmer.pigfarminformation');
 Route::get('/farmerdashboard', function () {
     return Inertia::render('FarmerDashboard');
 })->middleware(['auth', 'verified'])->name('farmer.dashboard');
