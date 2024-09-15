@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FarmInformationController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -14,10 +15,11 @@ Route::get('/', function () {
     ]);
 });
 
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-
+Route::post('/pigfarminformation', [PigFarmInformationController::class, 'store'])->middleware(['auth', 'verified']);
 Route::get('/pigfarminformation', function () {
     return Inertia::render('FarmerView/FarmInformation');
 })->middleware(['auth', 'verified'])->name('farmer.pigfarminformation');
