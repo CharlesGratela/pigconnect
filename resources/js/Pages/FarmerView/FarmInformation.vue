@@ -1,138 +1,21 @@
-/**
- *
- * This Vue component represents the Farm Information page for the FarmerView.
- * It uses the `AuthenticatedLayout` for the layout and `@inertiajs/vue3` for page navigation.
- * The component integrates a map using the Leaflet library to allow users to select a location.
- * 
- * Data Properties:
- * - feedingType: Type of feeding (feed or natural).
- * - frequencyOfFeeding: Frequency of feeding.
- * - minPricePerKilo: Minimum price per kilo.
- * - maxPricePerKilo: Maximum price per kilo.
- * - location: Object containing latitude and longitude of the selected location.
- * 
- * Methods:
- * - initMap: Initializes the Leaflet map, sets up the tile layer, marker, and geocoder.
- * - submitForm: Handles form submission and logs the form data to the console.
- * 
- * Template:
- * - Displays a form with fields for location, feeding type, frequency of feeding, minimum price per kilo, and maximum price per kilo.
- * - The map is displayed in a div with id "map".
- * - The form submission is handled by the `submitForm` method.
- * 
- * Styles:
- * - The map div has a height of 400px and width of 100%.
- */
-<script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
-import { ref } from 'vue';
-const location = ref('');
-const feedingType = ref('feed');
-const frequencyOfFeeding = ref('');
-const minPricePerKilo = ref('');
-const maxPricePerKilo = ref('');
-
-</script>
-
-<style>
-#map {
-  height: 400px;
-  width: 100%;
-}
-</style>
-<script>
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
-import 'leaflet-control-geocoder';
-
-export default {
-  data() {
-    return {
-      feedingType: '',
-      frequencyOfFeeding: '',
-      minPricePerKilo: '',
-      maxPricePerKilo: '',
-      location: {
-        lat: 0,
-        lng: 0
-      }
-    };
-  },
-  mounted() {
-    this.initMap();
-  },
-  methods: {
-    initMap() {
-      const map = L.map('map').setView([51.505, -0.09], 13);
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
-
-      const marker = L.marker([51.505, -0.09], { draggable: true }).addTo(map);
-
-      marker.on('dragend', (event) => {
-        const position = marker.getLatLng();
-        this.location.lat = position.lat;
-        this.location.lng = position.lng;
-      });
-
-      const geocoder = L.Control.geocoder({
-        defaultMarkGeocode: false
-      })
-        .on('markgeocode', (e) => {
-          const bbox = e.geocode.bbox;
-          const poly = L.polygon([
-            bbox.getSouthEast(),
-            bbox.getNorthEast(),
-            bbox.getNorthWest(),
-            bbox.getSouthWest()
-          ]).addTo(map);
-          map.fitBounds(poly.getBounds());
-          marker.setLatLng(e.geocode.center);
-          this.location.lat = e.geocode.center.lat;
-          this.location.lng = e.geocode.center.lng;
-        })
-        .addTo(map);
-    },
-    submitForm() {
-      // Handle form submission
-      console.log('Form submitted with:', {
-        feedingType: this.feedingType,
-        frequencyOfFeeding: this.frequencyOfFeeding,
-        minPricePerKilo: this.minPricePerKilo,
-        maxPricePerKilo: this.maxPricePerKilo,
-        location: this.location
-      });
-    }
-  }
-};
-</script>
-
 <template>
-  <Head title="Dashboard" />
-
-  <AuthenticatedLayout>
-    <template #header>'    
-      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Farm Details</h2>
-    </template>
-
-    <div class="flex">
-      <!-- Sidebar -->
-   
-
-      <!-- Main Content -->
-      <main class="flex-grow p-4">
-       
-
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-          <div class="p-6 text-gray-900 dark:text-gray-100">
-            <form @submit.prevent="submitForm">
+  <div>
+    <AuthenticatedLayout>
+      <template #header>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Farm Details</h2>
+      </template>
+      <main>
+        <div class="flex justify-center">
+          <div class="w-[75%]">
+            <form @submit.prevent="submitForm" class="place-content-center">
               <div class="mb-4">
                 <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Location</label>
                 <div id="map" class="w-full h-64"></div>
+              </div>
+
+              <div class="mb-4">
+                <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
+                <input type="text" id="address" v-model="address" class="mt-1 block w-full p-2.5 bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly />
               </div>
 
               <div class="mb-4">
@@ -163,6 +46,160 @@ export default {
           </div>
         </div>
       </main>
-    </div>
-  </AuthenticatedLayout>
+    </AuthenticatedLayout>
+  </div>
 </template>
+
+<script setup>
+import { ref, reactive, onMounted } from 'vue';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
+import 'leaflet-control-geocoder';
+
+const feedingType = ref('');
+const frequencyOfFeeding = ref('');
+const minPricePerKilo = ref('');
+const maxPricePerKilo = ref('');
+const location = reactive({
+  lat: 0,
+  lng: 0
+});
+const address = ref(''); // Add a reactive property for the address
+
+let map;
+let marker;
+
+const fetchFarmInformation = async () => {
+  try {
+    const response = await fetch('/api/pigfarminformation', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}` // Ensure the token is sent with the request
+      },
+      credentials: 'include' // Ensure cookies are sent with the request
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    console.log(data);
+  
+    if (data) {
+      feedingType.value = data.feeding_type;
+      frequencyOfFeeding.value = data.frequency_of_feeding;
+      minPricePerKilo.value = data.min_price_per_kilo;
+      maxPricePerKilo.value = data.max_price_per_kilo;
+      location.lat = data.latitude;
+      location.lng = data.longitude;
+
+      // Update marker position
+      if (marker) {
+        marker.setLatLng([location.lat, location.lng]);
+        map.setView([location.lat, location.lng], 13);
+      }
+
+      // Perform reverse geocoding to get the address
+      await reverseGeocode(location.lat, location.lng);
+    }
+  } catch (error) {
+    console.error('Error fetching farm information:', error);
+  }
+};
+
+const reverseGeocode = async (lat, lng) => {
+  const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    console.log('Reverse Geocoding Result:', data);
+    address.value = data.display_name; // Store the address in the reactive property
+  } catch (error) {
+    console.error('Error performing reverse geocoding:', error);
+  }
+};
+
+const initMap = () => {
+  map = L.map('map').setView([location.lat, location.lng], 13);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  marker = L.marker([location.lat, location.lng], { draggable: true }).addTo(map);
+
+  marker.on('dragend', async (event) => {
+    const position = marker.getLatLng();
+    location.lat = position.lat;
+    location.lng = position.lng;
+    await reverseGeocode(location.lat, location.lng); // Perform reverse geocoding on marker drag end
+  });
+
+  const geocoder = L.Control.geocoder({
+    defaultMarkGeocode: false
+  })
+    .on('markgeocode', (e) => {
+      const bbox = e.geocode.bbox;
+      const poly = L.polygon([
+        bbox.getSouthEast(),
+        bbox.getNorthEast(),
+        bbox.getNorthWest(),
+        bbox.getSouthWest()
+      ]).addTo(map);
+      map.fitBounds(poly.getBounds());
+      marker.setLatLng(e.geocode.center);
+      location.lat = e.geocode.center.lat;
+      location.lng = e.geocode.center.lng;
+      reverseGeocode(location.lat, location.lng); // Perform reverse geocoding on geocode result
+    })
+    .addTo(map);
+};
+
+const submitForm = async () => {
+  try {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const response = await fetch('/api/pigfarminformation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+        'Authorization': `Bearer ${localStorage.getItem('token')}` // Ensure the token is sent with the request
+      },
+      body: JSON.stringify({
+        feedingType: feedingType.value,
+        frequencyOfFeeding: frequencyOfFeeding.value,
+        minPricePerKilo: minPricePerKilo.value,
+        maxPricePerKilo: maxPricePerKilo.value,
+        location: location
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    console.log('Form submitted successfully:', data);
+  } catch (error) {
+    console.error('Error submitting form:', error);
+  }
+};
+
+onMounted(() => {
+  fetchFarmInformation();
+  initMap();
+});
+</script>
+
+<style>
+#map {
+  height: 400px;
+  width: 100%;
+}
+</style>

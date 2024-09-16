@@ -1,34 +1,30 @@
 <?php
+// app/Http/Controllers/PigFarmInformationController.php
 
 namespace App\Http\Controllers;
 
-use App\Models\PigFarmInformation;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\PigFarmInformation;
+use Illuminate\Support\Facades\Auth;
 
 class PigFarmInformationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function show()
     {
-        //
+        $userId = Auth::id();
+        $farmInformation = PigFarmInformation::where('user_id', $userId)->first();
+
+        if ($farmInformation) {
+            return response()->json($farmInformation);
+        } else {
+            return response()->json(null, 404);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
+        $userId = Auth::id();
+
         $request->validate([
             'feedingType' => 'required|string',
             'frequencyOfFeeding' => 'required|string',
@@ -38,48 +34,21 @@ class PigFarmInformationController extends Controller
             'location.lng' => 'required|numeric',
         ]);
 
-        PigFarmInformation::create([
+        $data = [
+            'user_id' => $userId,
             'feeding_type' => $request->feedingType,
             'frequency_of_feeding' => $request->frequencyOfFeeding,
             'min_price_per_kilo' => $request->minPricePerKilo,
             'max_price_per_kilo' => $request->maxPricePerKilo,
             'latitude' => $request->location['lat'],
             'longitude' => $request->location['lng'],
-        ]);
+        ];
+
+        PigFarmInformation::updateOrCreate(
+            ['user_id' => $userId],
+            $data
+        );
 
         return response()->json(['message' => 'Pig farm information saved successfully']);
-    }
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(PigFarmInformation $pigFarmInformation)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PigFarmInformation $pigFarmInformation)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, PigFarmInformation $pigFarmInformation)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(PigFarmInformation $pigFarmInformation)
-    {
-        //
     }
 }
