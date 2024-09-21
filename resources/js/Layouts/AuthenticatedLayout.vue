@@ -9,9 +9,6 @@ import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
 const showingSidebar = ref(false);
-
-
-
 </script>
 
 <template>
@@ -36,24 +33,28 @@ const showingSidebar = ref(false);
                                 <NavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
                                     Dashboard
                                 </NavLink>
-                                <template v-if=" $page.props.auth.user.role == 'farmer'">
-                      
-        <NavLink :href="route('farmer.pigfarminformation')">
-            Farm Information
-        </NavLink>
-        <NavLink :href="redirectToPigFarmInformation">
-            Pig Information
-        </NavLink>
-    </template>
-    <template v-if=" $page.props.auth.user.role == 'buyer'">
-                      
-                      <NavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
-                          Buyer Information
-                      </NavLink>
-                      <NavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
-                          Favorites
-                      </NavLink>
-                  </template>
+                                <template v-if="$page.props.auth.user.role == 'farmer'">
+                                    <NavLink :href="route('farmer.pigfarminformation')">
+                                        Farm Information
+                                    </NavLink>
+                                    <NavLink :href="redirectToPigFarmInformation">
+                                        Pig Information
+                                    </NavLink>
+                                    <NavLink :href="route('farmer.expenses')">
+                                        Expenses
+                                    </NavLink>
+                                </template>
+                                <template v-if="$page.props.auth.user.role == 'buyer'">
+                                    <NavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
+                                        Buyer Information
+                                    </NavLink>
+                                    <NavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
+                                        Favorites
+                                    </NavLink>
+                                </template>
+                                <NavLink :href="route('chat')" :active="route().current('chat')">
+                                    Messages
+                                </NavLink>
                             </div>
                         </div>
 
@@ -134,27 +135,31 @@ const showingSidebar = ref(false);
                     class="sm:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
-                       
-                        <template v-if=" $page.props.auth.user.role == 'farmer'">
+                        <template v-if="$page.props.auth.user.role == 'farmer'">
                             <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
-                         Home
-                        </ResponsiveNavLink>
+                                Home
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('farmer.pigfarminformation')" :active="route().current('farmer.pigfarminformation')">
+                                Farm Information
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="redirectToPigFarmInformation" :active="route().current('farmer.pigfarminformation')">
+                                Pig Information
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('farmer.expenses')" :active="route().current('farmer.expenses')">
+                                Expenses
+                            </ResponsiveNavLink>
+                        </template>
+                        <template v-if="$page.props.auth.user.role == 'buyer'">
                             <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
-                            Farm Information
+                                Buyer Information
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
+                                Favorites
+                            </ResponsiveNavLink>
+                        </template>
+                        <ResponsiveNavLink :href="route('chat')" :active="route().current('chat')">
+                            Messages
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
-                            Pig Information
-                        </ResponsiveNavLink>
-                  </template>
-                  <template v-if=" $page.props.auth.user.role == 'buyer'">
-                                    
-                    <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
-                         Buyer Information
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
-                           Favorites
-                        </ResponsiveNavLink>
-                                </template>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -193,12 +198,11 @@ const showingSidebar = ref(false);
 
 <script>
 export default {
-   
     computed: {
-         // Define a computed property to determine the dashboard route based on the user's role
-         redirectToPigFarmInformation() {
-        return route('farmer.pigfarminformation');
-     },
+        // Define a computed property to determine the dashboard route based on the user's role
+        redirectToPigFarmInformation() {
+            return route('farmer.pigfarminformation');
+        },
 
         dashboardRoute() {
             const role = this.$page.props.auth.user.role;

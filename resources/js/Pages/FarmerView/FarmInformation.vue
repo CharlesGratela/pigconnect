@@ -186,6 +186,8 @@ const submitForm = async () => {
 
     const data = await response.json();
     console.log('Form submitted successfully:', data);
+      // Re-fetch the farm information to reflect the updated details
+      await fetchFarmInformation();
   } catch (error) {
     console.error('Error submitting form:', error);
   }
