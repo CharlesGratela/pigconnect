@@ -5,10 +5,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PigFarmInformationController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\PigController;
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/pigfarminformation', [PigFarmInformationController::class, 'show']);
     Route::post('/pigfarminformation', [PigFarmInformationController::class, 'store']);
 });
+
+Route::get('/pigs', [PigController::class, 'index']);
+Route::post('/pigs', [PigController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/expenses', [ExpenseController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/expenses', [ExpenseController::class, 'store']);
 Route::middleware('auth:sanctum')->group(function () {

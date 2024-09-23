@@ -31,6 +31,9 @@ Route::get('/pigfarminformation', function () {
 Route::get('/farmerdashboard', function () {
     return Inertia::render('FarmerDashboard');
 })->middleware(['auth', 'verified'])->name('farmer.dashboard');
+Route::get('/piginformation', function () {
+    return Inertia::render('FarmerView/PigInformation');
+})->middleware(['auth', 'verified'])->name('pig.information');
 Route::get('/buyerdashboard', function () {
     return Inertia::render('BuyerDashboard');
 })->middleware(['auth', 'verified'])->name('buyer.dashboard');
@@ -46,5 +49,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
  
 });
+
 
 require __DIR__.'/auth.php';

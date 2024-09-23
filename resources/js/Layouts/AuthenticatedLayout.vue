@@ -37,7 +37,7 @@ const showingSidebar = ref(false);
                                     <NavLink :href="route('farmer.pigfarminformation')">
                                         Farm Information
                                     </NavLink>
-                                    <NavLink :href="redirectToPigFarmInformation">
+                                    <NavLink :href="route('pig.information')">
                                         Pig Information
                                     </NavLink>
                                     <NavLink :href="route('farmer.expenses')">
