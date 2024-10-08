@@ -3,6 +3,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\VaccinationRecordController;
 use App\Http\Controllers\PigFarmInformationController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\PigController;
@@ -18,4 +19,14 @@ Route::middleware('auth:sanctum')->post('/expenses', [ExpenseController::class, 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/chat/messages', [ChatController::class, 'index']);
     Route::post('/chat/messages', [ChatController::class, 'store']);
+});
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/pigs/{pig}/vaccination-records', [VaccinationRecordController::class, 'index']);
+    Route::post('/pigs/{pig}/vaccination-records', [VaccinationRecordController::class, 'store']);
+    Route::get('/pigs/{pig}/vaccination-records/{id}', [VaccinationRecordController::class, 'show']);
+    Route::put('/pigs/{pig}/vaccination-records/{id}', [VaccinationRecordController::class, 'update']);
+    Route::delete('/pigs/{pig}/vaccination-records/{id}', [VaccinationRecordController::class, 'destroy']);
 });
