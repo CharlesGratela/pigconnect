@@ -53,10 +53,6 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
-import 'leaflet-control-geocoder';
 
 const feedingType = ref('');
 const frequencyOfFeeding = ref('');
@@ -97,8 +93,8 @@ const fetchFarmInformation = async () => {
 
       // Update marker position
       if (marker) {
-        marker.setLatLng([location.lat, location.lng]);
-        map.setView([location.lat, location.lng], 13);
+        marker.setGeometry({ lat: location.lat, lng: location.lng });
+        map.setCenter({ lat: location.lat, lng: location.lng });
       }
 
       // Perform reverse geocoding to get the address
@@ -110,7 +106,8 @@ const fetchFarmInformation = async () => {
 };
 
 const reverseGeocode = async (lat, lng) => {
-  const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
+  const apiKey = 'qlF4FtaLmEQCthTvcfBCq5pu3aBHKgyWbWbaCJhA_9c';
+  const url = `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${lat},${lng}&apikey=${apiKey}`;
 
   try {
     const response = await fetch(url);
@@ -119,46 +116,59 @@ const reverseGeocode = async (lat, lng) => {
     }
     const data = await response.json();
     console.log('Reverse Geocoding Result:', data);
-    address.value = data.display_name; // Store the address in the reactive property
+    if (data.items && data.items.length > 0) {
+      address.value = data.items[0].address.label;
+    }
   } catch (error) {
     console.error('Error performing reverse geocoding:', error);
   }
 };
 
 const initMap = () => {
-  map = L.map('map').setView([location.lat, location.lng], 13);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
-
-  marker = L.marker([location.lat, location.lng], { draggable: true }).addTo(map);
-
-  marker.on('dragend', async (event) => {
-    const position = marker.getLatLng();
-    location.lat = position.lat;
-    location.lng = position.lng;
-    await reverseGeocode(location.lat, location.lng); // Perform reverse geocoding on marker drag end
+  const platform = new H.service.Platform({
+    apikey: 'qlF4FtaLmEQCthTvcfBCq5pu3aBHKgyWbWbaCJhA_9c'
   });
 
-  const geocoder = L.Control.geocoder({
-    defaultMarkGeocode: false
-  })
-    .on('markgeocode', (e) => {
-      const bbox = e.geocode.bbox;
-      const poly = L.polygon([
-        bbox.getSouthEast(),
-        bbox.getNorthEast(),
-        bbox.getNorthWest(),
-        bbox.getSouthWest()
-      ]).addTo(map);
-      map.fitBounds(poly.getBounds());
-      marker.setLatLng(e.geocode.center);
-      location.lat = e.geocode.center.lat;
-      location.lng = e.geocode.center.lng;
-      reverseGeocode(location.lat, location.lng); // Perform reverse geocoding on geocode result
-    })
-    .addTo(map);
+  const defaultLayers = platform.createDefaultLayers();
+  map = new H.Map(document.getElementById('map'), defaultLayers.vector.normal.map, {
+    center: { lat: location.lat, lng: location.lng },
+    zoom: 13,
+    pixelRatio: window.devicePixelRatio || 1
+  });
+
+  const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+  const ui = H.ui.UI.createDefault(map, defaultLayers);
+
+  marker = new H.map.Marker({ lat: location.lat, lng: location.lng }, { volatility: true });
+  marker.draggable = true;
+  map.addObject(marker);
+
+  map.addEventListener('dragstart', function(ev) {
+    const target = ev.target;
+    if (target instanceof H.map.Marker) {
+      behavior.disable();
+    }
+  }, false);
+
+  map.addEventListener('dragend', async function(ev) {
+    const target = ev.target;
+    if (target instanceof H.map.Marker) {
+      behavior.enable();
+      const position = target.getGeometry();
+      location.lat = position.lat;
+      location.lng = position.lng;
+      map.setCenter({ lat: location.lat, lng: location.lng }); // Center the map on the new position
+      await reverseGeocode(location.lat, location.lng); // Perform reverse geocoding on marker drag end
+    }
+  }, false);
+
+  map.addEventListener('drag', function(ev) {
+    const target = ev.target;
+    if (target instanceof H.map.Marker) {
+      const pointer = ev.currentPointer;
+      target.setGeometry(map.screenToGeo(pointer.viewportX, pointer.viewportY));
+    }
+  }, false);
 };
 
 const submitForm = async () => {
@@ -186,8 +196,8 @@ const submitForm = async () => {
 
     const data = await response.json();
     console.log('Form submitted successfully:', data);
-      // Re-fetch the farm information to reflect the updated details
-      await fetchFarmInformation();
+    // Re-fetch the farm information to reflect the updated details
+    await fetchFarmInformation();
   } catch (error) {
     console.error('Error submitting form:', error);
   }
