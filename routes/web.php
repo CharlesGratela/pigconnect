@@ -27,7 +27,13 @@ Route::post('/pigfarminformation', [PigFarmInformationController::class, 'store'
 Route::get('/pigfarminformation', function () {
     
     return Inertia::render('FarmerView/FarmInformation');
+    
 })->middleware(['auth', 'verified'])->name('farmer.pigfarminformation');
+Route::get('/breedingrecord', function () {
+    
+    return Inertia::render('FarmerView/BreedingRecord');
+    
+})->middleware(['auth', 'verified'])->name('farmer.breedingrecord');
 Route::get('/farmerdashboard', function () {
     return Inertia::render('FarmerDashboard');
 })->middleware(['auth', 'verified'])->name('farmer.dashboard');
@@ -40,6 +46,7 @@ Route::get('/buyerdashboard', function () {
 Route::get('/admin', function () {
     return Inertia::render('AdminDashboard');
 })->middleware(['auth', 'verified'])->name('admin.dashboard');
+
 Route::get('/chat', function () {
     return Inertia::render('Chat');
 })->name('chat');

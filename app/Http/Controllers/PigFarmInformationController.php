@@ -17,7 +17,7 @@ class PigFarmInformationController extends Controller
         if ($farmInformation) {
             return response()->json($farmInformation);
         } else {
-            return response()->json(null, 404);
+            return response()->json(['message' => 'Pig farm information not found for user ID: ' . $userId], 404);
         }
     }
 

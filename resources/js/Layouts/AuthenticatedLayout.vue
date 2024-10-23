@@ -43,6 +43,9 @@ const showingSidebar = ref(false);
                                     <NavLink :href="route('farmer.expenses')">
                                         Expenses
                                     </NavLink>
+                                    <NavLink :href="route('farmer.breedingrecord')">
+                                        Breeding Record
+                                    </NavLink>
                                 </template>
                                 <template v-if="$page.props.auth.user.role == 'buyer'">
                                     <NavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
@@ -147,6 +150,9 @@ const showingSidebar = ref(false);
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('farmer.expenses')" :active="route().current('farmer.expenses')">
                                 Expenses
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('farmer.breedingrecord')" :active="route().current('farmer.breedingrecord')">
+                                Breeding Record
                             </ResponsiveNavLink>
                         </template>
                         <template v-if="$page.props.auth.user.role == 'buyer'">
