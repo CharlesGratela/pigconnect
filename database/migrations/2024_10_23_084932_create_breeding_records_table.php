@@ -16,8 +16,7 @@ class CreateBreedingRecordsTable extends Migration
             $table->date('expected_farrowing_date');
             $table->timestamps();
 
-            $table->foreign('sow_id')->references('id')->on('pigs')->onDelete('cascade');
-            $table->foreign('boar_id')->references('id')->on('pigs')->onDelete('cascade');
+         
         });
     }
 

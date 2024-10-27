@@ -11,23 +11,27 @@
             <table class="min-w-full bg-white dark:bg-gray-800">
               <thead>
                 <tr>
-                  <th class="py-2 text-left text-gray-700 dark:text-gray-300">ID</th>
-                  <th class="py-2 text-left text-gray-700 dark:text-gray-300">Pig Farm ID</th>
+                  <th class="py-2 text-left text-gray-700 dark:text-gray-300 hidden-mobile">ID</th>
+                  <th class="py-2 text-left text-gray-700 dark:text-gray-300 hidden-mobile">Pig Farm ID</th>
                   <th class="py-2 text-left text-gray-700 dark:text-gray-300">Weight</th>
-                  <th class="py-2 text-left text-gray-700 dark:text-gray-300">Date of Birth</th>
+                  <th class="py-2 text-left text-gray-700 dark:text-gray-300 hidden-mobile">Date of Birth</th>
                   <th class="py-2 text-left text-gray-700 dark:text-gray-300">Gender</th>
                   <th class="py-2 text-left text-gray-700 dark:text-gray-300">Status</th>
+                  <th class="py-2 text-left text-gray-700 dark:text-gray-300">Image</th>
                   <th class="py-2 text-left text-gray-700 dark:text-gray-300">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="pig in pigs" :key="pig.pigId">
-                  <td class="py-2 text-left text-gray-700 dark:text-gray-300">{{ pig.pigId }}</td>
-                  <td class="py-2 text-left text-gray-700 dark:text-gray-300">{{ pig.pigfarmID }}</td>
+                  <td class="py-2 text-left text-gray-700 dark:text-gray-300 hidden-mobile">{{ pig.pigId }}</td>
+                  <td class="py-2 text-left text-gray-700 dark:text-gray-300 hidden-mobile">{{ pig.pigfarmID }}</td>
                   <td class="py-2 text-left text-gray-700 dark:text-gray-300">{{ pig.weight }}</td>
-                  <td class="py-2 text-left text-gray-700 dark:text-gray-300">{{ pig.date_of_birth }}</td>
+                  <td class="py-2 text-left text-gray-700 dark:text-gray-300 hidden-mobile">{{ pig.date_of_birth }}</td>
                   <td class="py-2 text-left text-gray-700 dark:text-gray-300">{{ pig.gender }}</td>
                   <td class="py-2 text-left text-gray-700 dark:text-gray-300">{{ pig.status }}</td>
+                  <td class="py-2 text-left text-gray-700 dark:text-gray-300">
+                    <img :src="`/storage/${pig.image}`" alt="Pig Image" class="w-16 h-16 rounded-full">
+                  </td>
                   <td class="py-2 text-left text-gray-700 dark:text-gray-300">
                     <button @click="viewVaccinationRecords(pig.pigId)" class="bg-green-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:focus:ring-green-800">View Vaccination Records</button>
                   </td>
@@ -40,10 +44,6 @@
               <div class="modal-content">
                 <span class="close" @click="showModal = false">&times;</span>
                 <form @submit.prevent="submitForm">
-                  <div class="mb-4">
-                    <label for="pigfarmID" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Pig Farm ID</label>
-                    <input type="number" id="pigfarmID" v-model="form.pigfarmID" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                  </div>
                   <div class="mb-4">
                     <label for="weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Weight</label>
                     <input type="number" step="0.01" id="weight" v-model="form.weight" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
@@ -62,6 +62,10 @@
                   <div class="mb-4">
                     <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
                     <input type="text" id="status" v-model="form.status" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                  </div>
+                  <div class="mb-4">
+                    <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image</label>
+                    <input type="file" id="image" @change="handleImageUpload" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                   </div>
                   <button type="submit" class="w-full bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800">Submit</button>
                 </form>
@@ -129,13 +133,75 @@ const form = reactive({
   weight: '',
   date_of_birth: '',
   gender: '',
-  status: ''
+  status: '',
+  image: null
 });
 const vaccinationForm = reactive({
   vaccineName: '',
   vaccineType: '',
   dateAdministered: ''
 });
+
+const fetchPigFarmID = async () => {
+  try {
+    const response = await fetch('/api/pigfarminformation', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      credentials: 'include'
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    form.pigfarmID = data.pigfarmID;
+  } catch (error) {
+    console.error('Error fetching pig farm ID:', error);
+  }
+};
+
+const handleImageUpload = (event) => {
+  form.image = event.target.files[0];
+};
+
+const submitForm = async () => {
+  try {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const formData = new FormData();
+    formData.append('pigfarmID', form.pigfarmID);
+    formData.append('weight', form.weight);
+    formData.append('date_of_birth', form.date_of_birth);
+    formData.append('gender', form.gender);
+    formData.append('status', form.status);
+    formData.append('image', form.image);
+
+    const response = await fetch('/api/pigs', {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    pigs.value.push(data);
+    showModal.value = false;
+    form.weight = '';
+    form.date_of_birth = '';
+    form.gender = '';
+    form.status = '';
+    form.image = null;
+  } catch (error) {
+    console.error('Error submitting form:', error);
+  }
+};
 
 const fetchPigs = async () => {
   try {
@@ -157,45 +223,11 @@ const fetchPigs = async () => {
   }
 };
 
-const submitForm = async () => {
-  try {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const response = await fetch('/api/pigs', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken,
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-      body: JSON.stringify(form)
-    });
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-
-    const data = await response.json();
-    pigs.value.push(data);
-    showModal.value = false;
-    form.pigfarmID = '';
-    form.weight = '';
-    form.date_of_birth = '';
-    form.gender = '';
-    form.status = '';
-  } catch (error) {
-    console.error('Error submitting form:', error);
-  }
-};
-
 const viewVaccinationRecords = async (pigId) => {
   selectedPigId.value = pigId;
   showVaccinationModal.value = true;
-  await fetchVaccinationRecords();
-};
-
-const fetchVaccinationRecords = async () => {
   try {
-    const response = await fetch(`/api/pigs/${selectedPigId.value}/vaccination-records`, {
+    const response = await fetch(`/api/pigs/${pigId}/vaccinations`, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -216,7 +248,7 @@ const fetchVaccinationRecords = async () => {
 const addVaccinationRecord = async () => {
   try {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const response = await fetch(`/api/pigs/${selectedPigId.value}/vaccination-records`, {
+    const response = await fetch(`/api/pigs/${selectedPigId.value}/vaccinations`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -226,27 +258,25 @@ const addVaccinationRecord = async () => {
       body: JSON.stringify(vaccinationForm)
     });
 
-    // Log the response for debugging
-    console.log('Response:', response);
-
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Error data:', errorData);
       throw new Error('Network response was not ok');
     }
 
     const data = await response.json();
     vaccinationRecords.value.push(data);
-    closeAddVaccinationForm();
+    showAddVaccinationForm.value = false;
+    vaccinationForm.vaccineName = '';
+    vaccinationForm.vaccineType = '';
+    vaccinationForm.dateAdministered = '';
   } catch (error) {
     console.error('Error adding vaccination record:', error);
   }
 };
 
-const deleteVaccinationRecord = async (id) => {
+const deleteVaccinationRecord = async (recordId) => {
   try {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    await fetch(`/api/pigs/${selectedPigId.value}/vaccination-records/${id}`, {
+    await fetch(`/api/vaccinations/${recordId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -255,28 +285,42 @@ const deleteVaccinationRecord = async (id) => {
       },
       credentials: 'include'
     });
-    vaccinationRecords.value = vaccinationRecords.value.filter(record => record.id !== id);
+    vaccinationRecords.value = vaccinationRecords.value.filter(record => record.id !== recordId);
   } catch (error) {
     console.error('Error deleting vaccination record:', error);
   }
 };
 
-const closeVaccinationModal = () => {
-  showVaccinationModal.value = false;
-  vaccinationRecords.value = [];
+const closeModal = () => {
+  showModal.value = false;
+  form.weight = '';
+  form.date_of_birth = '';
+  form.gender = '';
+  form.status = '';
+  form.image = null;
 };
 
-const closeAddVaccinationForm = () => {
+const closeVaccinationModal = () => {
+  showVaccinationModal.value = false;
+  showAddVaccinationForm.value = false;
   vaccinationForm.vaccineName = '';
   vaccinationForm.vaccineType = '';
   vaccinationForm.dateAdministered = '';
+};
+
+const closeAddVaccinationForm = () => {
   showAddVaccinationForm.value = false;
+  vaccinationForm.vaccineName = '';
+  vaccinationForm.vaccineType = '';
+  vaccinationForm.dateAdministered = '';
 };
 
 onMounted(() => {
+  fetchPigFarmID();
   fetchPigs();
 });
 </script>
+
 <style>
 .modal {
   display: block;
@@ -317,5 +361,11 @@ onMounted(() => {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .hidden-mobile {
+    display: none;
+  }
 }
 </style>

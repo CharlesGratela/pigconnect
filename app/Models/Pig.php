@@ -14,6 +14,7 @@ class Pig extends Model
         'weight',
         'date_of_birth',
         'gender',
+        'image',
         'status',
     ];
 }
