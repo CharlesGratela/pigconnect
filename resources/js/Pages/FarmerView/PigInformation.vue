@@ -8,13 +8,14 @@
         <div class="flex justify-center">
           <div class="w-[75%]">
             <button @click="showModal = true" class="mb-4 bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800">Add Pig</button>
-            <table class="min-w-full bg-white dark:bg-gray-800">
+            
+            <!-- Table View for Desktop -->
+            <table class="min-w-full bg-white dark:bg-gray-800 hidden-mobile">
               <thead>
                 <tr>
-                  <th class="py-2 text-left text-gray-700 dark:text-gray-300 hidden-mobile">ID</th>
-                  <th class="py-2 text-left text-gray-700 dark:text-gray-300 hidden-mobile">Pig Farm ID</th>
+                  <th class="py-2 text-left text-gray-700 dark:text-gray-300">ID</th>
                   <th class="py-2 text-left text-gray-700 dark:text-gray-300">Weight</th>
-                  <th class="py-2 text-left text-gray-700 dark:text-gray-300 hidden-mobile">Date of Birth</th>
+                  <th class="py-2 text-left text-gray-700 dark:text-gray-300">Date of Birth</th>
                   <th class="py-2 text-left text-gray-700 dark:text-gray-300">Gender</th>
                   <th class="py-2 text-left text-gray-700 dark:text-gray-300">Status</th>
                   <th class="py-2 text-left text-gray-700 dark:text-gray-300">Image</th>
@@ -23,10 +24,9 @@
               </thead>
               <tbody>
                 <tr v-for="pig in pigs" :key="pig.pigId">
-                  <td class="py-2 text-left text-gray-700 dark:text-gray-300 hidden-mobile">{{ pig.pigId }}</td>
-                  <td class="py-2 text-left text-gray-700 dark:text-gray-300 hidden-mobile">{{ pig.pigfarmID }}</td>
+                  <td class="py-2 text-left text-gray-700 dark:text-gray-300">{{ pig.pigId }}</td>
                   <td class="py-2 text-left text-gray-700 dark:text-gray-300">{{ pig.weight }}</td>
-                  <td class="py-2 text-left text-gray-700 dark:text-gray-300 hidden-mobile">{{ pig.date_of_birth }}</td>
+                  <td class="py-2 text-left text-gray-700 dark:text-gray-300">{{ pig.date_of_birth }}</td>
                   <td class="py-2 text-left text-gray-700 dark:text-gray-300">{{ pig.gender }}</td>
                   <td class="py-2 text-left text-gray-700 dark:text-gray-300">{{ pig.status }}</td>
                   <td class="py-2 text-left text-gray-700 dark:text-gray-300">
@@ -38,6 +38,35 @@
                 </tr>
               </tbody>
             </table>
+
+            <!-- Card View for Mobile -->
+            <div class="block-mobile">
+              <div v-for="pig in pigs" :key="pig.pigId" class="mb-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                <div class="flex items-center mb-4">
+                  <img :src="`/storage/${pig.image}`" alt="Pig Image" class="w-16 h-16 rounded-full mr-4">
+                  <div>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ pig.pigId }}</h3>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <span class="font-semibold text-gray-700 dark:text-gray-300">Weight:</span>
+                  <span class="text-gray-700 dark:text-gray-300">{{ pig.weight }}</span>
+                </div>
+                <div class="mb-2">
+                  <span class="font-semibold text-gray-700 dark:text-gray-300">Date of Birth:</span>
+                  <span class="text-gray-700 dark:text-gray-300">{{ pig.date_of_birth }}</span>
+                </div>
+                <div class="mb-2">
+                  <span class="font-semibold text-gray-700 dark:text-gray-300">Gender:</span>
+                  <span class="text-gray-700 dark:text-gray-300">{{ pig.gender }}</span>
+                </div>
+                <div class="mb-2">
+                  <span class="font-semibold text-gray-700 dark:text-gray-300">Status:</span>
+                  <span class="text-gray-700 dark:text-gray-300">{{ pig.status }}</span>
+                </div>
+                <button @click="viewVaccinationRecords(pig.pigId)" class="w-full bg-green-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:focus:ring-green-800">View Vaccination Records</button>
+              </div>
+            </div>
 
             <!-- Add Pig Modal -->
             <div v-if="showModal" class="modal">
@@ -320,7 +349,6 @@ onMounted(() => {
   fetchPigs();
 });
 </script>
-
 <style>
 .modal {
   display: block;
@@ -334,7 +362,6 @@ onMounted(() => {
   background-color: rgb(0,0,0);
   background-color: rgba(0,0,0,0.4);
 }
-
 .modal-content {
   background-color: #fefefe;
   margin: 15% auto;
@@ -343,29 +370,34 @@ onMounted(() => {
   width: 80%;
   color: #000;
 }
-
 .dark .modal-content {
   background-color: #333;
   color: #fff;
 }
-
 .close {
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
-
 .close:hover,
 .close:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
 }
-
+.hidden-mobile {
+  display: table;
+}
+.block-mobile {
+  display: none;
+}
 @media (max-width: 768px) {
   .hidden-mobile {
     display: none;
+  }
+  .block-mobile {
+    display: block;
   }
 }
 </style>
