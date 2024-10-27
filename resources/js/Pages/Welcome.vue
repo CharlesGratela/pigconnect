@@ -41,8 +41,8 @@ function handleImageError() {
       
       <!-- Links on the Far Right -->
       <div class="flex space-x-4">
-        <Link v-if="canLogin" href="/login" class="text-white font-bold py-2 px-4 rounded bg-transparent hover:underline">Login</Link>
-        <Link v-if="canRegister" href="/register" class="text-white font-bold py-2 px-4 rounded bg-transparent hover:underline">Register</Link>
+        <Link href="/login" class="text-white font-bold py-2 px-4 rounded bg-transparent hover:underline">Login</Link>
+        <Link  href="/register" class="text-white font-bold py-2 px-4 rounded bg-transparent hover:underline">Register</Link>
       </div>
     </header>
     
