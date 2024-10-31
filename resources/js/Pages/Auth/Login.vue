@@ -14,6 +14,14 @@ defineProps({
     status: {
         type: String,
     },
+    message: {
+        type: String,
+        default: null,
+    },
+    throttle: {
+        type: Object,
+        default: null,
+    },
 });
 
 const form = useForm({
@@ -35,6 +43,16 @@ const submit = () => {
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
             {{ status }}
+        </div>
+
+        <!-- Display the message if it exists -->
+        <div v-if="message" class="mb-4 font-medium text-sm text-red-600 dark:text-red-400">
+            {{ message }}
+        </div>
+
+        <!-- Display the throttle information if it exists -->
+        <div v-if="throttle" class="mb-4 font-medium text-sm text-red-600 dark:text-red-400">
+            Too many login attempts. Please try again in {{ throttle.seconds }} seconds. You have {{ throttle.remaining }} attempts left.
         </div>
 
         <form @submit.prevent="submit">

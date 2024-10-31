@@ -34,7 +34,6 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'role' => 'required|string|max:255',
-
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -48,15 +47,20 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
-        if($user->role == 'farmer')
-        {
-        return redirect(route('farmer.dashboard', absolute: false));
+
+        // Send email verification notification
+        $user->sendEmailVerificationNotification();
+
+        // Redirect to email verification notice if email is not verified
+        if (!$user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
         }
-        else if($user->role == 'buyer')
-        {
+
+        if ($user->role == 'farmer') {
+            return redirect(route('farmer.dashboard', absolute: false));
+        } elseif ($user->role == 'buyer') {
             return redirect(route('buyer.dashboard', absolute: false));
-        }
-        else{
+        } else {
             return redirect(route('/', absolute: false));
         }
     }
