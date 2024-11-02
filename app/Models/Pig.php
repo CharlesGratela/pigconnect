@@ -10,7 +10,7 @@ class Pig extends Model
     use HasFactory;
 
     protected $fillable = [
-        'pigfarmID',
+        'user_id',
         'weight',
         'date_of_birth',
         'gender',

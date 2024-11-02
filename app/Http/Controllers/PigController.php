@@ -14,15 +14,8 @@ class PigController extends Controller
         // Get the authenticated user's ID
         $userId = Auth::id();
 
-        // Fetch the pigfarmID from PigFarmInformation based on the user_id
-        $pigFarmInformation = PigFarmInformation::where('user_id', $userId)->first();
-
-        if (!$pigFarmInformation) {
-            return response()->json(['message' => 'Pig farm information not found for user ID: ' . $userId], 404);
-        }
-
         // Fetch the pigs based on the pigfarmID
-        $pigs = Pig::where('pigfarmID', $pigFarmInformation->id)->get();
+        $pigs = Pig::where('user_id', $userId)->get();
 
         return response()->json($pigs);
     }
@@ -40,13 +33,7 @@ class PigController extends Controller
         // Get the authenticated user's ID
         $userId = Auth::id();
 
-        // Fetch the pigfarmID from PigFarmInformation based on the user_id
-        $pigFarmInformation = PigFarmInformation::where('user_id', $userId)->first();
-
-        if (!$pigFarmInformation) {
-            return response()->json(['message' => 'Pig farm information not found for user ID: ' . $userId], 404);
-        }
-
+      
         // Handle the image upload
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images', 'public');
@@ -56,7 +43,7 @@ class PigController extends Controller
 
         // Create the pig record
         $pig = Pig::create([
-            'pigfarmID' => $pigFarmInformation->id,
+            'user_id' => $userId,
             'weight' => $request->weight,
             'date_of_birth' => $request->date_of_birth,
             'gender' => $request->gender,

@@ -34,6 +34,7 @@
                   </td>
                   <td class="py-2 text-left text-gray-700 dark:text-gray-300">
                     <button @click="viewVaccinationRecords(pig.pigId)" class="bg-green-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:focus:ring-green-800">View Vaccination Records</button>
+                    <button @click="openEditModal(pig.pigId, pig.weight, pig.status)" class="bg-yellow-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-600 dark:focus:ring-yellow-800 ml-2">Edit</button>
                   </td>
                 </tr>
               </tbody>
@@ -65,6 +66,7 @@
                   <span class="text-gray-700 dark:text-gray-300">{{ pig.status }}</span>
                 </div>
                 <button @click="viewVaccinationRecords(pig.pigId)" class="w-full bg-green-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:focus:ring-green-800">View Vaccination Records</button>
+                <button @click="openEditModal(pig.pigId, pig.weight, pig.status)" class="w-full bg-yellow-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-600 dark:focus:ring-yellow-800 mt-2">Edit</button>
               </div>
             </div>
 
@@ -74,7 +76,7 @@
                 <span class="close" @click="showModal = false">&times;</span>
                 <form @submit.prevent="submitForm">
                   <div class="mb-4">
-                    <label for="weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Weight</label>
+                    <label for="weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Weight(kg)</label>
                     <input type="number" step="0.01" id="weight" v-model="form.weight" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                   </div>
                   <div class="mb-4">
@@ -89,14 +91,33 @@
                     </select>
                   </div>
                   <div class="mb-4">
-                    <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
-                    <input type="text" id="status" v-model="form.status" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                  </div>
-                  <div class="mb-4">
                     <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image</label>
                     <input type="file" id="image" @change="handleImageUpload" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                   </div>
                   <button type="submit" class="w-full bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800">Submit</button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Edit Pig Modal -->
+            <div v-if="showEditModal" class="modal">
+              <div class="modal-content">
+                <span class="close" @click="showEditModal = false">&times;</span>
+                <form @submit.prevent="updatePigDetails">
+                  <div class="mb-4">
+                    <label for="editWeight" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Weight(kg)</label>
+                    <input type="number" step="0.01" id="editWeight" v-model="editForm.weight" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                  </div>
+                  <div class="mb-4">
+                    <label for="editStatus" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
+                    <select id="editStatus" v-model="editForm.status" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                      <option value="healthy">Healthy</option>
+                      <option value="sick">Sick</option>
+                      <option value="sold">Sold</option>
+                      <option value="dead">Dead</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="w-full bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800">Update</button>
                 </form>
               </div>
             </div>
@@ -153,17 +174,22 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
 const pigs = ref([]);
 const showModal = ref(false);
+const showEditModal = ref(false);
 const showVaccinationModal = ref(false);
 const showAddVaccinationForm = ref(false);
 const selectedPigId = ref(null);
 const vaccinationRecords = ref([]);
 const form = reactive({
-  pigfarmID: '',
+
   weight: '',
   date_of_birth: '',
   gender: '',
-  status: '',
+  status: 'healthy', 
   image: null
+});
+const editForm = reactive({
+  weight: '',
+  status: 'healthy' // default to healthy
 });
 const vaccinationForm = reactive({
   vaccineName: '',
@@ -199,12 +225,21 @@ const submitForm = async () => {
   try {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const formData = new FormData();
-    formData.append('pigfarmID', form.pigfarmID);
+
     formData.append('weight', form.weight);
     formData.append('date_of_birth', form.date_of_birth);
     formData.append('gender', form.gender);
-    formData.append('status', form.status);
+    formData.append('status', form.status); // Ensure status is included
     formData.append('image', form.image);
+
+    console.log('Submitting form with data:', {
+
+      weight: form.weight,
+      date_of_birth: form.date_of_birth,
+      gender: form.gender,
+      status: form.status,
+      image: form.image
+    });
 
     const response = await fetch('/api/pigs', {
       method: 'POST',
@@ -219,13 +254,19 @@ const submitForm = async () => {
       throw new Error('Network response was not ok');
     }
 
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Response is not JSON');
+    }
+
     const data = await response.json();
+    console.log('Response data:', data);
     pigs.value.push(data);
     showModal.value = false;
     form.weight = '';
     form.date_of_birth = '';
     form.gender = '';
-    form.status = '';
+    form.status = 'healthy'; // Reset status to default
     form.image = null;
   } catch (error) {
     console.error('Error submitting form:', error);
@@ -320,12 +361,47 @@ const deleteVaccinationRecord = async (recordId) => {
   }
 };
 
+const updatePigDetails = async () => {
+  try {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const response = await fetch(`/api/pigs/${selectedPigId.value}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({ weight: editForm.weight, status: editForm.status })
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    const pigIndex = pigs.value.findIndex(pig => pig.pigId === selectedPigId.value);
+    if (pigIndex !== -1) {
+      pigs.value[pigIndex].weight = data.weight;
+      pigs.value[pigIndex].status = data.status;
+    }
+    showEditModal.value = false;
+  } catch (error) {
+    console.error('Error updating pig details:', error);
+  }
+};
+
+const openEditModal = (pigId, currentWeight, currentStatus) => {
+  selectedPigId.value = pigId;
+  editForm.weight = currentWeight;
+  editForm.status = currentStatus;
+  showEditModal.value = true;
+};
+
 const closeModal = () => {
   showModal.value = false;
   form.weight = '';
   form.date_of_birth = '';
   form.gender = '';
-  form.status = '';
   form.image = null;
 };
 

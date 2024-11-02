@@ -9,7 +9,7 @@ class CreatePigsTable extends Migration
     {
         Schema::create('pigs', function (Blueprint $table) {
             $table->id('pigId');
-            $table->unsignedBigInteger('pigfarmID');
+            $table->unsignedBigInteger('user_id');
             $table->float('weight');
             $table->date('date_of_birth');
             $table->enum('gender', ['male', 'female']);
