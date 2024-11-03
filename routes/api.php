@@ -8,6 +8,12 @@ use App\Http\Controllers\PigFarmInformationController;
 use App\Http\Controllers\BreedingRecordController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\PigController;
+use App\Http\Controllers\BuyerPreferenceController;
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/buyer/preferences', [BuyerPreferenceController::class, 'store'])->name('buyer.preferences.store');
+    Route::get('/buyer/preferences', [BuyerPreferenceController::class, 'show'])->name('buyer.preferences.show');
+});
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/pigfarminformation', [PigFarmInformationController::class, 'show']);
     Route::post('/pigfarminformation', [PigFarmInformationController::class, 'store']);
