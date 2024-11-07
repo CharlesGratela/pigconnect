@@ -48,7 +48,7 @@ const showingSidebar = ref(false);
                                     </NavLink>
                                 </template>
                                 <template v-if="$page.props.auth.user.role == 'buyer'">
-                                    <NavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
+                                    <NavLink :href="route('buyer.preferences')" :active="route().current('buyer.preferences')">
                                         Buyer Information
                                     </NavLink>
                                     <NavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
@@ -156,7 +156,7 @@ const showingSidebar = ref(false);
                             </ResponsiveNavLink>
                         </template>
                         <template v-if="$page.props.auth.user.role == 'buyer'">
-                            <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
+                            <ResponsiveNavLink :href="route('buyer.preferences')" :active="route().current('buyer.preferences')">
                                 Buyer Information
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">

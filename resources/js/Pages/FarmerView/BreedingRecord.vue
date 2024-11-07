@@ -18,13 +18,13 @@
                   <div class="mb-4">
                     <label for="sowId" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sow (Female Pig)</label>
                     <select id="sowId" v-model="breedingForm.sow_id" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                      <option v-for="pig in femalePigs" :key="pig.pigId" :value="pig.pigId">{{ pig.pigId }}</option>
+                      <option v-for="pig in femalePigs" :key="pig.PigId" :value="pig.PigId">{{ pig.PigId }}</option>
                     </select>
                   </div>
                   <div class="mb-4">
                     <label for="boarId" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Boar (Male Pig)</label>
                     <select id="boarId" v-model="breedingForm.boar_id" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                      <option v-for="pig in malePigs" :key="pig.pigId" :value="pig.pigId">{{ pig.pigId }}</option>
+                      <option v-for="pig in malePigs" :key="pig.PigId" :value="pig.PigId">{{ pig.PigId }}</option>
                     </select>
                   </div>
                   <div class="mb-4">
@@ -40,13 +40,31 @@
               </div>
             </div>
 
-            <!-- Breeding Records List -->
-            <ul>
-              <li v-for="record in breedingRecords" :key="record.id">
-                <span>{{ record.sow_id }} - {{ record.boar_id }} - {{ record.date_of_breeding }} - {{ record.expected_farrowing_date }}</span>
-                <button @click="deleteBreedingRecord(record.id)" class="bg-red-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:focus:ring-red-800">Delete</button>
-              </li>
-            </ul>
+            <!-- Breeding Records Table -->
+            <div class="overflow-x-auto">
+              <table class="min-w-full bg-white dark:bg-gray-800">
+                <thead>
+                  <tr>
+                    <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Sow ID</th>
+                    <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Boar ID</th>
+                    <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Date of Breeding</th>
+                    <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Expected Farrowing Date</th>
+                    <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="record in breedingRecords" :key="record.id">
+                    <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{{ record.sow_id }}</td>
+                    <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{{ record.boar_id }}</td>
+                    <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{{ record.date_of_breeding }}</td>
+                    <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{{ record.expected_farrowing_date }}</td>
+                    <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
+                      <button @click="deleteBreedingRecord(record.id)" class="bg-red-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:focus:ring-red-800">Delete</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </main>
@@ -174,7 +192,6 @@ const closeAddBreedingForm = () => {
 onMounted(() => {
   fetchPigs(); 
   fetchBreedingRecords();
-
 });
 </script>
 

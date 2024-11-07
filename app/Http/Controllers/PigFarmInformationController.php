@@ -1,51 +1,65 @@
 <?php
-// app/Http/Controllers/PigFarmInformationController.php
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use App\Models\PigFarmInformation;
-use Illuminate\Support\Facades\Auth;
 
 class PigFarmInformationController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
-        $userId = Auth::id();
-        $farmInformation = PigFarmInformation::where('user_id', $userId)->first();
+        $farmInformation = PigFarmInformation::where('user_id', $request->user()->id)->first();
 
-        if ($farmInformation) {
-            return response()->json($farmInformation);
-        } else {
-            return response()->json(['message' => 'Pig farm information not found for user ID: ' . $userId], 404);
-        }
+        return response()->json($farmInformation);
+    }
+    public function showBuyer(Request $request)
+    {
+
+        $farmInformation = PigFarmInformation::where('user_id', $request->user_id)->first();
+
+        return response()->json($farmInformation);
     }
 
     public function store(Request $request)
     {
-        $userId = Auth::id();
-
         $request->validate([
             'feedingType' => 'required|string',
             'frequencyOfFeeding' => 'required|string',
             'minPricePerKilo' => 'required|numeric',
             'maxPricePerKilo' => 'required|numeric',
-            'location.lat' => 'required|numeric',
-            'location.lng' => 'required|numeric',
+            'address' => 'required|string'
         ]);
 
+        $apiKey = 'AIzaSyAPE3z_ByaGmKAwUDjUPFP6ZEZyyWmKvTY';
+        $geocodeUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($request->address) . "&key=" . $apiKey;
+
+        $response = Http::get($geocodeUrl);
+        if ($response->failed()) {
+            return response()->json(['error' => 'Failed to geocode address'], 500);
+        }
+
+        $data = $response->json();
+        if (empty($data['results'])) {
+            return response()->json(['error' => 'No geocoding results found'], 404);
+        }
+
+        $position = $data['results'][0]['geometry']['location'];
+
         $data = [
-            'user_id' => $userId,
+            'user_id' => $request->user()->id,
             'feeding_type' => $request->feedingType,
             'frequency_of_feeding' => $request->frequencyOfFeeding,
             'min_price_per_kilo' => $request->minPricePerKilo,
             'max_price_per_kilo' => $request->maxPricePerKilo,
-            'latitude' => $request->location['lat'],
-            'longitude' => $request->location['lng'],
+            'address' => $request->address,
+            'latitude' => $position['lat'],
+            'longitude' => $position['lng'],
         ];
 
         PigFarmInformation::updateOrCreate(
-            ['user_id' => $userId],
+            ['user_id' => $request->user()->id],
             $data
         );
 

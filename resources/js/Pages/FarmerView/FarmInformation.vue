@@ -15,7 +15,7 @@
 
               <div class="mb-4">
                 <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
-                <input type="text" id="address" v-model="address" class="mt-1 block w-full p-2.5 bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly />
+                <input type="text" id="address" v-model="address" class="mt-1 block w-full p-2.5 bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
               </div>
 
               <div class="mb-4">
@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, watch } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
 const feedingType = ref('');
@@ -93,7 +93,7 @@ const fetchFarmInformation = async () => {
 
       // Update marker position
       if (marker) {
-        marker.setGeometry({ lat: location.lat, lng: location.lng });
+        marker.setPosition({ lat: location.lat, lng: location.lng });
         map.setCenter({ lat: location.lat, lng: location.lng });
       }
 
@@ -106,8 +106,8 @@ const fetchFarmInformation = async () => {
 };
 
 const reverseGeocode = async (lat, lng) => {
-  const apiKey = 'qlF4FtaLmEQCthTvcfBCq5pu3aBHKgyWbWbaCJhA_9c';
-  const url = `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${lat},${lng}&apikey=${apiKey}`;
+  const apiKey = 'AIzaSyAPE3z_ByaGmKAwUDjUPFP6ZEZyyWmKvTY';
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
 
   try {
     const response = await fetch(url);
@@ -116,59 +116,60 @@ const reverseGeocode = async (lat, lng) => {
     }
     const data = await response.json();
     console.log('Reverse Geocoding Result:', data);
-    if (data.items && data.items.length > 0) {
-      address.value = data.items[0].address.label;
+    if (data.results && data.results.length > 0) {
+      address.value = data.results[0].formatted_address;
     }
   } catch (error) {
     console.error('Error performing reverse geocoding:', error);
   }
 };
 
-const initMap = () => {
-  const platform = new H.service.Platform({
-    apikey: 'qlF4FtaLmEQCthTvcfBCq5pu3aBHKgyWbWbaCJhA_9c'
-  });
+const geocodeAddress = async (address) => {
+  const apiKey = 'AIzaSyAPE3z_ByaGmKAwUDjUPFP6ZEZyyWmKvTY';
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
 
-  const defaultLayers = platform.createDefaultLayers();
-  map = new H.Map(document.getElementById('map'), defaultLayers.vector.normal.map, {
-    center: { lat: location.lat, lng: location.lng },
-    zoom: 13,
-    pixelRatio: window.devicePixelRatio || 1
-  });
-
-  const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-  const ui = H.ui.UI.createDefault(map, defaultLayers);
-
-  marker = new H.map.Marker({ lat: location.lat, lng: location.lng }, { volatility: true });
-  marker.draggable = true;
-  map.addObject(marker);
-
-  map.addEventListener('dragstart', function(ev) {
-    const target = ev.target;
-    if (target instanceof H.map.Marker) {
-      behavior.disable();
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
-  }, false);
-
-  map.addEventListener('dragend', async function(ev) {
-    const target = ev.target;
-    if (target instanceof H.map.Marker) {
-      behavior.enable();
-      const position = target.getGeometry();
+    const data = await response.json();
+    console.log('Geocoding Result:', data);
+    if (data.results && data.results.length > 0) {
+      const position = data.results[0].geometry.location;
       location.lat = position.lat;
       location.lng = position.lng;
-      map.setCenter({ lat: location.lat, lng: location.lng }); // Center the map on the new position
-      await reverseGeocode(location.lat, location.lng); // Perform reverse geocoding on marker drag end
-    }
-  }, false);
 
-  map.addEventListener('drag', function(ev) {
-    const target = ev.target;
-    if (target instanceof H.map.Marker) {
-      const pointer = ev.currentPointer;
-      target.setGeometry(map.screenToGeo(pointer.viewportX, pointer.viewportY));
+      // Update marker position
+      if (marker) {
+        marker.setPosition({ lat: location.lat, lng: location.lng });
+        map.setCenter({ lat: location.lat, lng: location.lng });
+      }
     }
-  }, false);
+  } catch (error) {
+    console.error('Error performing geocoding:', error);
+  }
+};
+
+const initMap = () => {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: { lat: location.lat, lng: location.lng },
+    zoom: 13
+  });
+
+  marker = new google.maps.Marker({
+    position: { lat: location.lat, lng: location.lng },
+    map: map,
+    draggable: true
+  });
+
+  google.maps.event.addListener(marker, 'dragend', async function() {
+    const position = marker.getPosition();
+    location.lat = position.lat();
+    location.lng = position.lng();
+    map.setCenter({ lat: location.lat, lng: location.lng }); // Center the map on the new position
+    await reverseGeocode(location.lat, location.lng); // Perform reverse geocoding on marker drag end
+  });
 };
 
 const submitForm = async () => {
@@ -186,7 +187,8 @@ const submitForm = async () => {
         frequencyOfFeeding: frequencyOfFeeding.value,
         minPricePerKilo: minPricePerKilo.value,
         maxPricePerKilo: maxPricePerKilo.value,
-        location: location
+        location: location,
+        address: address.value // Include the address in the form submission
       })
     });
 
@@ -206,6 +208,12 @@ const submitForm = async () => {
 onMounted(() => {
   fetchFarmInformation();
   initMap();
+});
+
+watch(address, async (newAddress) => {
+  if (newAddress) {
+    await geocodeAddress(newAddress);
+  }
 });
 </script>
 

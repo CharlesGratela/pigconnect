@@ -9,6 +9,8 @@ class Pig extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'PigId'; // Specify the primary key column
+
     protected $fillable = [
         'user_id',
         'weight',

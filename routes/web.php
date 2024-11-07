@@ -84,6 +84,10 @@ Route::get('/chat', function () {
     return Inertia::render('Chat');
 })->middleware(['auth', 'verified'])->name('chat');
 
+Route::get('/buyerpreferences', function () {
+    return Inertia::render('BuyerView/BuyersPreference');
+})->middleware(['auth', 'verified'])->name('buyer.preferences');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
