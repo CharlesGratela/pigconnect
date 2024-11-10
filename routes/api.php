@@ -10,7 +10,11 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\PigController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\BuyerPreferenceController;
+use App\Http\Controllers\AnalyticsController;
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/analytics', [AnalyticsController::class, 'getAnalytics']);
+});
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/buyers_preference', [BuyerPreferenceController::class, 'store']);
     Route::get('/buyers_preference', [BuyerPreferenceController::class, 'show']);
@@ -24,15 +28,17 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('breeding-records', BreedingRecordController::class);
 });
-Route::get('/pigs', [PigController::class, 'index']);
-Route::post('/pigs', [PigController::class, 'store']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/pigs', [PigController::class, 'index']);
+    Route::post('/pigs', [PigController::class, 'store']);
+    Route::put('/pigs/{id}', [PigController::class, 'update']);
+});
 Route::middleware('auth:sanctum')->get('/expenses', [ExpenseController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/expenses', [ExpenseController::class, 'store']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/chat/messages', [ChatController::class, 'index']);
     Route::post('/chat/messages', [ChatController::class, 'store']);
 });
-
 
 
 Route::middleware('auth:sanctum')->group(function () {
