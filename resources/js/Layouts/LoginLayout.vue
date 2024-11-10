@@ -14,18 +14,16 @@
   </template>
   
   <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, defineProps } from 'vue';
   
-  const theme = ref('light');
-  
-  const toggleTheme = () => {
-    theme.value = theme.value === 'light' ? 'dark' : 'light';
-    document.documentElement.classList.toggle('dark', theme.value === 'dark');
-  };
+  const props = defineProps({
+    theme: String,
+    toggleTheme: Function,
+  });
   
   onMounted(() => {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      theme.value = 'dark';
+      props.theme.value = 'dark';
       document.documentElement.classList.add('dark');
     }
   });
@@ -34,3 +32,5 @@
   <style>
   /* Add any necessary styles here */
   </style>
+
+  
