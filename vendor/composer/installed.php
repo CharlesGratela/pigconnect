@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'laravel/laravel',
-        'pretty_version' => 'v11.1.4',
-        'version' => '11.1.4.0',
-        'reference' => '2897a49c65a37e385d25d6606d8258e1afb39774',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'b2650b4ae3649b5f923278130f7c3b14ca24ff93',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -398,9 +398,9 @@
             'dev_requirement' => false,
         ),
         'laravel/laravel' => array(
-            'pretty_version' => 'v11.1.4',
-            'version' => '11.1.4.0',
-            'reference' => '2897a49c65a37e385d25d6606d8258e1afb39774',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'b2650b4ae3649b5f923278130f7c3b14ca24ff93',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -665,9 +665,9 @@
             'dev_requirement' => true,
         ),
         'phpunit/phpunit' => array(
-            'pretty_version' => '11.3.1',
-            'version' => '11.3.1.0',
-            'reference' => 'fe179875ef0c14e90b75617002767eae0a742641',
+            'pretty_version' => '11.3.4',
+            'version' => '11.3.4.0',
+            'reference' => 'd2ef57db1410b102b250e0cdce6675a60c2a993d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpunit/phpunit',
             'aliases' => array(),
