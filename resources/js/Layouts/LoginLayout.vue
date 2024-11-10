@@ -5,9 +5,7 @@
           <div class="md:max-w-md w-full px-4 py-4">
             <slot />
           </div>
-          <div class="md:h-full bg-[#000842] rounded-xl lg:p-12 p-8">
-            <img src="https://readymadeui.com/signin-image.webp" class="w-full h-full object-contain" alt="login-image" />
-          </div>
+         
         </div>
       </div>
     </div>
@@ -32,5 +30,3 @@
   <style>
   /* Add any necessary styles here */
   </style>
-
-  
