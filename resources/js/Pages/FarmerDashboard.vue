@@ -11,9 +11,6 @@
 
       <!-- Main Content -->
       <main class="flex-grow p-4">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-          <div class="p-6 text-gray-900 dark:text-gray-100">You're logged in!</div>
-        </div>
 
         <!-- Analytics Section -->
         <div class="mt-6">
@@ -31,6 +28,11 @@
               <h4 class="text-md font-semibold text-gray-800 dark:text-gray-200">Weight Trend</h4>
               <canvas id="weightTrendChart"></canvas>
             </div>
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+              <h4 class="text-md font-semibold text-gray-800 dark:text-gray-200">Current Weather</h4>
+              <p class="text-lg text-gray-800 dark:text-gray-200">Temperature: {{ weather.temperature }} °C</p>
+              <p class="text-lg text-gray-800 dark:text-gray-200">Status: {{ weather.weather }}</p>
+            </div>
           </div>
         </div>
       </main>
@@ -43,11 +45,19 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import Chart from 'chart.js/auto';
+import zoomPlugin from 'chartjs-plugin-zoom';
+
+Chart.register(zoomPlugin);
 
 const analytics = ref({
   totalPigs: 0,
   averageWeight: 0,
   weightTrend: [],
+});
+
+const weather = ref({
+  temperature: 0,
+  weather: '',
 });
 
 const fetchAnalytics = async () => {
@@ -61,10 +71,28 @@ const fetchAnalytics = async () => {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
+    console.log('Analytics data:', data); // Log the response data
     analytics.value = data;
     renderWeightTrendChart(data.weightTrend);
   } catch (error) {
     console.error('Error fetching analytics:', error);
+  }
+};
+
+const fetchWeather = async () => {
+  try {
+    const response = await fetch('/api/weather', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    weather.value = data;
+  } catch (error) {
+    console.error('Error fetching weather:', error);
   }
 };
 
@@ -84,6 +112,18 @@ const renderWeightTrendChart = (weightTrend) => {
     },
     options: {
       responsive: true,
+      plugins: {
+        zoom: {
+          pan: {
+            enabled: true,
+            mode: 'xy',
+          },
+          zoom: {
+            enabled: true,
+            mode: 'xy',
+          },
+        },
+      },
       scales: {
         x: {
           type: 'time',
@@ -101,9 +141,10 @@ const renderWeightTrendChart = (weightTrend) => {
 
 onMounted(() => {
   fetchAnalytics();
+  fetchWeather();
 });
 </script>
 
 <style>
 /* Add any necessary styles here */
-</style> 
+</style>

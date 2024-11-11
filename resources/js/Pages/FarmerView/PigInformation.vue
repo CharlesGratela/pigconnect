@@ -167,7 +167,6 @@
     </AuthenticatedLayout>
   </div>
 </template>
-
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -180,7 +179,6 @@ const showAddVaccinationForm = ref(false);
 const selectedPigId = ref(null);
 const vaccinationRecords = ref([]);
 const form = reactive({
-
   weight: '',
   date_of_birth: '',
   gender: '',
@@ -233,7 +231,6 @@ const submitForm = async () => {
     formData.append('image', form.image);
 
     console.log('Submitting form with data:', {
-
       weight: form.weight,
       date_of_birth: form.date_of_birth,
       gender: form.gender,
@@ -379,10 +376,11 @@ const updatePigDetails = async () => {
     }
 
     const data = await response.json();
+    console.log('Updated pig details:', data);
     const pigIndex = pigs.value.findIndex(pig => pig.pigId === selectedPigId.value);
     if (pigIndex !== -1) {
-      pigs.value[pigIndex].weight = data.weight;
-      pigs.value[pigIndex].status = data.status;
+      pigs.value[pigIndex].weight = data.pig.weight;
+      pigs.value[pigIndex].status = data.pig.status;
     }
     showEditModal.value = false;
   } catch (error) {

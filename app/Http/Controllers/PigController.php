@@ -1,12 +1,14 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Pig;
+
 use App\Models\PigWeight;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 class PigController extends Controller
 {
     public function index()
@@ -49,7 +51,7 @@ class PigController extends Controller
             'status' => $request->status,
             'image' => $imagePath,
         ]);
-
+      
         // Store the initial weight in the pig_weights table
         PigWeight::create([
             'pig_id' => $pig->PigId,
@@ -59,32 +61,33 @@ class PigController extends Controller
 
         return response()->json($pig, 201);
     }
+ 
+public function update(Request $request, $id)
+{
+    // Validate the request
+    $request->validate([
+        'weight' => 'required|numeric',
+        'status' => 'required|string',
+    ]);
 
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'weight' => 'required|numeric',
-            'status' => 'required|string',
-        ]);
+    // Log the request data
+    Log::info('Update Request Data:', $request->all());
 
-        // Find the pig record
-        $pig = Pig::findOrFail($id);
-
-        // Update the pig record
-        $pig->update([
+    // Update the pig record using the query builder
+    DB::table('pigs')
+        ->where('pigId', $id)
+        ->update([
             'weight' => $request->weight,
             'status' => $request->status,
-        ]);
-      
-    
-        // Store the updated weight in the pig_weights table
-        PigWeight::create([
-            'pig_id' => $id,
-            'date' => now(),
-            'weight' => $request->weight,
+            'updated_at' => now(), // Ensure the updated_at timestamp is updated
         ]);
 
-        return response()->json($pig);
-    }
+    // Retrieve the updated pig record
+    $pig = DB::table('pigs')->where('pigId', $id)->first();
 
+    // Log the updated state of the pig
+    Log::info('Updated Pig Data:', (array) $pig);
+
+    return response()->json(['message' => 'Pig updated successfully', 'pig' => $pig]);
+}
 }

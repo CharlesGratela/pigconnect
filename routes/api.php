@@ -11,9 +11,9 @@ use App\Http\Controllers\PigController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\BuyerPreferenceController;
 use App\Http\Controllers\AnalyticsController;
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/analytics', [AnalyticsController::class, 'getAnalytics']);
+    Route::get('/weather', [AnalyticsController::class, 'getWeather']);
 });
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/buyers_preference', [BuyerPreferenceController::class, 'store']);
