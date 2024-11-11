@@ -12,7 +12,6 @@ class CreateUserInteractionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('pig_id');
-            $table->string('interaction_type');
             $table->timestamps();
 
             // Define foreign key constraints

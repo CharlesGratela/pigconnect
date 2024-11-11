@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\PigFarmInformation;
+use App\Models\User;
 
 class PigFarmInformationController extends Controller
 {
@@ -13,13 +14,23 @@ class PigFarmInformationController extends Controller
         $farmInformation = PigFarmInformation::where('user_id', $request->user()->id)->first();
 
         return response()->json($farmInformation);
-    }
-    public function showBuyer(Request $request)
+    } public function showBuyer(Request $request)
     {
-
         $farmInformation = PigFarmInformation::where('user_id', $request->user_id)->first();
-
-        return response()->json($farmInformation);
+        $userName = User::where('id', $request->user_id)->first();
+ 
+        if ($farmInformation) {
+            return response()->json([
+                'min_price_per_kilo' => $farmInformation->min_price_per_kilo,
+                'max_price_per_kilo' => $farmInformation->max_price_per_kilo,
+                'location' => $farmInformation->location,
+                'latitude' => $farmInformation->latitude,
+                'longitude' => $farmInformation->longitude,
+                'owner_name' => $userName->name, // Include owner's name
+            ]);
+        } else {
+            return response()->json(['message' => 'Farm information not found'], 404);
+        }
     }
 
     public function store(Request $request)

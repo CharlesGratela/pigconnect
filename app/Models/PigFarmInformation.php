@@ -22,4 +22,5 @@ class PigFarmInformation extends Model
         'latitude',
         'longitude',
     ];
+  
 }

@@ -19,4 +19,5 @@ class Pig extends Model
         'image',
         'status',
     ];
+
 }

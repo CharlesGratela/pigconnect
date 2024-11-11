@@ -11,6 +11,7 @@ use App\Http\Controllers\PigController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\BuyerPreferenceController;
 use App\Http\Controllers\AnalyticsController;
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/analytics', [AnalyticsController::class, 'getAnalytics']);
     Route::get('/weather', [AnalyticsController::class, 'getWeather']);
@@ -28,11 +29,20 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('breeding-records', BreedingRecordController::class);
 });
+
+// Route to add feedback for a pig
+Route::post('/pigs/{pigId}/feedback', [PigController::class, 'addFeedback'])->middleware('auth:sanctum');
+
+// Route to get feedback for a pig
+Route::get('/pigs/{pigId}/feedback', [PigController::class, 'getFeedback'])->middleware('auth:sanctum');
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/pigs', [PigController::class, 'index']);
     Route::post('/pigs', [PigController::class, 'store']);
     Route::put('/pigs/{id}', [PigController::class, 'update']);
 });
+
+// Route to track user interaction
+Route::post('/track_interaction', [RecommendationController::class, 'trackInteraction'])->middleware('auth:sanctum');
 Route::middleware('auth:sanctum')->get('/expenses', [ExpenseController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/expenses', [ExpenseController::class, 'store']);
 Route::middleware('auth:sanctum')->group(function () {

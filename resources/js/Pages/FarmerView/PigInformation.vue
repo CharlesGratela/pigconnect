@@ -291,7 +291,7 @@ const fetchPigs = async () => {
 };
 
 const viewVaccinationRecords = async (pigId) => {
-  selectedPigId.value = pigId;
+  selectedPigId.value = x``;
   showVaccinationModal.value = true;
   try {
     const response = await fetch(`/api/pigs/${pigId}/vaccinations`, {

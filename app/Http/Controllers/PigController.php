@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Pig;
 
 use App\Models\PigWeight;
+
+use App\Models\Feedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -89,5 +91,42 @@ public function update(Request $request, $id)
     Log::info('Updated Pig Data:', (array) $pig);
 
     return response()->json(['message' => 'Pig updated successfully', 'pig' => $pig]);
+}
+public function getPigDetails($id)
+{
+    $pig = Pig::with('owner')->findOrFail($id);
+
+    return response()->json([
+        'pigId' => $pig->id,
+        'date_of_birth' => $pig->date_of_birth,
+        'weight' => $pig->weight,
+        'min_price_per_kilo' => $pig->min_price_per_kilo,
+        'max_price_per_kilo' => $pig->max_price_per_kilo,
+        'location' => $pig->location,
+        'owner_name' => $pig->owner->name, // Include owner's name
+    ]);
+}
+
+public function addFeedback(Request $request, $pigId)
+{
+    $request->validate([
+        'comment' => 'nullable|string',
+        'rating' => 'required|integer|min:1|max:5',
+    ]);
+
+    $feedback = Feedback::create([
+        'pig_id' => $pigId,
+        'user_id' => Auth::id(),
+        'comment' => $request->comment,
+        'rating' => $request->rating,
+    ]);
+
+    return response()->json($feedback, 201);
+}
+
+public function getFeedback($pigId)
+{
+    $feedback = Feedback::where('pig_id', $pigId)->with('user')->get();
+    return response()->json($feedback);
 }
 }
