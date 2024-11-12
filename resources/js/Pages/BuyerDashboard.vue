@@ -155,9 +155,11 @@ const computeAgeInMonths = (dateOfBirth) => {
 
 const showPigDetails = async (pig) => {
   selectedPig.value = pig;
+  selectedPig.value.pigId = pig.pigId;
+  console.log(selectedPig.value.pigId);
   showModal.value = true;
   await fetchFarmDetails(pig.user_id);
-  await fetchFeedback(pig.id);
+  await fetchFeedback(pig.pigId);
   await trackInteraction(pig.id);
 };
 
@@ -180,6 +182,7 @@ const fetchFarmDetails = async (userId) => {
     }
     const farmDetails = await response.json();
     console.log(farmDetails); // Debugging: Log farm details
+    selectedPig.value.id = farmDetails.id;
     selectedPig.value.min_price_per_kilo = farmDetails.min_price_per_kilo;
     selectedPig.value.max_price_per_kilo = farmDetails.max_price_per_kilo;
     selectedPig.value.owner = farmDetails.owner_name;
@@ -215,19 +218,22 @@ const fetchFeedback = async (pigId) => {
     alert('Failed to fetch feedback');
   }
 };
-
 const submitFeedback = async () => {
   try {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    console.log('Submitting feedback for pig ID:', selectedPig.value.id); // Debugging: Log pig ID
-    const response = await fetch(`/api/pigs/${selectedPig.value.id}/feedback`, {
+    console.log('Submitting feedback for pig ID:', selectedPig.value.pigId); // Debugging: Log pig ID
+    const response = await fetch(`/api/pigs/${selectedPig.value.pigId}/feedback`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken,
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'X-CSRF-TOKEN': csrfToken
       },
-      body: JSON.stringify(newFeedback.value)
+      body: JSON.stringify({
+        pig_id: selectedPig.value.pigId,
+     
+        comment: newFeedback.value.comment,
+        rating: newFeedback.value.rating
+      })
     });
     if (!response.ok) {
       throw new Error('Network response was not ok');
@@ -236,6 +242,7 @@ const submitFeedback = async () => {
     feedback.value.push(data);
     newFeedback.value.rating = 5;
     newFeedback.value.comment = '';
+    fetchFeedback(selectedPig.value.pigId);
   } catch (error) {
     console.error('Error submitting feedback:', error);
     alert('Failed to submit feedback');

@@ -48,20 +48,6 @@ import axios from 'axios';
 const preferredWeight = ref('');
 const ageOfPigs = ref('');
 const priceRange = ref('');
-const userId = ref(null);
-
-const fetchUserId = async () => {
-  try {
-    const response = await axios.get('/api/user', {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    });
-    userId.value = response.data.id;
-  } catch (error) {
-    console.error('Error fetching user ID:', error);
-  }
-};
 
 const fetchBuyerPreferences = async () => {
   try {
@@ -112,7 +98,7 @@ const submitForm = async () => {
 };
 
 onMounted(() => {
-  fetchUserId();
+
   fetchBuyerPreferences();
 });
 </script>
