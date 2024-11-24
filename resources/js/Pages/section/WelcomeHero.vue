@@ -14,8 +14,8 @@ import LinkButton from './LinkButton.vue';
                     Pigconnect is a comprehensive web app designed for pig farmers, enabling seamless tracking of herd health, growth, and productivity. Optimize your operations and stay connected to your flock with ease.   
                 </p>
                 <div class="flex justify-center lg:justify-start mt-10 space-x-4">
-                    <LinkButton btn-type="primary" link="#download-section" class="bg-[#AE445A] text-white uppercase">Login</LinkButton>
-                    <LinkButton btn-type="muted" link="#download-section" class="bg-[#D03B5B] text-white uppercase">Register</LinkButton>
+                    <LinkButton btnType="primary" link="/login" class="bg-[#AE445A] text-white uppercase">Login</LinkButton>
+                    <LinkButton btnType="primary" link="/register" class="bg-[#D03B5B] text-white uppercase">Register</LinkButton>
                 </div>
             </div>
             <div class="relative order-1 lg:order-none mb-20 lg:mt-0 lg:mb-0 lg:-mr-10">

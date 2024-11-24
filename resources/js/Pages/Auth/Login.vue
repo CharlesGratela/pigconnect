@@ -1,5 +1,6 @@
 <template>
   <LoginLayout>
+    
     <Head title="Log in" />
     <div class="md:max-w-md w-full px-4 py-4">
       <form @submit.prevent="submit">
@@ -9,8 +10,11 @@
             <a :href="route('register')" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline ml-1 whitespace-nowrap">Register here</a>
           </p>
         </div>
-
+   
         <div>
+          <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+          {{ status }}
+          </div>  
           <label class="text-gray-800 dark:text-gray-200 text-xs block mb-2">Email</label>
           <div class="relative flex items-center">
             <TextInput name="email" type="text" v-model="form.email" required class="w-full text-gray-800 dark:text-gray-200 text-sm border-b border-gray-300 dark:border-gray-600 focus:border-blue-600 px-2 py-3 outline-none" placeholder="Enter email" />
@@ -48,9 +52,13 @@
             </label>
           </div>
           <div>
-            <a href="javascript:void(0);" class="text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline">
-              Forgot Password?
-            </a>
+            <Link
+                    v-if="canResetPassword"
+                    :href="route('password.request')"
+                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                >
+                    Forgot your password?
+                </Link>
           </div>
         </div>
 
@@ -77,15 +85,31 @@
 import LoginLayout from '@/Layouts/LoginLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+
 import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 
 const form = useForm({
   email: '',
   password: '',
 });
-
+defineProps({
+    canResetPassword: {
+        type: Boolean,
+    },
+    status: {
+        type: String,
+    },
+    message: {
+        type: String,
+        default: null,
+    },
+    throttle: {
+        type: Object,
+        default: null,
+    },
+});
 const theme = ref('light');
 const showPassword = ref(false);
 
@@ -106,7 +130,9 @@ onMounted(() => {
 });
 
 const submit = () => {
-  form.post(route('login'));
+    form.post(route('login'), {
+        onFinish: () => form.reset('password'),
+    });
 };
 </script>
 
