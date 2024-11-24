@@ -19,5 +19,8 @@ class Pig extends Model
         'image',
         'status',
     ];
-
+    public function vaccinationRecords()
+    {
+        return $this->hasMany(VaccinationRecord::class);
+    }
 }

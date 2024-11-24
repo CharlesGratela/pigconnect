@@ -123,44 +123,46 @@
             </div>
 
             <!-- Vaccination Records Modal -->
-            <div v-if="showVaccinationModal" class="modal">
-              <div class="modal-content">
-                <span class="close" @click="closeVaccinationModal">&times;</span>
-                <h3>Vaccination Records for Pig ID: {{ selectedPigId }}</h3>
-                <button @click="showAddVaccinationForm = true" class="mb-4 bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800">Add Vaccination Record</button>
+    <!-- Vaccination Records Modal -->
+<div v-if="showVaccinationModal" class="modal">
+  <div class="modal-content">
+    <span class="close" @click="closeVaccinationModal">&times;</span>
+    <h3>Vaccination Records for Pig ID: {{ selectedPigId }}</h3>
+    <button @click="showAddVaccinationForm = true" class="mb-4 bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800">Add Vaccination Record</button>
 
-                <!-- Add Vaccination Record Form -->
-                <div v-if="showAddVaccinationForm" class="modal">
-                  <div class="modal-content">
-                    <span class="close" @click="closeAddVaccinationForm">&times;</span>
-                    <h3>Add Vaccination Record</h3>
-                    <form @submit.prevent="addVaccinationRecord">
-                      <div class="mb-4">
-                        <label for="vaccineName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Vaccine Name</label>
-                        <input type="text" id="vaccineName" v-model="vaccinationForm.vaccineName" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                      </div>
-                      <div class="mb-4">
-                        <label for="vaccineType" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Vaccine Type</label>
-                        <input type="text" id="vaccineType" v-model="vaccinationForm.vaccineType" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                      </div>
-                      <div class="mb-4">
-                        <label for="dateAdministered" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date Administered</label>
-                        <input type="date" id="dateAdministered" v-model="vaccinationForm.dateAdministered" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                      </div>
-                      <button type="submit" class="w-full bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800">Submit</button>
-                    </form>
-                  </div>
-                </div>
+    <!-- Add Vaccination Record Form -->
+    <div v-if="showAddVaccinationForm" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="closeAddVaccinationForm">&times;</span>
+        <h3>Add Vaccination Record</h3>
+        <form @submit.prevent="addVaccinationRecord">
+          <div class="mb-4">
+            <label for="vaccineName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Vaccine Name</label>
+            <input type="text" id="vaccineName" v-model="vaccinationForm.vaccineName" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+          </div>
+          <div class="mb-4">
+            <label for="vaccineType" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Vaccine Type</label>
+            <input type="text" id="vaccineType" v-model="vaccinationForm.vaccineType" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+          </div>
+          <div class="mb-4">
+            <label for="dateAdministered" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date Administered</label>
+            <input type="date" id="dateAdministered" v-model="vaccinationForm.dateAdministered" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+          </div>
+          <button type="submit" class="w-full bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800">Submit</button>
+        </form>
+      </div>
+    </div>
 
-                <!-- Vaccination Records List -->
-                <ul>
-                  <li v-for="record in vaccinationRecords" :key="record.id">
-                    <span>{{ record.vaccineName }} - {{ record.vaccineType }} - {{ record.dateAdministered }}</span>
-                    <button @click="deleteVaccinationRecord(record.id)" class="bg-red-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:focus:ring-red-800">Delete</button>
-                  </li>
-                </ul>
-              </div>
-            </div>
+    <!-- Vaccination Records List -->
+    <ul v-if="vaccinationRecords.length > 0">
+      <li v-for="record in vaccinationRecords" :key="record.id">
+        <span>{{ record.vaccineName }} - {{ record.vaccineType }} - {{ record.dateAdministered }}</span>
+        <button @click="deleteVaccinationRecord(record.id)" class="bg-red-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:focus:ring-red-800">Delete</button>
+      </li>
+    </ul>
+    <p v-else>{{ noVaccinationRecordsMessage }}</p> <!-- Add this line -->
+  </div>
+</div>
           </div>
         </div>
       </main>
@@ -178,6 +180,7 @@ const showVaccinationModal = ref(false);
 const showAddVaccinationForm = ref(false);
 const selectedPigId = ref(null);
 const vaccinationRecords = ref([]);
+const noVaccinationRecordsMessage = ref(''); 
 const form = reactive({
   weight: '',
   date_of_birth: '',
@@ -289,12 +292,11 @@ const fetchPigs = async () => {
     console.error('Error fetching pigs:', error);
   }
 };
-
 const viewVaccinationRecords = async (pigId) => {
-  selectedPigId.value = x``;
+  selectedPigId.value = pigId;
   showVaccinationModal.value = true;
   try {
-    const response = await fetch(`/api/pigs/${pigId}/vaccinations`, {
+    const response = await fetch(`/api/pigs/${pigId}/vaccination-records`, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -303,10 +305,17 @@ const viewVaccinationRecords = async (pigId) => {
       credentials: 'include'
     });
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      if (response.status === 404) {
+        vaccinationRecords.value = [];
+        noVaccinationRecordsMessage.value = 'No vaccination records found';
+      } else {
+        throw new Error('Network response was not ok');
+      }
+    } else {
+      const data = await response.json();
+      vaccinationRecords.value = data;
+      noVaccinationRecordsMessage.value = '';
     }
-    const data = await response.json();
-    vaccinationRecords.value = data;
   } catch (error) {
     console.error('Error fetching vaccination records:', error);
   }
@@ -315,7 +324,7 @@ const viewVaccinationRecords = async (pigId) => {
 const addVaccinationRecord = async () => {
   try {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const response = await fetch(`/api/pigs/${selectedPigId.value}/vaccinations`, {
+    const response = await fetch(`/api/pigs/${selectedPigId.value}/vaccination-records`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -326,6 +335,8 @@ const addVaccinationRecord = async () => {
     });
 
     if (!response.ok) {
+      console.error('Response status:', response.status);
+      console.error('Response status text:', response.statusText);
       throw new Error('Network response was not ok');
     }
 
@@ -343,7 +354,7 @@ const addVaccinationRecord = async () => {
 const deleteVaccinationRecord = async (recordId) => {
   try {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    await fetch(`/api/vaccinations/${recordId}`, {
+    await fetch(`/api/pigs/${selectedPigId.value}/vaccination-records/${recordId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
