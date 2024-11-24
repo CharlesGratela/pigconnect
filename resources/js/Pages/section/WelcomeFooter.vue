@@ -4,7 +4,9 @@
     <!-- Footer Start -->
     <footer class="bg-theme-dark-blue py-10">
         <div class="container mx-auto px-5">
+            <!--
             <div class="grid md:grid-cols-2">
+                
                 <div class="flex flex-col md:flex-row md:space-x-12 items-center">
                     <div class="mb-10 md:mb-0">
                         <img src="/images/logo-bookmark-white.svg" alt="Logo" />
@@ -34,8 +36,10 @@
                             </svg>
                         </li>
                     </ul>
+
                 </div>
             </div>
+        -->
         </div>
     </footer>
     <!-- Footer End -->
