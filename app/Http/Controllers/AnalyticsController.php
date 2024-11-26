@@ -29,7 +29,9 @@ class AnalyticsController extends Controller
             ->groupBy('date')
             ->orderBy('date')
             ->get();
-    
+            if(averageWeight == null){
+                $averageWeight = 0;
+            }
 
         return response()->json([
             'totalPigs' => $totalPigs,
@@ -47,12 +49,11 @@ class AnalyticsController extends Controller
             return response()->json(['error' => 'Farm information not found'], 404);
         }
 
-        $apiKey = '58bc032bc09b45d38ac05217241111';
         $lat = $farmInfo->latitude;
         $lon = $farmInfo->longitude;
 
         try {
-            $response = Http::get("http://api.weatherapi.com/v1/current.json?key={$apiKey}&q={$lat},{$lon}");
+            $response = Http::get("http://api.weatherapi.com/v1/current.json?key=58bc032bc09b45d38ac05217241111&q={$lat},{$lon}");
 
             if ($response->failed()) {
                 return response()->json(['error' => 'Failed to fetch weather data'], 500);

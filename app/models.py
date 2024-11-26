@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey, DateTime, Boolean
+from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey, DateTime, Boolean, func
 from app.database import Base
 from datetime import datetime
 
@@ -48,4 +48,5 @@ class UserInteraction(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.id'))
     pig_id = Column(Integer, ForeignKey('pigs.pigId'))
-    interaction_time = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

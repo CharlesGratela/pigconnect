@@ -12,11 +12,11 @@
               No recommendations available.
             </div>
             <div v-else>
-              <div v-for="pig in recommendedPigs" :key="pig.id" class="mb-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+              <div v-for="pig in recommendedPigs" :key="pig.pigId" class="mb-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
                 <div class="flex items-center mb-4">
                   <img :src="`/storage/${pig.image}`" alt="Pig Image" class="w-24 h-24 rounded-lg mr-4 object-cover">
                   <div>
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ pig.id }}</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ pig.pigId }}</h3>
                     <button @click="showPigDetails(pig)" class="text-blue-500 hover:underline">View Details</button>
                   </div>
                 </div>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="mb-2">
                   <span class="font-semibold text-gray-700 dark:text-gray-300">Age:</span>
-                  <span class="text-gray-700 dark:text-gray-300">{{ computeAgeInMonths(pig.date_of_birth) }} months</span>
+                  <span class="text-gray-700 dark:text-gray-300">{{ pig.age_in_months }} months</span>
                 </div>
                 <div class="mb-2">
                   <span class="font-semibold text-gray-700 dark:text-gray-300">Price Range:</span>
@@ -57,7 +57,7 @@
         </div>
         <div class="mb-2 text-center">
           <span class="text-xl font-semibold text-gray-700 dark:text-gray-300">Age:</span>
-          <span class="text-xl text-gray-700 dark:text-gray-300">{{ computeAgeInMonths(selectedPig.date_of_birth) }} months</span>
+          <span class="text-xl text-gray-700 dark:text-gray-300">{{ selectedPig.age_in_months }} months</span>
         </div>
         <div class="mb-2 text-center">
           <span class="text-xl font-semibold text-gray-700 dark:text-gray-300">Price Range:</span>
@@ -140,7 +140,8 @@ const fetchRecommendations = async () => {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
-    recommendedPigs.value = data;
+    recommendedPigs.value = data.recommended_items; // Update to use recommended_items
+    console.log(recommendedPigs.value)
   } catch (error) {
     console.error('Error fetching recommendations:', error);
     alert('Failed to fetch recommendations');
@@ -160,7 +161,7 @@ const showPigDetails = async (pig) => {
   showModal.value = true;
   await fetchFarmDetails(pig.user_id);
   await fetchFeedback(pig.pigId);
-  await trackInteraction(pig.id);
+  await trackInteraction(selectedPig.value.pigId);
 };
 
 const closeModal = () => {
@@ -250,6 +251,7 @@ const submitFeedback = async () => {
 };
 
 const trackInteraction = async (pigId) => {
+  console.log(pigId);
   try {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const response = await fetch('/api/track_interaction', {

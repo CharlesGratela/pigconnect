@@ -34,7 +34,6 @@ function handleImageError() {
 
   <WelcomeHero/>
 
-  <WelcomeFooter />
 </template>
 
 <style scoped></style>

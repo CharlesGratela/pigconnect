@@ -12,7 +12,7 @@ import { Link } from '@inertiajs/vue3';
 
         <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
             <Link href="/">
-                <img src="/images/pigconnectlogo_s.png" alt="Site Logo" class="h-10" />
+                <img src="/images/pigconnectlogo.png" alt="Site Logo" class="h-10" />
             </Link>
             <slot />
         </div>

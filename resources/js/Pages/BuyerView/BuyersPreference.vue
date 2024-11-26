@@ -2,41 +2,49 @@
   <div>
     <AuthenticatedLayout>
       <template #header>
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Buyer Preferences</h2>
+        <h2 class="font-semibold text-xl text-black leading-tight">Buyer Preferences</h2>
       </template>
       <main>
         <div class="flex justify-center">
           <div class="w-[75%]">
             <form @submit.prevent="submitForm" class="place-content-center">
               <div class="mb-4">
-                <label for="preferredWeight" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Preferred Weight</label>
-                <input type="text" id="preferredWeight" v-model="preferredWeight" class="mt-1 block w-full p-2.5 bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                <label for="preferredWeight" class="block text-sm font-medium text-black">Preferred Weight</label>
+                <input type="text" id="preferredWeight" v-model="preferredWeight" class="mt-1 block w-full p-2.5 bg-gray-100 border border-gray-300 text-black rounded-lg focus:ring-blue-500 focus:border-blue-500" />
               </div>
 
               <div class="mb-4">
-                <label for="ageOfPigs" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Age of Pigs (in months)</label>
-                <select id="ageOfPigs" v-model="ageOfPigs" class="mt-1 block w-full p-2.5 bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="Older">Older</option>
+                <label for="ageOfPigs" class="block text-sm font-medium text-black">Age of Pigs</label>
+                <select id="ageOfPigs" v-model="ageOfPigs" class="mt-1 block w-full p-2.5 bg-gray-100 border border-gray-300 text-black rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                  <option value="0-3 months">0 to 3 months (Piglets)</option>
+                  <option value="3-6 months">3 to 6 months (Growers)</option>
+                  <option value="6-8 months">6 to 8 months (Finishers)</option>
+                  <option value="6 months and above">6 months and above (Breeding Stock)</option>
                 </select>
               </div>
 
               <div class="mb-4">
-                <label for="priceRange" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Price Range</label>
-                <input type="text" id="priceRange" v-model="priceRange" class="mt-1 block w-full p-2.5 bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                <label for="priceRange" class="block text-sm font-medium text-black">Price Range</label>
+                <input type="text" id="priceRange" v-model="priceRange" class="mt-1 block w-full p-2.5 bg-gray-100 border border-gray-300 text-black rounded-lg focus:ring-blue-500 focus:border-blue-500" />
               </div>
 
-              <button type="submit" class="w-full bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800">Submit</button>
+              <button type="submit" class="w-full bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300">Submit</button>
             </form>
           </div>
         </div>
       </main>
     </AuthenticatedLayout>
+
+    <!-- Success Dialog -->
+    <div v-if="showSuccessDialog" class="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-75">
+      <div class="bg-white p-4 rounded-lg shadow-lg w-[80%] md:w-[40%]">
+        <h3 class="text-xl font-bold text-black mb-2 text-center">Success</h3>
+        <p class="text-black text-center">Buyer's preference has been saved successfully.</p>
+        <div class="flex justify-center mt-4">
+          <button @click="closeDialog" class="bg-blue-500 text-white p-2 rounded-lg focus:ring-4 focus:ring-blue-300">Close</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -48,6 +56,7 @@ import axios from 'axios';
 const preferredWeight = ref('');
 const ageOfPigs = ref('');
 const priceRange = ref('');
+const showSuccessDialog = ref(false);
 
 const fetchBuyerPreferences = async () => {
   try {
@@ -90,6 +99,8 @@ const submitForm = async () => {
 
     const data = response.data;
     console.log('Form submitted successfully:', data);
+    // Show success dialog
+    showSuccessDialog.value = true;
     // Re-fetch the buyer preferences to reflect the updated details
     await fetchBuyerPreferences();
   } catch (error) {
@@ -97,8 +108,11 @@ const submitForm = async () => {
   }
 };
 
-onMounted(() => {
+const closeDialog = () => {
+  showSuccessDialog.value = false;
+};
 
+onMounted(() => {
   fetchBuyerPreferences();
 });
 </script>

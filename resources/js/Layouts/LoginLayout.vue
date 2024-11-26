@@ -1,10 +1,12 @@
 <template>
   <div :class="theme">
-    <WelcomeHeader :toggleTheme="toggleTheme" />
+
     <div class="font-[sans-serif] min-h-screen flex flex-col items-center justify-center dark:bg-gray-900 bg-gray-100">
       <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
         <div class="md:max-w-md w-full px-4 py-4">
-      
+          <Link href="/">
+                <img src="/images/pigconnectlogo.png" alt="Site Logo" class="h-10" />
+            </Link>
           <slot />
         </div>
       </div>

@@ -29,6 +29,7 @@ class RecommendationController extends Controller
     public function trackInteraction(Request $request)
     {
         $user = Auth::user();
+      
         $fastApiUrl = 'http://127.0.0.1:8001/api/track_interaction'; // Update this URL to your FastAPI server address
         $response = Http::post($fastApiUrl, [
             'user_id' => $user->id,
