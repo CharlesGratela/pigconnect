@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Console\Commands\SendFeedingScheduleNotification;
 
 class Kernel extends ConsoleKernel
 {
@@ -14,7 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         // Register your custom commands here
-        Commands\SendWeightUpdateNotifications::class,
+        SendFeedingScheduleNotification::class,
     ];
 
     /**
@@ -25,8 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // Schedule your custom commands here
-        $schedule->command('notify:weight-updates')->monthly();
+        $schedule->command('app:send:feeding-schedule-notification')->everyMinute(); // Schedule to run every minute
     }
 
     /**

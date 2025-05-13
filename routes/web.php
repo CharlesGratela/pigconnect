@@ -5,8 +5,15 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\FarmInformationController;
+use App\Http\Controllers\PigController;
 use App\Http\Controllers\PigFarmInformationController;
+use App\Http\Controllers\BreedingRecordController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\UserManagementController;
+
+use App\Http\Controllers\AdminDashboardController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -18,6 +25,7 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout.get');
 // Email Verification Routes
 Route::get('/email/verify', function () {
     return Inertia::render('Auth/VerifyEmail');
@@ -53,6 +61,9 @@ Route::get('/dashboard', function () {
 Route::get('/expenses', function () {
     return Inertia::render('FarmerView/Expenses');
 })->middleware(['auth', 'verified'])->name('farmer.expenses');
+Route::get('/feedingschedule', function () {
+    return Inertia::render('FarmerView/FeedingSchedule');
+})->middleware(['auth', 'verified'])->name('farmer.feedingschedule');
 
 Route::post('/pigfarminformation', [PigFarmInformationController::class, 'store'])->middleware(['auth', 'verified']);
 
@@ -64,6 +75,7 @@ Route::get('/breedingrecord', function () {
     return Inertia::render('FarmerView/BreedingRecord');
 })->middleware(['auth', 'verified'])->name('farmer.breedingrecord');
 
+
 Route::get('/farmerdashboard', function () {
     return Inertia::render('FarmerDashboard');
 })->middleware(['auth', 'verified'])->name('farmer.dashboard');
@@ -71,23 +83,36 @@ Route::get('/farmerdashboard', function () {
 Route::get('/piginformation', function () {
     return Inertia::render('FarmerView/PigInformation');
 })->middleware(['auth', 'verified'])->name('pig.information');
+Route::get('/buyerinformation', function () {
+    return Inertia::render('BuyerView/BuyerInformation');
+})->middleware(['auth', 'verified'])->name('buyer.information');
 
 Route::get('/buyerdashboard', function () {
-    return Inertia::render('BuyerDashboard');
+    return Inertia::render('BuyerDashboard');  
 })->middleware(['auth', 'verified'])->name('buyer.dashboard');
 
 Route::get('/admin', function () {
     return Inertia::render('AdminDashboard');
 })->middleware(['auth', 'verified'])->name('admin.dashboard');
 
-Route::get('/chat', function () {
-    return Inertia::render('Chat');
-})->middleware(['auth', 'verified'])->name('chat');
 
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/chatlist', [ChatController::class, 'chatList'])->name('chat.list');
+    Route::get('/chat/{userId}', [ChatController::class, 'index'])->name('chat.index');
+    Route::post('/chat', [ChatController::class, 'store'])->name('chat.store');
+    Route::get('/chat/messages/{userId}', [ChatController::class, 'getMessages'])->name('chat.getMessages');
+});
 Route::get('/buyerpreferences', function () {
     return Inertia::render('BuyerView/BuyersPreference');
 })->middleware(['auth', 'verified'])->name('buyer.preferences');
-
+Route::middleware(['auth', 'verified'])->group(function () {
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+});
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/admin/users', [UserManagementController::class, 'index'])->name('admin.users');
+    Route::delete('/admin/users/{user}', [UserManagementController::class, 'destroy'])->name('admin.users.destroy');
+});
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

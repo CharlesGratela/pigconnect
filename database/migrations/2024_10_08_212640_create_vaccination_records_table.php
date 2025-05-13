@@ -13,10 +13,10 @@ class CreateVaccinationRecordsTable extends Migration
             $table->unsignedBigInteger('pigId');
             $table->string('vaccineType');
             $table->date('dateAdministered');
+            $table->string('vaccine_image')->nullable();
+       
             $table->timestamps();
-
-            $table->foreign('pigId')->references('pigId')->on('pigs')->onDelete('cascade');
-        });
+     });
     }
 
     public function down()

@@ -17,8 +17,6 @@ class PigFarmInformation extends Model
         'user_id',
         'feeding_type',
         'frequency_of_feeding',
-        'min_price_per_kilo',
-        'max_price_per_kilo',
         'latitude',
         'longitude',
     ];

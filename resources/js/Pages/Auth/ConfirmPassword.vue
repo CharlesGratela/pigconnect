@@ -2,7 +2,7 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import LinkButton from '@/Pages/section/LinkButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
@@ -11,9 +11,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('password.confirm'), {
-        onFinish: () => form.reset(),
-    });
+    form.post(route('password.confirm'));
 };
 </script>
 
@@ -21,29 +19,30 @@ const submit = () => {
     <GuestLayout>
         <Head title="Confirm Password" />
 
-        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
+        <div class="mb-4 text-sm text-[#543434]">
             This is a secure area of the application. Please confirm your password before continuing.
         </div>
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="Password" class="text-[#543434]" />
+
                 <TextInput
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full text-[#543434] border-b border-[#c59461] focus:border-[#c58a61] px-2 py-3 outline-none"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
-                    autofocus
                 />
+
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
-            <div class="flex justify-end mt-4">
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Confirm
-                </PrimaryButton>
+            <div class="flex items-center justify-end mt-4">
+                <LinkButton btnType="primary" link="#" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    Confirm Password
+                </LinkButton>
             </div>
         </form>
     </GuestLayout>

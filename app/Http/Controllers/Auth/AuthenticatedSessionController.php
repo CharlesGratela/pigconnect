@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use App\Models\LoginHistory;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -56,7 +57,12 @@ class AuthenticatedSessionController extends Controller
         
             return redirect()->route('verification.notice')->with('message', 'You need to verify your email address before logging in.');
         }
-
+        if(auth()->user()->role != 'admin'){
+            LoginHistory::create([
+                'user_id' => Auth::id(),
+            ]);
+        }
+    
         if ($user->role === 'admin') {
             // If the user is an admin, redirect to the admin dashboard
             return redirect()->intended(route('admin.dashboard', false));
@@ -82,7 +88,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
-
+        
         return redirect('/');
     }
 }

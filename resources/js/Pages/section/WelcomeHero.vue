@@ -4,11 +4,11 @@ import LinkButton from './LinkButton.vue';
 
 <template>
     <!-- Hero Section Start -->
-    <div class="container mx-auto px-5 overflow-x-hidden lg:overflow-x-visible">
+    <div class="container mx-auto px-5 overflow-x-hidden lg:overflow-x-hidden">
         <section class="grid grid-cols-none lg:grid-cols-2 pb-16 pt-8 items-center">
             <div class="lg:w-5/6 order-2 lg:order-none">
                 <h1 class="text-4xl xl:text-5xl font-bold font-theme-heading text-center lg:text-left">
-                    <span class="text-[#c58a61]">PigConnect:</span> <span class="text-[#281c11]">Intelligent Pig Farming Management System</span>
+                    <span class="text-[#c58a61]">PigConnect:</span> <span class="text-[#281c11]">Pig Recommendation and Information System</span>
                 </h1>
                 <p class="lg:text-xl mt-10 font-theme-content text-[#543434] text-justify">
                     Pigconnect is a comprehensive web app designed for pig farmers, enabling seamless tracking of herd health, growth, and productivity. Optimize your operations and stay connected to your flock with ease.   

@@ -11,9 +11,10 @@ class CreateBuyerPreferencesTable extends Migration
         Schema::create('buyer_preferences', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('preferred_weight');
-            $table->string('age_of_pigs');
-            $table->string('price_range');
+            $table->string('preferred_weight')->nullable();
+            $table->string('age_of_pigs')->nullable();
+            $table->string('price_range')->nullable();
+            $table->boolean('prefer_nearby')->default(false);
             $table->timestamps();
         });
     }

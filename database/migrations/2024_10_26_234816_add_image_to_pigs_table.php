@@ -9,6 +9,9 @@ class AddImageToPigsTable extends Migration
     {
         Schema::table('pigs', function (Blueprint $table) {
             $table->string('image')->after('status');
+            $table->decimal('price_per_kilo', 8, 2)->after('status');
+            $table->string('mark')->nullable()->after('status');
+            $table->string('breed')->nullable()->after('status');
         });
     }
 
@@ -18,4 +21,4 @@ class AddImageToPigsTable extends Migration
             $table->dropColumn('image');
         });
     }
-}
+} 

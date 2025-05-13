@@ -1,16 +1,18 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pig;
 use App\Models\VaccinationRecord;
+use Illuminate\Support\Facades\Storage;
 
 class VaccinationRecordController extends Controller
 {
     public function index($pigId)
     {
         $pig = Pig::findOrFail($pigId);
-        $vaccinationRecords = $pig->vaccinationRecords;
+        $vaccinationRecords = VaccinationRecord::where('pigId', $pigId)->get();
 
         if ($vaccinationRecords->isEmpty()) {
             return response()->json(['message' => 'No vaccination records found'], 404);
@@ -22,12 +24,25 @@ class VaccinationRecordController extends Controller
     public function store(Request $request, $pigId)
     {
         $pig = Pig::findOrFail($pigId);
-        
+
+        $request->validate([
+            'vaccineName' => 'required|string|max:255',
+            'vaccineType' => 'required|string|max:255',
+            'dateAdministered' => 'required|date',
+            'vaccineImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $vaccineImagePath = null;
+        if ($request->hasFile('vaccineImage')) {
+            $vaccineImagePath = $request->file('vaccineImage')->store('images', 'public');
+        }
+
         $vaccinationRecord = VaccinationRecord::create([
-            'vaccineName' => $request->vaccineName,
             'pigId' => $pigId,
+            'vaccineName' => $request->vaccineName,
             'vaccineType' => $request->vaccineType,
             'dateAdministered' => $request->dateAdministered,
+            'vaccine_image' => $vaccineImagePath,
         ]);
 
         return response()->json($vaccinationRecord, 201);
@@ -48,7 +63,7 @@ class VaccinationRecordController extends Controller
 
     public function destroy($pigId, $id)
     {
-        $vaccinationRecord = VaccinationRecord::where('pig_id', $pigId)->findOrFail($id);
+        $vaccinationRecord = VaccinationRecord::where('pigId', $pigId)->findOrFail($id);
         $vaccinationRecord->delete();
         return response()->json(null, 204);
     }

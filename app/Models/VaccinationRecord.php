@@ -10,10 +10,11 @@ class VaccinationRecord extends Model
     use HasFactory;
 
     protected $fillable = [
-        'vaccineName',
         'pigId',
+        'vaccineName',
         'vaccineType',
         'dateAdministered',
+        'vaccine_image',
     ];
 
     public function pig()

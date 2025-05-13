@@ -17,6 +17,9 @@ class Pig extends Model
         'date_of_birth',
         'gender',
         'image',
+        'mark',
+        'breed',
+        'price_per_kilo',
         'status',
     ];
         public function vaccinationRecords()

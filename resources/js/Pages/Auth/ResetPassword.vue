@@ -2,7 +2,7 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import LinkButton from '@/Pages/section/LinkButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
@@ -37,12 +37,12 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="Email" class="text-[#543434]" />
 
                 <TextInput
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full text-[#543434] border-b border-[#c59461] focus:border-[#c58a61] px-2 py-3 outline-none"
                     v-model="form.email"
                     required
                     autofocus
@@ -53,12 +53,12 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="Password" class="text-[#543434]" />
 
                 <TextInput
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full text-[#543434] border-b border-[#c59461] focus:border-[#c58a61] px-2 py-3 outline-none"
                     v-model="form.password"
                     required
                     autocomplete="new-password"
@@ -68,12 +68,12 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
+                <InputLabel for="password_confirmation" value="Confirm Password" class="text-[#543434]" />
 
                 <TextInput
                     id="password_confirmation"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full text-[#543434] border-b border-[#c59461] focus:border-[#c58a61] px-2 py-3 outline-none"
                     v-model="form.password_confirmation"
                     required
                     autocomplete="new-password"
@@ -83,9 +83,9 @@ const submit = () => {
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <LinkButton btnType="primary" link="#" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Reset Password
-                </PrimaryButton>
+                </LinkButton>
             </div>
         </form>
     </GuestLayout>

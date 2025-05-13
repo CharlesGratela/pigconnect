@@ -2,46 +2,36 @@
   <div>
     <AuthenticatedLayout>
       <template #header>
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Farm Details</h2>
+        <h2 class="font-semibold text-xl text-[#543434] leading-tight">Farm Details</h2>
       </template>
       <main>
         <div class="flex justify-center">
           <div class="w-[75%]">
             <form @submit.prevent="submitForm" class="place-content-center">
               <div class="mb-4">
-                <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Location</label>
+                <label for="location" class="block text-sm font-medium text-[#543434]">Location</label>
                 <div id="map" class="w-full h-64"></div>
               </div>
 
               <div class="mb-4">
-                <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
-                <input type="text" id="address" v-model="address" class="mt-1 block w-full p-2.5 bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                <label for="address" class="block text-sm font-medium text-[#543434]">Address</label>
+                <input type="text" id="address" v-model="address" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" />
               </div>
 
               <div class="mb-4">
-                <label for="feedingType" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Feeding Type</label>
-                <select id="feedingType" v-model="feedingType" class="mt-1 block w-full p-2.5 bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <label for="feedingType" class="block text-sm font-medium text-[#543434]">Feeding Type</label>
+                <select id="feedingType" v-model="feedingType" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]">
                   <option value="feed">Feed</option>
                   <option value="natural">Natural</option>
                 </select>
               </div>
 
               <div class="mb-4">
-                <label for="frequencyOfFeeding" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Frequency of Feeding</label>
-                <input type="text" id="frequencyOfFeeding" v-model="frequencyOfFeeding" class="mt-1 block w-full p-2.5 bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                <label for="frequencyOfFeeding" class="block text-sm font-medium text-[#543434]">Frequency of Feeding</label>
+                <input type="text" id="frequencyOfFeeding" v-model="frequencyOfFeeding" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" />
               </div>
 
-              <div class="mb-4">
-                <label for="minPricePerKilo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Minimum Price per Kilo</label>
-                <input type="number" id="minPricePerKilo" v-model="minPricePerKilo" class="mt-1 block w-full p-2.5 bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-              </div>
-
-              <div class="mb-4">
-                <label for="maxPricePerKilo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Maximum Price per Kilo</label>
-                <input type="number" id="maxPricePerKilo" v-model="maxPricePerKilo" class="mt-1 block w-full p-2.5 bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-              </div>
-
-              <button type="submit" class="w-full bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800">Submit</button>
+              <button type="submit" class="w-full bg-[#281c11] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Submit</button>
             </form>
           </div>
         </div>
@@ -55,9 +45,7 @@ import { ref, reactive, onMounted, watch } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
 const feedingType = ref('');
-const frequencyOfFeeding = ref('');
-const minPricePerKilo = ref('');
-const maxPricePerKilo = ref('');
+const frequencyOfFeeding = ref(0);
 const location = reactive({
   lat: 0,
   lng: 0
@@ -86,8 +74,6 @@ const fetchFarmInformation = async () => {
     if (data) {
       feedingType.value = data.feeding_type;
       frequencyOfFeeding.value = data.frequency_of_feeding;
-      minPricePerKilo.value = data.min_price_per_kilo;
-      maxPricePerKilo.value = data.max_price_per_kilo;
       location.lat = data.latitude;
       location.lng = data.longitude;
 
@@ -185,8 +171,6 @@ const submitForm = async () => {
       body: JSON.stringify({
         feedingType: feedingType.value,
         frequencyOfFeeding: frequencyOfFeeding.value,
-        minPricePerKilo: minPricePerKilo.value,
-        maxPricePerKilo: maxPricePerKilo.value,
         location: location,
         address: address.value // Include the address in the form submission
       })
@@ -200,6 +184,7 @@ const submitForm = async () => {
     console.log('Form submitted successfully:', data);
     // Re-fetch the farm information to reflect the updated details
     await fetchFarmInformation();
+    window.location.reload();
   } catch (error) {
     console.error('Error submitting form:', error);
   }

@@ -2,35 +2,39 @@
   <div>
     <AuthenticatedLayout>
       <template #header>
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Buyer Dashboard</h2>
+        <h2 class="font-semibold text-xl text-[#543434] leading-tight">Buyer Dashboard</h2>
       </template>
       <main>
         <div class="flex justify-center">
-          <div class="w-[75%]">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Recommended Pigs</h3>
-            <div v-if="recommendedPigs.length === 0" class="text-center text-gray-700 dark:text-gray-300">
+          <div class="w-full md:w-[75%]">
+            <h3 class="text-lg font-semibold text-[#543434] mb-4">Recommended Pigs</h3>
+            <div v-if="recommendedPigs.length === 0" class="text-center text-[#543434]">
               No recommendations available.
             </div>
-            <div v-else>
-              <div v-for="pig in recommendedPigs" :key="pig.pigId" class="mb-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div v-for="pig in recommendedPigs" :key="pig.pigId" class="p-4 bg-white rounded-lg shadow-md">
                 <div class="flex items-center mb-4">
-                  <img :src="`/storage/${pig.image}`" alt="Pig Image" class="w-24 h-24 rounded-lg mr-4 object-cover">
+                  <img :src="`/storage/${pig.image}`" alt="Pig Image" class="w-24 h-24 sm:w-28 sm:h-28 rounded-lg mr-4 object-cover">
                   <div>
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ pig.pigId }}</h3>
-                    <button @click="showPigDetails(pig)" class="text-blue-500 hover:underline">View Details</button>
+                    <h3 class="text-lg font-semibold text-[#543434]">{{ pig.pigId }}</h3>
+                    <button @click="showPigDetails(pig)" class="text-[#c58a61] hover:underline">View Details</button>
                   </div>
                 </div>
                 <div class="mb-2">
-                  <span class="font-semibold text-gray-700 dark:text-gray-300">Weight: </span>
-                  <span class="text-gray-700 dark:text-gray-300">{{ pig.weight }} kg.</span>
+                  <span class="font-semibold text-[#543434]">Breed:</span>
+                  <span class="text-[#543434]"> {{ pig.breed }} per kilo</span>
                 </div>
                 <div class="mb-2">
-                  <span class="font-semibold text-gray-700 dark:text-gray-300">Age:</span>
-                  <span class="text-gray-700 dark:text-gray-300">{{ pig.age_in_months }} months</span>
+                  <span class="font-semibold text-[#543434]">Weight: </span>
+                  <span class="text-[#543434]">{{ pig.weight }} kg.</span>
                 </div>
                 <div class="mb-2">
-                  <span class="font-semibold text-gray-700 dark:text-gray-300">Price Range:</span>
-                  <span class="text-gray-700 dark:text-gray-300">{{ pig.min_price_per_kilo }} - {{ pig.max_price_per_kilo }} per kilo</span>
+                  <span class="font-semibold text-[#543434]">Age:</span>
+                  <span class="text-[#543434]">{{ computeAgeInMonths(pig.date_of_birth) }} months</span>
+                </div>
+                <div class="mb-2">
+                  <span class="font-semibold text-[#543434]">Price Range:</span>
+                  <span class="text-[#543434]">₱ {{ pig.price_per_kilo }} per kilo</span>
                 </div>
               </div>
             </div>
@@ -40,58 +44,73 @@
     </AuthenticatedLayout>
 
     <!-- Pig Details Modal -->
-    <div v-if="showModal" class="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-75">
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-[90%] md:w-[50%] h-[80%] overflow-y-auto">
-        <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 text-center">Pig Details</h3>
+    <div v-if="showModal" class="fixed inset-0 flex items-center justify-center z-50 bg-[#543434] bg-opacity-75">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-[50%] h-[80%] overflow-y-auto">
+        <h3 class="text-2xl font-bold text-[#543434] mb-4 text-center">Pig Details</h3>
         <div class="mb-4 flex justify-center">
           <img :src="`/storage/${selectedPig.image}`" alt="Pig Image" class="w-48 h-48 rounded-lg object-cover">
         </div>
     
         <div class="mb-2 text-center">
-          <span class="text-xl font-semibold text-gray-700 dark:text-gray-300">Owner: </span>
-          <span class="text-xl text-gray-700 dark:text-gray-300"> {{ selectedPig.owner }}</span>
+          <span class="text-xl font-semibold text-[#543434]">Owner: </span>
+          <span class="text-xl text-[#543434]"> {{ selectedPig.owner }}</span>
         </div>
         <div class="mb-2 text-center">
-          <span class="text-xl font-semibold text-gray-700 dark:text-gray-300">Weight:</span>
-          <span class="text-xl text-gray-700 dark:text-gray-300">{{ selectedPig.weight }} kg</span>
+          <span class="text-xl font-semibold text-[#543434]">Breed:</span>
+          <span class="text-xl text-[#543434]">{{ selectedPig.breed }}</span>
         </div>
         <div class="mb-2 text-center">
-          <span class="text-xl font-semibold text-gray-700 dark:text-gray-300">Age:</span>
-          <span class="text-xl text-gray-700 dark:text-gray-300">{{ selectedPig.age_in_months }} months</span>
+          <span class="text-xl font-semibold text-[#543434]">Weight:</span>
+          <span class="text-xl text-[#543434]">{{ selectedPig.weight }} kg</span>
         </div>
         <div class="mb-2 text-center">
-          <span class="text-xl font-semibold text-gray-700 dark:text-gray-300">Price Range:</span>
-          <span class="text-xl text-gray-700 dark:text-gray-300">{{ selectedPig.min_price_per_kilo }} - {{ selectedPig.max_price_per_kilo }} per kilo</span>
+          <span class="text-xl font-semibold text-[#543434]">Age:</span>
+          <span class="text-xl text-[#543434]">{{ computeAgeInMonths(selectedPig.date_of_birth) }} months</span>
         </div>
         <div class="mb-2 text-center">
-          <span class="text-xl font-semibold text-gray-700 dark:text-gray-300">Location:</span>
-          <span class="text-xl text-gray-700 dark:text-gray-300">{{ selectedPig.location }}</span>
+          <span class="text-xl font-semibold text-[#543434]">Price Range:</span>
+          <span class="text-xl text-[#543434]">₱ {{ selectedPig.price_per_kilo }} per kilo</span>
         </div>
+        <div class="mb-2 text-center">
+          <span class="text-xl font-semibold text-[#543434]">Interested with the pig? </span>
+   
+           </div>
+           <div class="mb-2 text-center">
+            <span><Link :href="route('chat.index', { userId: farmUserId })" :active="route('chat.index', { userId: farmUserId })" class="mt-2 bg-[#c58a61] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">
+            Message the Seller.
+          </Link></span>
+       </div>
+        <div class="mb-2 text-center">
+         
+          <span class="text-xl font-semibold text-[#543434]">Location:</span>
+          <span class="text-xl text-[#543434]">{{ selectedPig.location }}</span>
+        </div>
+
         <div id="map" class="w-full h-64 mb-4"></div>
 
         <!-- Feedback Section -->
         <div class="mb-4">
-          <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Feedback</h4>
-          <div v-if="feedback.length === 0" class="text-center text-gray-700 dark:text-gray-300">
+          <h4 class="text-lg font-semibold text-[#543434] mb-2">Feedback</h4>
+          <div v-if="feedback.length === 0" class="text-center text-[#543434]">
             No feedback available.
           </div>
           <div v-else>
-            <div v-for="item in feedback" :key="item.id" class="mb-2 p-2 bg-gray-100 dark:bg-gray-700 rounded-lg">
+            <div v-for="item in feedback" :key="item.id" class="mb-2 p-2 bg-[#c58a61] rounded-lg">
               <div class="flex justify-between">
-                <span class="font-semibold text-gray-800 dark:text-gray-200">{{ item.user.name }}</span>
-                <span class="text-gray-600 dark:text-gray-400">{{ item.rating }} / 5</span>
+                <span class="font-semibold text-[#543434]">{{ item.user.name }}</span>
+                <span class="text-[#543434]">{{ item.rating }} / 5</span>
               </div>
-              <p class="text-gray-700 dark:text-gray-300">{{ item.comment }}</p>
+              <p class="text-[#543434]">{{ item.comment }}</p>
             </div>
           </div>
         </div>
 
         <!-- Add Feedback Form -->
         <div class="mb-4">
-          <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Add Feedback</h4>
+          <h4 class="text-lg font-semibold text-[#543434] mb-2">Add Feedback</h4>
           <form @submit.prevent="submitFeedback">
             <div class="mb-2">
-              <label for="rating" class="block text-gray-700 dark:text-gray-300">Rating:</label>
+              <label for="rating" class="block text-[#543434]">Rating:</label>
               <select id="rating" v-model="newFeedback.rating" class="w-full p-2 border rounded-lg">
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -101,15 +120,15 @@
               </select>
             </div>
             <div class="mb-2">
-              <label for="comment" class="block text-gray-700 dark:text-gray-300">Comment:</label>
+              <label for="comment" class="block text-[#543434]">Comment:</label>
               <textarea id="comment" v-model="newFeedback.comment" class="w-full p-2 border rounded-lg"></textarea>
             </div>
-            <button type="submit" class="mt-2 bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800">Submit</button>
+            <button type="submit" class="mt-2 bg-[#c58a61] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Submit</button>
           </form>
         </div>
 
         <div class="flex justify-center">
-          <button @click="closeModal" class="mt-4 bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800">Close</button>
+          <button @click="closeModal" class="mt-4 bg-[#c58a61] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Close</button>
         </div>
       </div>
     </div>
@@ -119,10 +138,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Link } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
 
 const recommendedPigs = ref([]);
 const showModal = ref(false);
 const selectedPig = ref(null);
+const farmUserId = ref(null);
 const feedback = ref([]);
 const newFeedback = ref({
   rating: 5,
@@ -140,11 +162,9 @@ const fetchRecommendations = async () => {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
-    recommendedPigs.value = data.recommended_items; // Update to use recommended_items
-    console.log(recommendedPigs.value)
+    recommendedPigs.value = data.recommendations;
   } catch (error) {
     console.error('Error fetching recommendations:', error);
-    alert('Failed to fetch recommendations');
   }
 };
 
@@ -157,8 +177,10 @@ const computeAgeInMonths = (dateOfBirth) => {
 const showPigDetails = async (pig) => {
   selectedPig.value = pig;
   selectedPig.value.pigId = pig.pigId;
-  console.log(selectedPig.value.pigId);
+  selectedPig.value.price_per_kilo = pig.price_per_kilo;
+  selectedPig.value.breed = pig.breed;
   showModal.value = true;
+  farmUserId.value = pig.user_id;
   await fetchFarmDetails(pig.user_id);
   await fetchFeedback(pig.pigId);
   await trackInteraction(selectedPig.value.pigId);
@@ -182,11 +204,9 @@ const fetchFarmDetails = async (userId) => {
       throw new Error('Network response was not ok');
     }
     const farmDetails = await response.json();
-    console.log(farmDetails); // Debugging: Log farm details
     selectedPig.value.id = farmDetails.id;
-    selectedPig.value.min_price_per_kilo = farmDetails.min_price_per_kilo;
-    selectedPig.value.max_price_per_kilo = farmDetails.max_price_per_kilo;
     selectedPig.value.owner = farmDetails.owner_name;
+
     selectedPig.value.location = farmDetails.location;
     const latitude = parseFloat(farmDetails.latitude);
     const longitude = parseFloat(farmDetails.longitude);
@@ -219,10 +239,10 @@ const fetchFeedback = async (pigId) => {
     alert('Failed to fetch feedback');
   }
 };
+
 const submitFeedback = async () => {
   try {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    console.log('Submitting feedback for pig ID:', selectedPig.value.pigId); // Debugging: Log pig ID
     const response = await fetch(`/api/pigs/${selectedPig.value.pigId}/feedback`, {
       method: 'POST',
       headers: {
@@ -231,7 +251,6 @@ const submitFeedback = async () => {
       },
       body: JSON.stringify({
         pig_id: selectedPig.value.pigId,
-     
         comment: newFeedback.value.comment,
         rating: newFeedback.value.rating
       })
@@ -251,7 +270,6 @@ const submitFeedback = async () => {
 };
 
 const trackInteraction = async (pigId) => {
-  console.log(pigId);
   try {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const response = await fetch('/api/track_interaction', {
@@ -261,7 +279,7 @@ const trackInteraction = async (pigId) => {
         'X-CSRF-TOKEN': csrfToken,
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
-      body: JSON.stringify({  pig_id: pigId })
+      body: JSON.stringify({ pig_id: pigId })
     });
     if (!response.ok) {
       throw new Error('Network response was not ok');

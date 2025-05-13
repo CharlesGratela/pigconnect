@@ -14,7 +14,7 @@ let toggleMobileNav = () => {
         <div class="container mx-auto px-5">
             <header class="flex justify-between items-center">
                 <div>
-                    <a href="/"><img src="/images/pigconnectlogo_s.png" alt="Site Logo" class="h-10 md:h-12 lg:h-16"></a>
+                    <a href="/"><img src="/images/pigconnectlogo_s.png" alt="Site Logo" class="h-10 md:h-8 lg:h-12"></a>
                 </div>
                 
                 <nav class="flex justify-end items-center flex-row">

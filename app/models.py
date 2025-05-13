@@ -15,20 +15,20 @@ class BuyersPreference(Base):
     __tablename__ = "buyer_preferences"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
+    user_id = Column(Integer)
     preferred_weight = Column(Float)
     age_of_pigs = Column(String(50))
     price_range = Column(String(50))
+    breed = Column(String)
+    prefer_nearby = Column(Boolean, default=False)
 
 class PigFarmInformation(Base):
     __tablename__ = "pig_farm_information"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
+    user_id = Column(Integer)
     feeding_type = Column(String)
     frequency_of_feeding = Column(String)
-    min_price_per_kilo = Column(Float)
-    max_price_per_kilo = Column(Float)
     latitude = Column(Float)
     longitude = Column(Float)
 
@@ -41,6 +41,8 @@ class Pig(Base):
     date_of_birth = Column(Date)
     status = Column(String)
     image = Column(String)
+    breed = Column(String)
+    price_per_kilo = Column(Float)
 
 class UserInteraction(Base):
     __tablename__ = "user_interactions"
@@ -50,3 +52,14 @@ class UserInteraction(Base):
     pig_id = Column(Integer, ForeignKey('pigs.pigId'))
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+class BuyerInformation(Base):
+    __tablename__ = "buyer_information"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    location = Column(String)
+    address = Column(String)
+    latitude = Column(Float)
+    longitude = Column(Float)
+   

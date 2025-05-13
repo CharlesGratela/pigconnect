@@ -6,16 +6,14 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
-import FarmerDashboard from '@/Pages/FarmerDashboard.vue';
 
 const showingNavigationDropdown = ref(false);
-const showingSidebar = ref(false);
 </script>
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100">
-            <nav class="bg-[#F7B5CA] py-6 border-b border-gray-100">
+        <div class="min-h-screen">
+            <nav style="background-color: #c58a61; padding: 15px 0;">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -28,35 +26,48 @@ const showingSidebar = ref(false);
                             </div>
 
                             <!-- Navigation Links -->
-                            <div class="text-black hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <div class="text-white hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
                                     Dashboard
                                 </NavLink>
                                 <template v-if="$page.props.auth.user.role == 'farmer'">
-                                    <NavLink :href="route('farmer.pigfarminformation')">
+                                    <NavLink :href="route('farmer.pigfarminformation')" :active="route().current('farmer.pigfarminformation')">
                                         Farm Information
                                     </NavLink>
-                                    <NavLink :href="route('pig.information')">
+                                    <NavLink :href="route('pig.information')" :active="route().current('pig.information')">
                                         Pig Information
                                     </NavLink>
-                                    <NavLink :href="route('farmer.expenses')">
+                                    <NavLink :href="route('farmer.expenses')" :active="route().current('farmer.expenses')">
                                         Expenses
                                     </NavLink>
-                                    <NavLink :href="route('farmer.breedingrecord')">
+                                    <NavLink :href="route('farmer.breedingrecord')" :active="route().current('farmer.breedingrecord')">
                                         Breeding Record
+                                    </NavLink>
+                                    <NavLink :href="route('farmer.feedingschedule')" :active="route().current('farmer.feedingschedule')">
+                                        Feeding Schedule
+                                    </NavLink>
+                                    <NavLink :href="route('chat.list')" :active="route().current('chat.list')">
+                                    Messages
+                                </NavLink>
+                                </template>
+                                <template v-if="$page.props.auth.user.role == 'admin'">
+                     
+                                    <NavLink :href="route('admin.users')" :active="route().current('admin.users')">
+                                        User accounts
                                     </NavLink>
                                 </template>
                                 <template v-if="$page.props.auth.user.role == 'buyer'">
                                     <NavLink :href="route('buyer.preferences')" :active="route().current('buyer.preferences')">
+                                        Preferences
+                                    </NavLink>
+                                    <NavLink :href="route('buyer.information')" :active="route().current('buyer.information')">
                                         Buyer Information
                                     </NavLink>
-                                    <NavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
-                                        Favorites
-                                    </NavLink>
-                                </template>
-                                <NavLink :href="route('chat')" :active="route().current('chat')">
+                                    <NavLink :href="route('chat.list')" :active="route().current('chat.list')">
                                     Messages
                                 </NavLink>
+                                </template>
+                           
                             </div>
                         </div>
 
@@ -68,7 +79,7 @@ const showingSidebar = ref(false);
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#281c11] hover:text-[#a7674d] focus:outline-none transition ease-in-out duration-150"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
@@ -102,7 +113,7 @@ const showingSidebar = ref(false);
                         <div class="-me-2 flex items-center sm:hidden">
                             <button
                                 @click="showingNavigationDropdown = !showingNavigationDropdown"
-                                class="inline-flex items-center justify-center p-2 rounded-md text-black hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
+                                class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-[#a7674d] hover:bg-[#c59461] focus:outline-none focus:bg-[#c59461] focus:text-[#a7674d] transition duration-150 ease-in-out"
                             >
                                 <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                     <path
@@ -136,7 +147,7 @@ const showingSidebar = ref(false);
                     :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
                     class="sm:hidden"
                 >
-                    <div class="pt-2 pb-3 space-y-1 text-black">
+                    <div class="pt-2 pb-3 space-y-1 text-white">
                         <template v-if="$page.props.auth.user.role == 'farmer'">
                             <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
                                 Home
@@ -144,7 +155,7 @@ const showingSidebar = ref(false);
                             <ResponsiveNavLink :href="route('farmer.pigfarminformation')" :active="route().current('farmer.pigfarminformation')">
                                 Farm Information
                             </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('pig.information')" :active="route().current('farmer.piginformation')">
+                            <ResponsiveNavLink :href="route('pig.information')" :active="route().current('pig.information')">
                                 Pig Information
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('farmer.expenses')" :active="route().current('farmer.expenses')">
@@ -153,34 +164,37 @@ const showingSidebar = ref(false);
                             <ResponsiveNavLink :href="route('farmer.breedingrecord')" :active="route().current('farmer.breedingrecord')">
                                 Breeding Record
                             </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('farmer.feedingschedule')" :active="route().current('farmer.feedingschedule')">
+                               Feeding Schedule
+                            </ResponsiveNavLink>
                         </template>
                         <template v-if="$page.props.auth.user.role == 'buyer'">
                             <ResponsiveNavLink :href="route('buyer.preferences')" :active="route().current('buyer.preferences')">
+                                Preferences
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('buyer.information')" :active="route().current('buyer.information')">
                                 Buyer Information
                             </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="dashboardRoute" :active="route().current(dashboardRoute)">
-                                Favorites
-                            </ResponsiveNavLink>
                         </template>
-                        <ResponsiveNavLink :href="route('chat')" :active="route().current('chat')">
+                        <ResponsiveNavLink :href="route('chat.list')" :active="route().current('chat.list')">
                             Messages
                         </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
-                    <div class="pt-4 pb-1 border-t border-gray-200 text-black">
+                    <div class="pt-4 pb-1 border-t border-[#c59461] text-white">
                         <div class="px-4">
-                            <div class="font-medium text-base text-black">
+                            <div class="font-medium text-base text-white">
                                 {{ $page.props.auth.user.name }}
                             </div>
-                            <div class="font-medium text-sm text-black">{{ $page.props.auth.user.email }}</div>
+                            <div class="font-medium text-sm text-white">{{ $page.props.auth.user.email }}</div>
                         </div>
 
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
-                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('logout.get')" as="button">
+                Log Out
+              </ResponsiveNavLink>
                         </div>
                     </div>
                 </div>

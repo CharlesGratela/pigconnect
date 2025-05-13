@@ -1,98 +1,72 @@
-<script setup>
-import { computed, onMounted, onUnmounted, watch } from 'vue';
-
-const props = defineProps({
-    show: {
-        type: Boolean,
-        default: false,
-    },
-    maxWidth: {
-        type: String,
-        default: '2xl',
-    },
-    closeable: {
-        type: Boolean,
-        default: true,
-    },
-});
-
-const emit = defineEmits(['close']);
-
-watch(
-    () => props.show,
-    () => {
-        if (props.show) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = null;
-        }
-    }
-);
-
-const close = () => {
-    if (props.closeable) {
-        emit('close');
-    }
-};
-
-const closeOnEscape = (e) => {
-    if (e.key === 'Escape' && props.show) {
-        close();
-    }
-};
-
-onMounted(() => document.addEventListener('keydown', closeOnEscape));
-
-onUnmounted(() => {
-    document.removeEventListener('keydown', closeOnEscape);
-    document.body.style.overflow = null;
-});
-
-const maxWidthClass = computed(() => {
-    return {
-        sm: 'sm:max-w-sm',
-        md: 'sm:max-w-md',
-        lg: 'sm:max-w-lg',
-        xl: 'sm:max-w-xl',
-        '2xl': 'sm:max-w-2xl',
-    }[props.maxWidth];
-});
-</script>
-
 <template>
-    <Teleport to="body">
-        <Transition leave-active-class="duration-200">
-            <div v-show="show" class="fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50" scroll-region>
-                <Transition
-                    enter-active-class="ease-out duration-300"
-                    enter-from-class="opacity-0"
-                    enter-to-class="opacity-100"
-                    leave-active-class="ease-in duration-200"
-                    leave-from-class="opacity-100"
-                    leave-to-class="opacity-0"
-                >
-                    <div v-show="show" class="fixed inset-0 transform transition-all" @click="close">
-                        <div class="absolute inset-0 bg-gray-500 dark:bg-gray-900 opacity-75" />
-                    </div>
-                </Transition>
-
-                <Transition
-                    enter-active-class="ease-out duration-300"
-                    enter-from-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    enter-to-class="opacity-100 translate-y-0 sm:scale-100"
-                    leave-active-class="ease-in duration-200"
-                    leave-from-class="opacity-100 translate-y-0 sm:scale-100"
-                    leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                >
-                    <div
-                        v-show="show"
-                        class="mb-6 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto"
-                        :class="maxWidthClass"
-                    >
-                        <slot v-if="show" />
-                    </div>
-                </Transition>
-            </div>
-        </Transition>
-    </Teleport>
-</template>
+    <div class="fixed inset-0 flex items-center justify-center z-50">
+      <div class="absolute inset-0 bg-black opacity-50"></div>
+      <div class="bg-white rounded-lg shadow-lg p-6 z-10 max-w-lg w-full mx-4 sm:mx-6 md:mx-8 lg:mx-10">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold text-[#543434]">{{ title }}</h3>
+          <button @click="$emit('close')" class="text-[#c58a61] hover:text-[#a7674d]">&times;</button>
+        </div>
+        <div class="mb-4 text-[#543434] modal-content">
+          <slot></slot>
+        </div>
+        <div class="flex justify-end">
+          <button @click="$emit('close')" class="bg-[#281c11] text-white px-4 py-2 rounded hover:bg-[#c59461]">Close</button>
+        </div>
+      </div>
+    </div>
+  </template>
+  
+  <script>
+  export default {
+    props: {
+      title: {
+        type: String,
+        required: true,
+      },
+    },
+  };
+  </script>
+  
+  <style scoped>
+  /* Ensure the modal is responsive and fits the screen */
+  @media (max-width: 640px) {
+    .max-w-lg {
+      max-width: 90%;
+      height: 80vh; /* Fixed height for mobile view */
+    }
+    .p-6 {
+      padding: 1.5rem;
+    }
+    .modal-content {
+      max-height: 60vh; /* Scrollable content */
+      overflow-y: auto;
+    }
+  }
+  
+  @media (min-width: 641px) and (max-width: 768px) {
+    .max-w-lg {
+      max-width: 80%;
+    }
+    .p-6 {
+      padding: 2rem;
+    }
+  }
+  
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .max-w-lg {
+      max-width: 70%;
+    }
+    .p-6 {
+      padding: 2.5rem;
+    }
+  }
+  
+  @media (min-width: 1025px) {
+    .max-w-lg {
+      max-width: 60%;
+    }
+    .p-6 {
+      padding: 3rem;
+    }
+  }
+  </style>

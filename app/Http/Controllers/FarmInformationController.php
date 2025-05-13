@@ -10,7 +10,7 @@ class FarmInformationController extends Controller
     {
         $request->validate([
             'feedingType' => 'required|string',
-            'frequencyOfFeeding' => 'required|string',
+            'frequencyOfFeeding' => 'required|numeric',
             'minPricePerKilo' => 'required|numeric',
             'maxPricePerKilo' => 'required|numeric',
             'location.lat' => 'required|numeric',

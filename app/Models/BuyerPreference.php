@@ -11,13 +11,10 @@ class BuyerPreference extends Model
 
     protected $fillable = [
         'user_id',
-        'preferred_weight',
         'age_of_pigs',
         'price_range',
+        'preferred_weight',
+        'prefer_nearby',
+        'breed', // Add the breed field
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

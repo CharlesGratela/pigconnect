@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use App\Models\PigFarmInformation;
+    use App\Models\PigFarmInformation;
 use App\Models\User;
 
 class PigFarmInformationController extends Controller
@@ -38,8 +38,7 @@ class PigFarmInformationController extends Controller
         $request->validate([
             'feedingType' => 'required|string',
             'frequencyOfFeeding' => 'required|string',
-            'minPricePerKilo' => 'required|numeric',
-            'maxPricePerKilo' => 'required|numeric',
+
             'address' => 'required|string'
         ]);
 
@@ -62,8 +61,6 @@ class PigFarmInformationController extends Controller
             'user_id' => $request->user()->id,
             'feeding_type' => $request->feedingType,
             'frequency_of_feeding' => $request->frequencyOfFeeding,
-            'min_price_per_kilo' => $request->minPricePerKilo,
-            'max_price_per_kilo' => $request->maxPricePerKilo,
             'address' => $request->address,
             'latitude' => $position['lat'],
             'longitude' => $position['lng'],

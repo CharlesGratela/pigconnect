@@ -2,68 +2,83 @@
   <div>
     <AuthenticatedLayout>
       <template #header>
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Breeding Records</h2>
+        <h2 class="font-semibold text-xl text-[#543434] leading-tight">Breeding Records</h2>
       </template>
       <main>
         <div class="flex justify-center">
-          <div class="w-[75%]">
-            <button @click="showAddBreedingForm = true" class="mb-4 bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800">Add Breeding Record</button>
+          <div class="w-full md:w-[75%] px-4">
+            <button @click="openAddBreedingForm" class="mb-4 bg-[#281c11] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Add Breeding Record</button>
 
-            <!-- Add Breeding Record Form -->
-            <div v-if="showAddBreedingForm" class="modal">
-              <div class="modal-content">
-                <span class="close" @click="closeAddBreedingForm">&times;</span>
-                <h3>Add Breeding Record</h3>
+            <!-- Add Breeding Record Form Modal -->
+            <div v-if="showAddBreedingForm" class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                <span class="close cursor-pointer text-[#543434] float-right" @click="closeAddBreedingForm">&times;</span>
+                <h3 class="text-[#543434] mb-4">Add Breeding Record</h3>
                 <form @submit.prevent="addBreedingRecord">
                   <div class="mb-4">
-                    <label for="sowId" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sow (Female Pig)</label>
-                    <select id="sowId" v-model="breedingForm.sow_id" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                      <option v-for="pig in femalePigs" :key="pig.PigId" :value="pig.PigId">{{ pig.PigId }}</option>
+                    <label for="sowId" class="block text-sm font-medium text-[#543434]">Sow (Female Pig)</label>
+                    <select id="sowId" v-model="breedingForm.sow_id" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
+                      <option v-for="pig in femalePigs" :key="pig.pigId" :value="pig.pigId">{{ pig.pigId }}</option>
                     </select>
                   </div>
                   <div class="mb-4">
-                    <label for="boarId" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Boar (Male Pig)</label>
-                    <select id="boarId" v-model="breedingForm.boar_id" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                      <option v-for="pig in malePigs" :key="pig.PigId" :value="pig.PigId">{{ pig.PigId }}</option>
+                    <label for="boarId" class="block text-sm font-medium text-[#543434]">Boar (Male Pig)</label>
+                    <select id="boarId" v-model="breedingForm.boar_id" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
+                      <option v-for="pig in malePigs" :key="pig.pigId" :value="pig.pigId">{{ pig.pigId }}</option>
                     </select>
                   </div>
                   <div class="mb-4">
-                    <label for="dateOfBreeding" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date of Breeding</label>
-                    <input type="date" id="dateOfBreeding" v-model="breedingForm.date_of_breeding" @change="computeExpectedFarrowingDate" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                    <label for="dateOfBreeding" class="block text-sm font-medium text-[#543434]">Date of Breeding</label>
+                    <input type="date" id="dateOfBreeding" v-model="breedingForm.date_of_breeding" @change="computeExpectedFarrowingDate" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
                   </div>
                   <div class="mb-4">
-                    <label for="expectedFarrowingDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Expected Farrowing Date</label>
-                    <input type="date" id="expectedFarrowingDate" v-model="breedingForm.expected_farrowing_date" class="mt-1 block w-full p-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly>
+                    <label for="expectedFarrowingDate" class="block text-sm font-medium text-[#543434]">Expected Farrowing Date</label>
+                    <input type="date" id="expectedFarrowingDate" v-model="breedingForm.expected_farrowing_date" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" readonly>
                   </div>
-                  <button type="submit" class="w-full bg-blue-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800">Submit</button>
+                  <button type="submit" class="w-full bg-[#281c11] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Submit</button>
                 </form>
               </div>
             </div>
 
             <!-- Breeding Records Table -->
-            <div class="overflow-x-auto">
-              <table class="min-w-full bg-white dark:bg-gray-800">
-                <thead>
+            <div class="hidden md:block overflow-x-auto mt-4">
+              <table class="min-w-full divide-y divide-[#c59461]">
+                <thead class="bg-[#c58a61]">
                   <tr>
-                    <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Sow ID</th>
-                    <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Boar ID</th>
-                    <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Date of Breeding</th>
-                    <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Expected Farrowing Date</th>
-                    <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Actions</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-[#543434] uppercase tracking-wider">Sow ID</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-[#543434] uppercase tracking-wider">Boar ID</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-[#543434] uppercase tracking-wider">Date of Breeding</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-[#543434] uppercase tracking-wider">Expected Farrowing Date</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-[#543434] uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody class="bg-white divide-y divide-[#c59461] text-center">
                   <tr v-for="record in breedingRecords" :key="record.id">
-                    <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{{ record.sow_id }}</td>
-                    <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{{ record.boar_id }}</td>
-                    <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{{ record.date_of_breeding }}</td>
-                    <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{{ record.expected_farrowing_date }}</td>
-                    <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
-                      <button @click="deleteBreedingRecord(record.id)" class="bg-red-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:focus:ring-red-800">Delete</button>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ record.sow_id }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ record.boar_id }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ record.date_of_breeding }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ record.expected_farrowing_date }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <button @click="deleteBreedingRecord(record.id)" class="bg-red-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-red-300">Delete</button>
                     </td>
                   </tr>
                 </tbody>
               </table>
+            </div>
+
+            <!-- Breeding Records Card View for Mobile -->
+            <div class="block md:hidden mt-4 space-y-4">
+              <div v-for="record in breedingRecords" :key="record.id" class="bg-white p-4 rounded-lg shadow-md divide-y divide-[#c59461]">
+                <div class="py-2">
+                  <p class="text-sm font-medium text-[#543434]">Sow ID: {{ record.sow_id }}</p>
+                  <p class="text-sm font-medium text-[#543434]">Boar ID: {{ record.boar_id }}</p>
+                  <p class="text-sm font-medium text-[#543434]">Date of Breeding: {{ record.date_of_breeding }}</p>
+                  <p class="text-sm font-medium text-[#543434]">Expected Farrowing Date: {{ record.expected_farrowing_date }}</p>
+                </div>
+                <div class="py-2 flex justify-end">
+                  <button @click="deleteBreedingRecord(record.id)" class="bg-red-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-red-300">Delete</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -122,9 +137,7 @@ const fetchPigs = async () => {
     }
     const data = await response.json();
     malePigs.value = data.filter(pig => pig.gender === 'male');
-    console.log(malePigs);
     femalePigs.value = data.filter(pig => pig.gender === 'female');
-    console.log(femalePigs);
   } catch (error) {
     console.error('Error fetching pigs:', error);
   }
@@ -189,13 +202,17 @@ const closeAddBreedingForm = () => {
   showAddBreedingForm.value = false;
 };
 
+const openAddBreedingForm = () => {
+  showAddBreedingForm.value = true;
+  fetchPigs();
+};
+
 onMounted(() => {
-  fetchPigs(); 
   fetchBreedingRecords();
 });
 </script>
 
-<style>
+<style scoped>
 .modal {
   display: block;
   position: fixed;
@@ -216,11 +233,6 @@ onMounted(() => {
   border: 1px solid #888;
   width: 80%;
   color: #000;
-}
-
-.dark .modal-content {
-  background-color: #333;
-  color: #fff;
 }
 
 .close {
