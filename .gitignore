@@ -51,3 +51,7 @@ Thumbs.db
 *.swo
 *.swn
 *.swp
+
+# Prevent specific changes from being included
+/vendor/composer/installed.json
+/symfony/polyfill-mbstring/bootstrap.php
