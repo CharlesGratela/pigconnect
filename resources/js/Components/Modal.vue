@@ -1,72 +1,71 @@
 <template>
-    <div class="fixed inset-0 flex items-center justify-center z-50">
-      <div class="absolute inset-0 bg-black opacity-50"></div>
-      <div class="bg-white rounded-lg shadow-lg p-6 z-10 max-w-lg w-full mx-4 sm:mx-6 md:mx-8 lg:mx-10">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-lg font-semibold text-[#543434]">{{ title }}</h3>
-          <button @click="$emit('close')" class="text-[#c58a61] hover:text-[#a7674d]">&times;</button>
-        </div>
-        <div class="mb-4 text-[#543434] modal-content">
-          <slot></slot>
-        </div>
-        <div class="flex justify-end">
-          <button @click="$emit('close')" class="bg-[#281c11] text-white px-4 py-2 rounded hover:bg-[#c59461]">Close</button>
+  <Teleport to="body">
+    <Transition
+      enter-active-class="duration-300 ease-out"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-active-class="duration-200 ease-in"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
+      <div v-show="true" class="fixed inset-0 z-[999] overflow-y-auto">
+        <div class="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+          <div
+            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            @click="$emit('close')"
+            aria-hidden="true"
+          ></div>
+
+          <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
+
+          <div
+            class="relative inline-block transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
+            :class="$attrs.class"
+          >
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div class="sm:flex sm:items-start">
+                <div class="mt-3 w-full text-center sm:mt-0 sm:text-left">
+                  <div class="flex items-center justify-between border-b border-gray-200 pb-3">
+                    <h3 class="text-xl font-semibold leading-6 text-gray-900" id="modal-title">
+                      {{ title }}
+                    </h3>
+                    <button
+                      @click="$emit('close')"
+                      type="button"
+                      class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                    >
+                      <span class="sr-only">Close</span>
+                      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="mt-4">
+                    <slot></slot>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    props: {
-      title: {
-        type: String,
-        required: true,
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  /* Ensure the modal is responsive and fits the screen */
-  @media (max-width: 640px) {
-    .max-w-lg {
-      max-width: 90%;
-      height: 80vh; /* Fixed height for mobile view */
-    }
-    .p-6 {
-      padding: 1.5rem;
-    }
-    .modal-content {
-      max-height: 60vh; /* Scrollable content */
-      overflow-y: auto;
-    }
-  }
-  
-  @media (min-width: 641px) and (max-width: 768px) {
-    .max-w-lg {
-      max-width: 80%;
-    }
-    .p-6 {
-      padding: 2rem;
-    }
-  }
-  
-  @media (min-width: 769px) and (max-width: 1024px) {
-    .max-w-lg {
-      max-width: 70%;
-    }
-    .p-6 {
-      padding: 2.5rem;
-    }
-  }
-  
-  @media (min-width: 1025px) {
-    .max-w-lg {
-      max-width: 60%;
-    }
-    .p-6 {
-      padding: 3rem;
-    }
-  }
-  </style>
+    </Transition>
+  </Teleport>
+</template>
+
+<script setup>
+import { Teleport, Transition } from 'vue';
+
+defineProps({
+  title: {
+    type: String,
+    required: true,
+  },
+});
+
+defineEmits(['close']);
+</script>
+
+<style scoped>
+/* Add any additional styling here */
+</style>
