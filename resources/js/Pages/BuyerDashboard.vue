@@ -44,91 +44,128 @@
     </AuthenticatedLayout>
 
     <!-- Pig Details Modal -->
-    <div v-if="showModal" class="fixed inset-0 flex items-center justify-center z-50 bg-[#543434] bg-opacity-75">
-      <div class="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-[50%] h-[80%] overflow-y-auto">
-        <h3 class="text-2xl font-bold text-[#543434] mb-4 text-center">Pig Details</h3>
-        <div class="mb-4 flex justify-center">
-          <img :src="`/storage/${selectedPig.image}`" alt="Pig Image" class="w-48 h-48 rounded-lg object-cover">
-        </div>
-    
-        <div class="mb-2 text-center">
-          <span class="text-xl font-semibold text-[#543434]">Owner: </span>
-          <span class="text-xl text-[#543434]"> {{ selectedPig.owner }}</span>
-        </div>
-        <div class="mb-2 text-center">
-          <span class="text-xl font-semibold text-[#543434]">Breed:</span>
-          <span class="text-xl text-[#543434]">{{ selectedPig.breed }}</span>
-        </div>
-        <div class="mb-2 text-center">
-          <span class="text-xl font-semibold text-[#543434]">Weight:</span>
-          <span class="text-xl text-[#543434]">{{ selectedPig.weight }} kg</span>
-        </div>
-        <div class="mb-2 text-center">
-          <span class="text-xl font-semibold text-[#543434]">Age:</span>
-          <span class="text-xl text-[#543434]">{{ computeAgeInMonths(selectedPig.date_of_birth) }} months</span>
-        </div>
-        <div class="mb-2 text-center">
-          <span class="text-xl font-semibold text-[#543434]">Price Range:</span>
-          <span class="text-xl text-[#543434]">₱ {{ selectedPig.price_per_kilo }} per kilo</span>
-        </div>
-        <div class="mb-2 text-center">
-          <span class="text-xl font-semibold text-[#543434]">Interested with the pig? </span>
-   
-           </div>
-           <div class="mb-2 text-center">
-            <span><Link :href="route('chat.index', { userId: farmUserId })" :active="route('chat.index', { userId: farmUserId })" class="mt-2 bg-[#c58a61] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">
-            Message the Seller.
-          </Link></span>
-       </div>
-        <div class="mb-2 text-center">
-         
-          <span class="text-xl font-semibold text-[#543434]">Location:</span>
-          <span class="text-xl text-[#543434]">{{ selectedPig.location }}</span>
+    <div v-if="showModal" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+      <div class="bg-white p-6 rounded-lg shadow-xl w-[95%] md:w-[80%] lg:w-[60%] max-h-[90vh] overflow-y-auto">
+        <!-- Header with close button -->
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold text-[#543434]">Pig Details</h3>
+          <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
-        <div id="map" class="w-full h-64 mb-4"></div>
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Left Column - Image and Basic Info -->
+          <div class="space-y-4">
+            <div class="aspect-square w-full overflow-hidden rounded-lg">
+              <img :src="`/storage/${selectedPig.image}`" alt="Pig Image" class="w-full h-full object-cover">
+            </div>
+            
+            <div class="bg-gray-50 p-4 rounded-lg space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="font-semibold text-[#543434]">Owner:</span>
+                <span class="text-[#543434]">{{ selectedPig.owner }}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="font-semibold text-[#543434]">Breed:</span>
+                <span class="text-[#543434]">{{ selectedPig.breed }}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="font-semibold text-[#543434]">Weight:</span>
+                <span class="text-[#543434]">{{ selectedPig.weight }} kg</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="font-semibold text-[#543434]">Age:</span>
+                <span class="text-[#543434]">{{ computeAgeInMonths(selectedPig.date_of_birth) }} months</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="font-semibold text-[#543434]">Price:</span>
+                <span class="text-[#543434]">₱ {{ selectedPig.price_per_kilo }} per kilo</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column - Location and Contact -->
+          <div class="space-y-4">
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h4 class="text-lg font-semibold text-[#543434] mb-2">Location</h4>
+              <p class="text-[#543434] mb-4">{{ selectedPig.location }}</p>
+              <div id="map" class="w-full h-48 rounded-lg"></div>
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h4 class="text-lg font-semibold text-[#543434] mb-2">Contact Seller</h4>
+              <Link 
+                :href="route('chat.index', { userId: farmUserId })" 
+                :active="route('chat.index', { userId: farmUserId })" 
+                class="inline-block w-full text-center bg-[#c58a61] text-white py-2 px-4 rounded-lg hover:bg-[#b37a51] transition-colors duration-200"
+              >
+                Message the Seller
+              </Link>
+            </div>
+          </div>
+        </div>
 
         <!-- Feedback Section -->
-        <div class="mb-4">
-          <h4 class="text-lg font-semibold text-[#543434] mb-2">Feedback</h4>
-          <div v-if="feedback.length === 0" class="text-center text-[#543434]">
-            No feedback available.
-          </div>
-          <div v-else>
-            <div v-for="item in feedback" :key="item.id" class="mb-2 p-2 bg-[#c58a61] rounded-lg">
-              <div class="flex justify-between">
-                <span class="font-semibold text-[#543434]">{{ item.user.name }}</span>
-                <span class="text-[#543434]">{{ item.rating }} / 5</span>
+        <div class="mt-6 space-y-6">
+          <!-- Existing Feedback -->
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h4 class="text-lg font-semibold text-[#543434] mb-4">Feedback</h4>
+            <div v-if="feedback.length === 0" class="text-center text-gray-500 py-4">
+              No feedback available.
+            </div>
+            <div v-else class="space-y-3">
+              <div v-for="item in feedback" :key="item.id" class="bg-white p-3 rounded-lg shadow-sm">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="font-semibold text-[#543434]">{{ item.user.name }}</span>
+                  <div class="flex items-center">
+                    <span class="text-yellow-500 mr-1">★</span>
+                    <span class="text-[#543434]">{{ item.rating }}/5</span>
+                  </div>
+                </div>
+                <p class="text-[#543434]">{{ item.comment }}</p>
               </div>
-              <p class="text-[#543434]">{{ item.comment }}</p>
             </div>
           </div>
-        </div>
 
-        <!-- Add Feedback Form -->
-        <div class="mb-4">
-          <h4 class="text-lg font-semibold text-[#543434] mb-2">Add Feedback</h4>
-          <form @submit.prevent="submitFeedback">
-            <div class="mb-2">
-              <label for="rating" class="block text-[#543434]">Rating:</label>
-              <select id="rating" v-model="newFeedback.rating" class="w-full p-2 border rounded-lg">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-              </select>
-            </div>
-            <div class="mb-2">
-              <label for="comment" class="block text-[#543434]">Comment:</label>
-              <textarea id="comment" v-model="newFeedback.comment" class="w-full p-2 border rounded-lg"></textarea>
-            </div>
-            <button type="submit" class="mt-2 bg-[#c58a61] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Submit</button>
-          </form>
-        </div>
-
-        <div class="flex justify-center">
-          <button @click="closeModal" class="mt-4 bg-[#c58a61] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Close</button>
+          <!-- Add Feedback Form -->
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h4 class="text-lg font-semibold text-[#543434] mb-4">Add Feedback</h4>
+            <form @submit.prevent="submitFeedback" class="space-y-4">
+              <div>
+                <label for="rating" class="block text-[#543434] mb-2">Rating:</label>
+                <select 
+                  id="rating" 
+                  v-model="newFeedback.rating" 
+                  class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#c58a61] focus:border-[#c58a61]"
+                >
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+              <div>
+                <label for="comment" class="block text-[#543434] mb-2">Comment:</label>
+                <textarea 
+                  id="comment" 
+                  v-model="newFeedback.comment" 
+                  rows="3"
+                  class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#c58a61] focus:border-[#c58a61]"
+                ></textarea>
+              </div>
+              <button 
+                type="submit" 
+                class="w-full bg-[#c58a61] text-white py-2 px-4 rounded-lg hover:bg-[#b37a51] transition-colors duration-200"
+              >
+                Submit Feedback
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
