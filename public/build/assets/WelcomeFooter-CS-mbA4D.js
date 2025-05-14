@@ -1,0 +1,1 @@
+import{_ as o}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{b as t,a as r,o as s}from"./app-BpM4j1nk.js";const a={},c={class:"bg-theme-dark-blue py-10"};function n(l,e){return s(),t("footer",c,e[0]||(e[0]=[r("div",{class:"container mx-auto px-5"},null,-1)]))}const f=o(a,[["render",n]]);export{f as default};

@@ -34,11 +34,21 @@
                   <td class="py-2 text-left text-[#543434]">{{ pig.breed }}</td>
                   <td class="py-2 text-left text-[#543434]">{{ pig.status }}</td>
                   <td class="py-2 text-left text-[#543434]">
-                    <img :src="`/storage/${pig.image}`" alt="Pig Image" class="w-16 h-16 rounded-full">
+                    <img 
+                      :src="`/storage/${pig.image}`" 
+                      alt="Pig Image" 
+                      class="w-16 h-16 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+                      @click="showEnlargedImage(`/storage/${pig.image}`, 'Pig Image')"
+                    >
                   </td>
                   <td class="py-2 text-left text-[#543434]">
                     <template v-if="pig.mark">
-                      <img :src="`/storage/${pig.mark}`" alt="Pig Mark" class="w-16 h-16 rounded-full">
+                      <img 
+                        :src="`/storage/${pig.mark}`" 
+                        alt="Pig Mark" 
+                        class="w-16 h-16 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+                        @click="showEnlargedImage(`/storage/${pig.mark}`, 'Pig Mark')"
+                      >
                     </template>
                     <template v-else>
                       <span class="text-[#543434]">No Mark</span>
@@ -57,7 +67,12 @@
             <div class="block-mobile">
               <div v-for="pig in pigs" :key="pig.pigId" class="mb-4 p-4 bg-white rounded-lg shadow-md">
                 <div class="flex items-center mb-4">
-                  <img :src="`/storage/${pig.image}`" alt="Pig Image" class="w-16 h-16 rounded-full mr-4">
+                  <img 
+                    :src="`/storage/${pig.image}`" 
+                    alt="Pig Image" 
+                    class="w-16 h-16 rounded-full mr-4 cursor-pointer hover:opacity-80 transition-opacity"
+                    @click="showEnlargedImage(`/storage/${pig.image}`, 'Pig Image')"
+                  >
                   <div>
                     <h3 class="text-lg font-semibold text-[#543434]">{{ pig.pigId }}</h3>
                   </div>
@@ -89,7 +104,12 @@
                 <div class="mb-2">
                   <span class="font-semibold text-[#543434]">Mark:</span>
                   <template v-if="pig.mark">
-                    <img :src="`/storage/${pig.mark}`" alt="Pig Mark" class="w-16 h-16 mr-4">
+                    <img 
+                      :src="`/storage/${pig.mark}`" 
+                      alt="Pig Mark" 
+                      class="w-16 h-16 mr-4 cursor-pointer hover:opacity-80 transition-opacity"
+                      @click="showEnlargedImage(`/storage/${pig.mark}`, 'Pig Mark')"
+                    >
                   </template>
                   <template v-else>
                     <span class="text-[#543434]">No Mark</span>
@@ -194,98 +214,122 @@
               </div>
             </div>
 
-          <!-- Vaccination Records Modal -->
-          <div v-if="showVaccinationModal" class="modal">
-  <div class="modal-content">
-    <span class="close" @click="closeVaccinationModal">&times;</span>
-    <h3 class="text-lg leading-6 font-medium text-[#543434]">Vaccination Records for Pig ID: {{ selectedPigId }}</h3>
-    <button @click="showAddVaccinationForm = true" class="mb-4 bg-[#281c11] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Add Vaccination Record</button>
+            <!-- Vaccination Records Modal -->
+            <div v-if="showVaccinationModal" class="modal">
+              <div class="modal-content">
+                <span class="close" @click="closeVaccinationModal">&times;</span>
+                <h3 class="text-lg leading-6 font-medium text-[#543434]">Vaccination Records for Pig ID: {{ selectedPigId }}</h3>
+                <button @click="showAddVaccinationForm = true" class="mb-4 bg-[#281c11] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Add Vaccination Record</button>
 
-    <!-- Add Vaccination Record Form -->
-    <div v-if="showAddVaccinationForm" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="closeAddVaccinationForm">&times;</span>
-        <h3 class="text-lg leading-6 font-medium text-[#543434]">Add Vaccination Record</h3>
-        <form @submit.prevent="addVaccinationRecord">
-          <div class="mb-4">
-            <label for="vaccineName" class="block text-sm font-medium text-[#543434]">Vaccine Name</label>
-            <input type="text" id="vaccineName" v-model="vaccinationForm.vaccineName" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
-          </div>
-          <div class="mb-4">
-            <label for="vaccineType" class="block text-sm font-medium text-[#543434]">Vaccine Type</label>
-            <input type="text" id="vaccineType" v-model="vaccinationForm.vaccineType" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
-          </div>
-          <div class="mb-4">
-            <label for="dateAdministered" class="block text-sm font-medium text-[#543434]">Date Administered</label>
-            <input type="date" id="dateAdministered" v-model="vaccinationForm.dateAdministered" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
-          </div>
-          <div class="mb-4">
-            <label for="vaccineImage" class="block text-sm font-medium text-[#543434]">Vaccine Image</label>
-            <input type="file" id="vaccineImage" @change="handleImageUpload" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" accept="image/*" required>
-          </div>
-          <button type="submit" class="w-full bg-[#281c11] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Submit</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Vaccination Records Table -->
-    <div v-if="vaccinationRecords.length > 0">
-      <div class="overflow-x-auto hidden md:block">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-[#281c11]">
-            <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Vaccine Name</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Vaccine Type</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Date Administered</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Vaccine Image</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody class="bg-[#fefefe] divide-y divide-gray-200">
-            <tr v-for="record in vaccinationRecords" :key="record.id">
-              <td class="px-6 py-4 whitespace-nowrap text-[#543434]">{{ record.vaccineName }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#543434]">{{ record.vaccineType }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-[#543434]">{{ record.dateAdministered }}</td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div v-if="record.vaccine_image">
-                  <img :src="`/storage/${record.vaccine_image}`" alt="Vaccine Image" class="w-32 h-32 object-cover">
+                <!-- Add Vaccination Record Form -->
+                <div v-if="showAddVaccinationForm" class="modal">
+                  <div class="modal-content">
+                    <span class="close" @click="closeAddVaccinationForm">&times;</span>
+                    <h3 class="text-lg leading-6 font-medium text-[#543434]">Add Vaccination Record</h3>
+                    <form @submit.prevent="addVaccinationRecord">
+                      <div class="mb-4">
+                        <label for="vaccineName" class="block text-sm font-medium text-[#543434]">Vaccine Name</label>
+                        <input type="text" id="vaccineName" v-model="vaccinationForm.vaccineName" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
+                      </div>
+                      <div class="mb-4">
+                        <label for="vaccineType" class="block text-sm font-medium text-[#543434]">Vaccine Type</label>
+                        <input type="text" id="vaccineType" v-model="vaccinationForm.vaccineType" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
+                      </div>
+                      <div class="mb-4">
+                        <label for="dateAdministered" class="block text-sm font-medium text-[#543434]">Date Administered</label>
+                        <input type="date" id="dateAdministered" v-model="vaccinationForm.dateAdministered" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
+                      </div>
+                      <div class="mb-4">
+                        <label for="vaccineImage" class="block text-sm font-medium text-[#543434]">Vaccine Image</label>
+                        <input type="file" id="vaccineImage" @change="handleImageUpload" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" accept="image/*" required>
+                      </div>
+                      <button type="submit" class="w-full bg-[#281c11] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Submit</button>
+                    </form>
+                  </div>
                 </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <button @click="deleteVaccinationRecord(record.id)" class="bg-red-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-red-300">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
 
-      <!-- Vaccination Records Cards for Mobile -->
-      <div class="md:hidden">
-        <div v-for="record in vaccinationRecords" :key="record.id" class="bg-[#fefefe] p-4 mb-4 rounded-lg shadow-md">
-          <div class="mb-2">
-            <span class="block text-sm font-medium text-[#543434]">Vaccine Name:</span>
-            <span class="block text-sm text-[#543434]">{{ record.vaccineName }}</span>
+                <!-- Vaccination Records Table -->
+                <div v-if="vaccinationRecords.length > 0">
+                  <div class="overflow-x-auto hidden md:block">
+                    <table class="min-w-full divide-y divide-gray-200">
+                      <thead class="bg-[#281c11]">
+                        <tr>
+                          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Vaccine Name</th>
+                          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Vaccine Type</th>
+                          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Date Administered</th>
+                          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Vaccine Image</th>
+                          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody class="bg-[#fefefe] divide-y divide-gray-200">
+                        <tr v-for="record in vaccinationRecords" :key="record.id">
+                          <td class="px-6 py-4 whitespace-nowrap text-[#543434]">{{ record.vaccineName }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-[#543434]">{{ record.vaccineType }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-[#543434]">{{ record.dateAdministered }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap">
+                            <div v-if="record.vaccine_image">
+                              <img :src="`/storage/${record.vaccine_image}`" alt="Vaccine Image" class="w-32 h-32 object-cover">
+                            </div>
+                          </td>
+                          <td class="px-6 py-4 whitespace-nowrap">
+                            <button @click="deleteVaccinationRecord(record.id)" class="bg-red-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-red-300">Delete</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Vaccination Records Cards for Mobile -->
+                  <div class="md:hidden">
+                    <div v-for="record in vaccinationRecords" :key="record.id" class="bg-[#fefefe] p-4 mb-4 rounded-lg shadow-md">
+                      <div class="mb-2">
+                        <span class="block text-sm font-medium text-[#543434]">Vaccine Name:</span>
+                        <span class="block text-sm text-[#543434]">{{ record.vaccineName }}</span>
+                      </div>
+                      <div class="mb-2">
+                        <span class="block text-sm font-medium text-[#543434]">Date Administered:</span>
+                        <span class="block text-sm text-[#543434]">{{ record.dateAdministered }}</span>
+                      </div>
+                      <div class="mb-2" v-if="record.vaccine_image">
+                        <span class="block text-sm font-medium text-[#543434]">Vaccine Image:</span>
+                        <img :src="`/storage/${record.vaccine_image}`" alt="Vaccine Image" class="w-full h-32 object-cover mt-2">
+                      </div>
+                      <button @click="deleteVaccinationRecord(record.id)" class="bg-red-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-red-300 mt-2">Delete</button>
+                    </div>
+                  </div>
+                </div>
+                <p v-else class="text-[#543434]">{{ noVaccinationRecordsMessage }}</p>
+              </div>
+            </div>
+
+            <!-- Enlarged Image Modal -->
+            <div v-if="showEnlargedImageModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+              <div class="relative max-w-4xl w-full mx-4">
+                <button 
+                  @click="closeEnlargedImage" 
+                  class="absolute -top-10 right-0 text-white hover:text-gray-300 transition-colors"
+                >
+                  <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                <div class="bg-white rounded-lg overflow-hidden">
+                  <img 
+                    :src="enlargedImageUrl" 
+                    :alt="enlargedImageTitle" 
+                    class="w-full h-auto max-h-[80vh] object-contain"
+                  >
+                  <div class="p-4 bg-white">
+                    <h3 class="text-lg font-semibold text-[#543434]">{{ enlargedImageTitle }}</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="mb-2">
-            <span class="block text-sm font-medium text-[#543434]">Date Administered:</span>
-            <span class="block text-sm text-[#543434]">{{ record.dateAdministered }}</span>
-          </div>
-          <div class="mb-2" v-if="record.vaccine_image">
-            <span class="block text-sm font-medium text-[#543434]">Vaccine Image:</span>
-            <img :src="`/storage/${record.vaccine_image}`" alt="Vaccine Image" class="w-full h-32 object-cover mt-2">
-          </div>
-          <button @click="deleteVaccinationRecord(record.id)" class="bg-red-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-red-300 mt-2">Delete</button>
         </div>
-      </div>
-    </div>
-    <p v-else class="text-[#543434]">{{ noVaccinationRecordsMessage }}</p>
+      </main>
+    </AuthenticatedLayout>
   </div>
-</div>
-        </div>
-      </div>
-    </main>
-  </AuthenticatedLayout>
-</div>
 </template>
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
@@ -322,6 +366,11 @@ const vaccinationForm = reactive({
   dateAdministered: '',
   vaccineImage: null
 });
+
+// Add new refs for enlarged image modal
+const showEnlargedImageModal = ref(false);
+const enlargedImageUrl = ref('');
+const enlargedImageTitle = ref('');
 
 const fetchPigFarmID = async () => {
   try {
@@ -607,6 +656,19 @@ const closeAddVaccinationForm = () => {
   vaccinationForm.dateAdministered = '';
 };
 
+// Add new methods for enlarged image handling
+const showEnlargedImage = (imageUrl, title) => {
+  enlargedImageUrl.value = imageUrl;
+  enlargedImageTitle.value = title;
+  showEnlargedImageModal.value = true;
+};
+
+const closeEnlargedImage = () => {
+  showEnlargedImageModal.value = false;
+  enlargedImageUrl.value = '';
+  enlargedImageTitle.value = '';
+};
+
 onMounted(() => {
   fetchPigFarmID();
   fetchPigs();
@@ -662,5 +724,24 @@ onMounted(() => {
   .block-mobile {
     display: block;
   }
+}
+
+/* Add styles for enlarged image modal */
+.enlarged-image-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.enlarged-image-container {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.enlarged-image {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
 }
 </style>
