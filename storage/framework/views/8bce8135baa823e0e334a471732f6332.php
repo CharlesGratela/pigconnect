@@ -35,16 +35,16 @@ foreach ($attributes->all() as $__key => $__value) {
 }
 
 unset($__defined_vars); ?>
-<table class="action" align="<?php echo e($align); ?>" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+<table class="action" align="<?php echo new \Illuminate\Support\EncodedHtmlString($align); ?>" width="100%" cellpadding="0" cellspacing="0" role="presentation">
 <tr>
-<td align="<?php echo e($align); ?>">
+<td align="<?php echo new \Illuminate\Support\EncodedHtmlString($align); ?>">
 <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
 <tr>
-<td align="<?php echo e($align); ?>">
+<td align="<?php echo new \Illuminate\Support\EncodedHtmlString($align); ?>">
 <table border="0" cellpadding="0" cellspacing="0" role="presentation">
 <tr>
 <td>
-<a href="<?php echo e($url); ?>" class="button button-<?php echo e($color); ?>" target="_blank" rel="noopener"><?php echo e($slot); ?></a>
+<a href="<?php echo new \Illuminate\Support\EncodedHtmlString($url); ?>" class="button button-<?php echo new \Illuminate\Support\EncodedHtmlString($color); ?>" target="_blank" rel="noopener"><?php echo $slot; ?></a>
 </td>
 </tr>
 </table>

@@ -20,7 +20,7 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['url' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(config('app.url'))]); ?>
-<?php echo e(config('app.name')); ?>
+<?php echo new \Illuminate\Support\EncodedHtmlString(config('app.name')); ?>
 
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -35,7 +35,7 @@
  <?php $__env->endSlot(); ?>
 
 
-<?php echo e($slot); ?>
+<?php echo $slot; ?>
 
 
 
@@ -51,7 +51,7 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-<?php echo e($subcopy); ?>
+<?php echo $subcopy; ?>
 
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -78,7 +78,7 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-© <?php echo e(date('Y')); ?> <?php echo e(config('app.name')); ?>. <?php echo e(__('All rights reserved.')); ?>
+© <?php echo new \Illuminate\Support\EncodedHtmlString(date('Y')); ?> <?php echo new \Illuminate\Support\EncodedHtmlString(config('app.name')); ?>. <?php echo new \Illuminate\Support\EncodedHtmlString(__('All rights reserved.')); ?>
 
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

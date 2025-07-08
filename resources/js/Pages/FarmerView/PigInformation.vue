@@ -7,116 +7,196 @@
       <main>
         <div class="flex justify-center">
           <div class="w-[75%]">
-            <button @click="showModal = true" class="mb-4 bg-[#281c11] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Add Pig</button>
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-2xl font-bold text-[#543434]">Pig Inventory</h2>
+              <button 
+                @click="showModal = true" 
+                class="flex items-center gap-2 bg-[#281c11] text-white px-4 py-2.5 rounded-lg hover:bg-[#3a2a1a] transition-colors duration-200 focus:ring-4 focus:ring-[#c58a61] focus:ring-opacity-50"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Add Pig
+              </button>
+            </div>
             
             <!-- Table View for Desktop -->
-            <table class="min-w-full bg-white hidden-mobile">
-              <thead>
-                <tr>
-                  <th class="py-2 text-left text-[#543434]">ID</th>
-                  <th class="py-2 text-left text-[#543434]">Weight</th>
-                  <th class="py-2 text-left text-[#543434]">Date of Birth</th>
-                  <th class="py-2 text-left text-[#543434]">Gender</th>
-                  <th class="py-2 text-left text-[#543434]">Breed</th>
-                  <th class="py-2 text-left text-[#543434]">Status</th>
-                  <th class="py-2 text-left text-[#543434]">Image</th>
-                  <th class="py-2 text-left text-[#543434]">Mark</th>
-                  <th class="py-2 text-left text-[#543434]">Price per Kilo</th>
-                  <th class="py-2 text-left text-[#543434]">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="pig in pigs" :key="pig.pigId">
-                  <td class="py-2 text-left text-[#543434]">{{ pig.pigId }}</td>
-                  <td class="py-2 text-left text-[#543434]">{{ pig.weight }}</td>
-                  <td class="py-2 text-left text-[#543434]">{{ pig.date_of_birth }}</td>
-                  <td class="py-2 text-left text-[#543434]">{{ pig.gender }}</td>
-                  <td class="py-2 text-left text-[#543434]">{{ pig.breed }}</td>
-                  <td class="py-2 text-left text-[#543434]">{{ pig.status }}</td>
-                  <td class="py-2 text-left text-[#543434]">
+            <div class="hidden md:block bg-white rounded-lg shadow-md overflow-hidden mb-6">
+              <div class="p-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-[#543434] flex items-center gap-2">
+                  <svg class="w-5 h-5 text-[#c58a61]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                  Pig Inventory
+                </h3>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Weight</th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date of Birth</th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Breed</th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mark</th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price per Kilo</th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="pig in pigs" :key="pig.pigId" class="hover:bg-gray-50 transition-colors duration-200">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-[#543434]">{{ pig.pigId }}</div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-[#543434]">{{ pig.weight }} kg</div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-[#543434]">{{ pig.date_of_birth }}</div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-[#543434] capitalize">{{ pig.gender }}</div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-[#543434]">{{ pig.breed }}</div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span :class="{
+                          'px-2 inline-flex text-xs leading-5 font-semibold rounded-full': true,
+                          'bg-green-100 text-green-800': pig.status === 'healthy',
+                          'bg-red-100 text-red-800': pig.status === 'sick',
+                          'bg-blue-100 text-blue-800': pig.status === 'sold',
+                          'bg-gray-100 text-gray-800': pig.status === 'dead'
+                        }">
+                          {{ pig.status }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <img 
+                          :src="`/storage/${pig.image}`" 
+                          alt="Pig Image" 
+                          class="w-16 h-16 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity shadow-sm"
+                          @click="showEnlargedImage(`/storage/${pig.image}`, 'Pig Image')"
+                        >
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <template v-if="pig.mark">
+                          <img 
+                            :src="`/storage/${pig.mark}`" 
+                            alt="Pig Mark" 
+                            class="w-16 h-16 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity shadow-sm"
+                            @click="showEnlargedImage(`/storage/${pig.mark}`, 'Pig Mark')"
+                          >
+                        </template>
+                        <template v-else>
+                          <span class="text-sm text-gray-500">No Mark</span>
+                        </template>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-[#543434]">₱{{ pig.price_per_kilo }}</div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div class="flex space-x-2">
+                          <button 
+                            @click="viewVaccinationRecords(pig.pigId)" 
+                            class="bg-[#a7674d] text-white px-3 py-2 rounded-lg hover:bg-[#8b5a43] transition-colors duration-200 focus:ring-2 focus:ring-[#c58a61] focus:ring-opacity-50"
+                          >
+                            Vaccination
+                          </button>
+                          <button 
+                            @click="openEditModal(pig.pigId, pig.weight, pig.price_per_kilo, pig.status, pig.breed)" 
+                            class="bg-[#c58a61] text-white px-3 py-2 rounded-lg hover:bg-[#b37a50] transition-colors duration-200 focus:ring-2 focus:ring-[#c58a61] focus:ring-opacity-50"
+                          >
+                            Edit
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Card View for Mobile -->
+            <div class="md:hidden space-y-4">
+              <div v-for="pig in pigs" :key="pig.pigId" class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="p-4 border-b border-gray-200">
+                  <div class="flex items-center space-x-4">
                     <img 
                       :src="`/storage/${pig.image}`" 
                       alt="Pig Image" 
-                      class="w-16 h-16 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+                      class="w-20 h-20 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity shadow-sm"
                       @click="showEnlargedImage(`/storage/${pig.image}`, 'Pig Image')"
                     >
-                  </td>
-                  <td class="py-2 text-left text-[#543434]">
-                    <template v-if="pig.mark">
-                      <img 
-                        :src="`/storage/${pig.mark}`" 
-                        alt="Pig Mark" 
-                        class="w-16 h-16 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
-                        @click="showEnlargedImage(`/storage/${pig.mark}`, 'Pig Mark')"
-                      >
-                    </template>
-                    <template v-else>
-                      <span class="text-[#543434]">No Mark</span>
-                    </template>
-                  </td>
-                  <td class="py-2 text-left text-[#543434]">{{ pig.price_per_kilo }}</td>
-                  <td class="py-2 text-left text-[#543434]">
-                    <button @click="viewVaccinationRecords(pig.pigId)" class="bg-[#a7674d] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">View Vaccination Records</button>
-                    <button @click="openEditModal(pig.pigId, pig.weight, pig.price_per_kilo, pig.status, pig.breed)" class="bg-[#c58a61] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61] ml-2">Edit</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <!-- Card View for Mobile -->
-            <div class="block-mobile">
-              <div v-for="pig in pigs" :key="pig.pigId" class="mb-4 p-4 bg-white rounded-lg shadow-md">
-                <div class="flex items-center mb-4">
-                  <img 
-                    :src="`/storage/${pig.image}`" 
-                    alt="Pig Image" 
-                    class="w-16 h-16 rounded-full mr-4 cursor-pointer hover:opacity-80 transition-opacity"
-                    @click="showEnlargedImage(`/storage/${pig.image}`, 'Pig Image')"
-                  >
-                  <div>
-                    <h3 class="text-lg font-semibold text-[#543434]">{{ pig.pigId }}</h3>
+                    <div>
+                      <h3 class="text-lg font-semibold text-[#543434]">ID: {{ pig.pigId }}</h3>
+                      <span :class="{
+                        'px-2 inline-flex text-xs leading-5 font-semibold rounded-full mt-1': true,
+                        'bg-green-100 text-green-800': pig.status === 'healthy',
+                        'bg-red-100 text-red-800': pig.status === 'sick',
+                        'bg-blue-100 text-blue-800': pig.status === 'sold',
+                        'bg-gray-100 text-gray-800': pig.status === 'dead'
+                      }">
+                        {{ pig.status }}
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div class="mb-2">
-                  <span class="font-semibold text-[#543434]">Weight:</span>
-                  <span class="text-[#543434]">{{ pig.weight }}</span>
-                </div>
-                <div class="mb-2">
-                  <span class="font-semibold text-[#543434]">Date of Birth:</span>
-                  <span class="text-[#543434]">{{ pig.date_of_birth }}</span>
-                </div>
-                <div class="mb-2">
-                  <span class="font-semibold text-[#543434]">Gender:</span>
-                  <span class="text-[#543434]">{{ pig.gender }}</span>
-                </div>
-                <div class="mb-2">
-                  <span class="font-semibold text-[#543434]">Breed:</span>
-                  <span class="text-[#543434]">{{ pig.breed }}</span>
-                </div>
-                <div class="mb-2">
-                  <span class="font-semibold text-[#543434]">Status:</span>
-                  <span class="text-[#543434]">{{ pig.status }}</span>
-                </div>
-                <div class="mb-2">
-                  <span class="font-semibold text-[#543434]">Price per kilo:</span>
-                  <span class="text-[#543434]">{{ pig.price_per_kilo }}</span>
-                </div>
-                <div class="mb-2">
-                  <span class="font-semibold text-[#543434]">Mark:</span>
-                  <template v-if="pig.mark">
-                    <img 
-                      :src="`/storage/${pig.mark}`" 
-                      alt="Pig Mark" 
-                      class="w-16 h-16 mr-4 cursor-pointer hover:opacity-80 transition-opacity"
-                      @click="showEnlargedImage(`/storage/${pig.mark}`, 'Pig Mark')"
+                <div class="p-4 space-y-3">
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <p class="text-sm font-medium text-gray-500">Weight</p>
+                      <p class="text-sm text-[#543434]">{{ pig.weight }} kg</p>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-500">Price per Kilo</p>
+                      <p class="text-sm text-[#543434]">₱{{ pig.price_per_kilo }}</p>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-500">Date of Birth</p>
+                      <p class="text-sm text-[#543434]">{{ pig.date_of_birth }}</p>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-500">Gender</p>
+                      <p class="text-sm text-[#543434] capitalize">{{ pig.gender }}</p>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-500">Breed</p>
+                      <p class="text-sm text-[#543434]">{{ pig.breed }}</p>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-500">Mark</p>
+                      <template v-if="pig.mark">
+                        <img 
+                          :src="`/storage/${pig.mark}`" 
+                          alt="Pig Mark" 
+                          class="w-12 h-12 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity shadow-sm"
+                          @click="showEnlargedImage(`/storage/${pig.mark}`, 'Pig Mark')"
+                        >
+                      </template>
+                      <template v-else>
+                        <span class="text-sm text-gray-500">No Mark</span>
+                      </template>
+                    </div>
+                  </div>
+                  <div class="flex space-x-2 pt-2">
+                    <button 
+                      @click="viewVaccinationRecords(pig.pigId)" 
+                      class="flex-1 bg-[#a7674d] text-white px-3 py-2 rounded-lg hover:bg-[#8b5a43] transition-colors duration-200 focus:ring-2 focus:ring-[#c58a61] focus:ring-opacity-50"
                     >
-                  </template>
-                  <template v-else>
-                    <span class="text-[#543434]">No Mark</span>
-                  </template>
+                      Vaccination
+                    </button>
+                    <button 
+                      @click="openEditModal(pig.pigId, pig.weight, pig.price_per_kilo, pig.status, pig.breed)" 
+                      class="flex-1 bg-[#c58a61] text-white px-3 py-2 rounded-lg hover:bg-[#b37a50] transition-colors duration-200 focus:ring-2 focus:ring-[#c58a61] focus:ring-opacity-50"
+                    >
+                      Edit
+                    </button>
+                  </div>
                 </div>
-                <button @click="viewVaccinationRecords(pig.pigId)" class="w-full bg-[#a7674d] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">View Vaccination Records</button>
-                <button @click="openEditModal(pig.pigId, pig.weight, pig.price_per_kilo, pig.status, pig.breed)" class="w-full bg-[#c58a61] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61] mt-2">Edit</button>
               </div>
             </div>
 

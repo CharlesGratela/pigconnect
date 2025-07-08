@@ -47,13 +47,34 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 const feedingType = ref('');
 const frequencyOfFeeding = ref(0);
 const location = reactive({
-  lat: 0,
-  lng: 0
+  lat: 14.5995, // Default to Philippines coordinates
+  lng: 120.9842
 });
-const address = ref(''); // Add a reactive property for the address
+const address = ref('');
+const isMapLoaded = ref(false);
 
 let map;
 let marker;
+
+const loadGoogleMapsScript = () => {
+  return new Promise((resolve, reject) => {
+    if (window.google && window.google.maps) {
+      resolve();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCL_IiN0vAn1y3Z_ZttsmYwi4R1fgXD1zU&callback=initGoogleMaps`;
+    script.async = true;
+    script.defer = true;
+    window.initGoogleMaps = () => {
+      isMapLoaded.value = true;
+      resolve();
+    };
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+};
 
 const fetchFarmInformation = async () => {
   try {
@@ -92,7 +113,7 @@ const fetchFarmInformation = async () => {
 };
 
 const reverseGeocode = async (lat, lng) => {
-  const apiKey = 'AIzaSyAPE3z_ByaGmKAwUDjUPFP6ZEZyyWmKvTY';
+  const apiKey = 'AIzaSyCL_IiN0vAn1y3Z_ZttsmYwi4R1fgXD1zU';
   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
 
   try {
@@ -111,7 +132,7 @@ const reverseGeocode = async (lat, lng) => {
 };
 
 const geocodeAddress = async (address) => {
-  const apiKey = 'AIzaSyAPE3z_ByaGmKAwUDjUPFP6ZEZyyWmKvTY';
+  const apiKey = 'AIzaSyCL_IiN0vAn1y3Z_ZttsmYwi4R1fgXD1zU';
   const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
 
   try {
@@ -190,9 +211,14 @@ const submitForm = async () => {
   }
 };
 
-onMounted(() => {
-  fetchFarmInformation();
-  initMap();
+onMounted(async () => {
+  try {
+    await loadGoogleMapsScript();
+    await fetchFarmInformation();
+    initMap();
+  } catch (error) {
+    console.error('Error loading Google Maps:', error);
+  }
 });
 
 watch(address, async (newAddress) => {

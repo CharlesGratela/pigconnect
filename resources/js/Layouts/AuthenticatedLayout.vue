@@ -1,13 +1,32 @@
 <script setup>
-import { ref } from 'vue';
-
+import { ref, onMounted, onUnmounted } from 'vue';
+import { Link, usePage } from '@inertiajs/vue3';
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import MessageNotification from '@/Components/MessageNotification.vue';
 
 const showingNavigationDropdown = ref(false);
+const { props: pageProps } = usePage();
+
+// Add notification polling
+const pollNotifications = () => {
+    const messageNotification = document.querySelector('message-notification');
+    if (messageNotification) {
+        messageNotification.fetchNotifications();
+    }
+};
+
+onMounted(() => {
+    // Start polling for notifications every 3 seconds
+    const interval = setInterval(pollNotifications, 3000);
+    
+    onUnmounted(() => {
+        clearInterval(interval);
+    });
+});
 </script>
 
 <template>
@@ -72,6 +91,11 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
+                            <!-- Message Notifications -->
+                            <div class="ms-3 relative">
+                                <MessageNotification />
+                            </div>
+                            
                             <!-- Settings Dropdown -->
                             <div class="ms-3 relative">
                                 <Dropdown align="right" width="48">

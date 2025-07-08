@@ -55,41 +55,49 @@ class ChatController extends Controller
     }
 
     public function index($userId)
-{
-    $user = auth()->user();
-    $messages = ChatMessage::where(function ($query) use ($user, $userId) {
-        $query->where('sender_id', $user->id)
-              ->where('receiver_id', $userId);
-    })->orWhere(function ($query) use ($user, $userId) {
-        $query->where('sender_id', $userId)
-              ->where('receiver_id', $user->id);
-    })->orderBy('created_at', 'asc')->get();
+    {
+        $currentUser = Auth::user();
+        $otherUser = User::findOrFail($userId);
 
-    $sender = User::find($userId);
+        // Mark all messages from this user as read
+        ChatMessage::where('sender_id', $userId)
+            ->where('receiver_id', $currentUser->id)
+            ->where('read', false)
+            ->update(['read' => true]);
 
-    return Inertia::render('Chat', [
-        'messages' => $messages,
-        'userId' => $userId,
-        'senderName' => $sender->name,
-    ]);
-}
-public function store(Request $request)
-{
-    $request->validate([
-        'receiver_id' => 'required|integer|exists:users,id',
-        'message' => 'required|string',
-    ]);
+        $messages = ChatMessage::where(function ($query) use ($currentUser, $userId) {
+            $query->where('sender_id', $currentUser->id)
+                ->where('receiver_id', $userId);
+        })->orWhere(function ($query) use ($currentUser, $userId) {
+            $query->where('sender_id', $userId)
+                ->where('receiver_id', $currentUser->id);
+        })
+        ->orderBy('created_at', 'asc')
+        ->get();
 
-    $message = ChatMessage::create([
-        'sender_id' => $request->user()->id,
-        'receiver_id' => $request->receiver_id,
-        'message' => $request->message,
-    ]);
+        return Inertia::render('Chat', [
+            'messages' => $messages,
+            'otherUser' => $otherUser,
+        ]);
+    }
 
-    broadcast(new NewMessage($message))->toOthers();
+    public function store(Request $request)
+    {
+        $request->validate([
+            'receiver_id' => 'required|integer|exists:users,id',
+            'message' => 'required|string',
+        ]);
 
-    return response()->json($message, 201);
-}
+        $message = ChatMessage::create([
+            'sender_id' => $request->user()->id,
+            'receiver_id' => $request->receiver_id,
+            'message' => $request->message,
+        ]);
+
+        broadcast(new NewMessage($message))->toOthers();
+
+        return response()->json($message, 201);
+    }
 
     public function getMessages($userId)
     {

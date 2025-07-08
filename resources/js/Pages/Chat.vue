@@ -1,7 +1,7 @@
 <template>
   <AuthenticatedLayout>
     <template #header>
-      <h2 class="font-semibold text-xl text-dark leading-tight">Chat with {{ senderName }}</h2>
+      <h2 class="font-semibold text-xl text-dark leading-tight">Chat with {{ otherUser?.name }}</h2>
     </template>
 
     <div class="chat-container bg-highlight">
@@ -30,13 +30,17 @@ import axios from 'axios';
 const { props: pageProps } = usePage();
 const loggedInUserId = ref(pageProps.auth.user.id);
 const newMessage = ref('');
-const messages = ref(pageProps.messages);
-const userId = ref(pageProps.userId);
-const senderName = ref(pageProps.senderName);
+const messages = ref(pageProps.messages || []);
+const otherUser = ref(pageProps.otherUser);
 
 const fetchMessages = async () => {
+  if (!otherUser.value?.id) {
+    console.error('No other user ID available');
+    return;
+  }
+
   try {
-    const response = await axios.get(`/api/chat/messages/${userId.value}`);
+    const response = await axios.get(`/api/chat/messages/${otherUser.value.id}`);
     messages.value = response.data;
   } catch (error) {
     console.error('Error fetching messages:', error);
@@ -44,11 +48,11 @@ const fetchMessages = async () => {
 };
 
 const sendMessage = async () => {
-  if (newMessage.value.trim() === '') return;
+  if (newMessage.value.trim() === '' || !otherUser.value?.id) return;
 
   try {
     const response = await axios.post('/api/chat/', {
-      receiver_id: userId.value,
+      receiver_id: otherUser.value.id,
       message: newMessage.value,
     });
     messages.value.push(response.data);
@@ -63,8 +67,11 @@ const formatDate = (date) => {
 };
 
 onMounted(() => {
-  const interval = setInterval(fetchMessages, 3000); // Refresh messages every 3 seconds
-  onUnmounted(() => clearInterval(interval));
+  if (otherUser.value?.id) {
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 3000); // Refresh messages every 3 seconds
+    onUnmounted(() => clearInterval(interval));
+  }
 });
 </script>
 

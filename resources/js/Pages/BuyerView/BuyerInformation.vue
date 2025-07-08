@@ -73,7 +73,7 @@ const fetchBuyerInformation = async () => {
 };
 
 const reverseGeocode = async (lat, lng) => {
-  const apiKey = 'AIzaSyAPE3z_ByaGmKAwUDjUPFP6ZEZyyWmKvTY';
+  const apiKey = 'AIzaSyC7qjUE5KQyJJkjvXGpsf-MeKVTbGXt490';
   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
 
   try {
@@ -92,7 +92,7 @@ const reverseGeocode = async (lat, lng) => {
 };
 
 const geocodeAddress = async (address) => {
-  const apiKey = 'AIzaSyAPE3z_ByaGmKAwUDjUPFP6ZEZyyWmKvTY';
+  const apiKey = 'AIzaSyCL_IiN0vAn1y3Z_ZttsmYwi4R1fgXD1zU';
   const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
 
   try {
