@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "@headlessui/vue": "^1.7.23",
+        "@heroicons/vue": "^2.2.0",
         "chart.js": "^4.4.6",
         "chartjs-adapter-date-fns": "^3.0.0",
         "chartjs-plugin-zoom": "^2.0.1",
