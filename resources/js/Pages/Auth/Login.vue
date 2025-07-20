@@ -4,9 +4,10 @@
     <div class="sm:mx-auto sm:w-full max-w-xl">
       <div class="flex justify-center">
         <div class="bg-emerald-600 h-14 w-14 rounded-xl flex items-center justify-center shadow-md transform transition-transform hover:scale-105">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <a href="/"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
+          </a>
         </div>
       </div>
       <h2 class="mt-6 text-center text-3xl font-bold text-gray-800">Welcome back</h2>

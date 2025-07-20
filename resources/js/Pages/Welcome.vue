@@ -42,12 +42,7 @@ const chartBars = Array(12).fill(0).map(() => Math.floor(Math.random() * 100));
             <span class="font-bold text-xl text-gray-800">PigConnect</span>
           </div>
           
-          <div class="hidden md:flex items-center space-x-8">
-            <a href="#" class="text-gray-600 hover:text-green-600 transition-colors">Home</a>
-            <a href="#" class="text-gray-600 hover:text-green-600 transition-colors">Features</a>
-            <a href="#" class="text-gray-600 hover:text-green-600 transition-colors">Pricing</a>
-            <a href="#" class="text-gray-600 hover:text-green-600 transition-colors">About</a>
-          </div>
+
           
           <div class="flex items-center space-x-3">
               <a v-if="canLogin" href="/login" class="px-4 py-2 text-green-600 hover:text-green-700 font-medium transition-colors">
@@ -78,17 +73,12 @@ const chartBars = Array(12).fill(0).map(() => Math.floor(Math.random() * 100));
             
             <div class="flex flex-col sm:flex-row gap-4">
               <Link v-if="canRegister" :href="route('register')" class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-md transition-colors flex items-center justify-center">
-                <span>Start Free Trial</span>
+                <span>Create an account</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                 </svg>
               </Link>
-              <button class="px-6 py-3 border border-gray-300 hover:border-gray-400 text-gray-700 font-medium rounded-md transition-colors flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-                </svg>
-                <span>Watch Demo</span>
-              </button>
+      
             </div>
             
             <div class="mt-10 flex items-center">

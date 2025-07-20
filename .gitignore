@@ -3,6 +3,7 @@
 /node_modules/
 /public/storage
 /public/build
+/public/build/manifest.json
 /storage/*.key
 .env
 .env.*.backup
