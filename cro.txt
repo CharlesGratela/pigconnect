@@ -1,0 +1,4 @@
+* * * * * /path/to/your/venv/bin/python /var/www/pigconnect/app/feeding_notification.py
+
+0 * * * * /path/to/your/venv/bin/python /var/www/pigconnect/app/weather_update_notification.py
+0 0 * * * /path/to/your/venv/bin/python /var/www/pigconnect/app/monthly_pig_update.py
