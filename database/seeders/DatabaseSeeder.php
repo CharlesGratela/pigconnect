@@ -18,6 +18,24 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'role' => 'farmer',
+            'email_verified_at' => null, // Unverified email to test the fix
+        ]);
+        
+        // Create a verified farmer user for comparison
+        User::factory()->create([
+            'name' => 'Verified Farmer',
+            'email' => 'farmer@example.com',
+            'role' => 'farmer',
+            'email_verified_at' => now(), // Verified email
+        ]);
+        
+        // Create a verified buyer user
+        User::factory()->create([
+            'name' => 'Test Buyer',
+            'email' => 'buyer@example.com',
+            'role' => 'buyer', 
+            'email_verified_at' => now(), // Verified email
         ]);
     }
 }

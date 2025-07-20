@@ -21,10 +21,10 @@ let toggleMobileNav = () => {
                     <!-- Mobile and Desktop Menu -->
                     <ul class="flex space-x-4 md:space-x-7 font-theme-heading font-medium items-center">
                         <li class="uppercase transition duration-200">
-                            <a href="/login" v-smooth-scroll class="text-white hover:text-[#a7674d] text-sm md:text-lg lg:text-xl font-bold">Login</a>
+                            <a href="/login" class="text-white hover:text-[#a7674d] text-sm md:text-lg lg:text-xl font-bold">Login</a>
                         </li>
                         <li class="uppercase transition duration-200">
-                            <a href="/register" v-smooth-scroll class="text-white hover:text-[#a7674d] text-sm md:text-lg lg:text-xl font-bold">Register</a>
+                            <a href="/register" class="text-white hover:text-[#a7674d] text-sm md:text-lg lg:text-xl font-bold">Register</a>
                         </li>
                     </ul>
                 </nav>

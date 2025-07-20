@@ -3,10 +3,10 @@
     <!-- Toast Notification -->
     <div
       v-if="showToast"
-      class="fixed top-4 right-4 bg-[#281c11] text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-3 animate-fade-in"
+      class="fixed top-4 right-4 bg-emerald-700 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-3 animate-fade-in"
     >
       <svg
-        class="w-6 h-6 text-[#c58a61]"
+        class="w-6 h-6 text-emerald-300"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -20,7 +20,7 @@
         ></path>
       </svg>
       <span>{{ toastMessage }}</span>
-      <button @click="showToast = false" class="text-white hover:text-[#c58a61]">
+      <button @click="showToast = false" class="text-white hover:text-emerald-300">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
@@ -31,25 +31,26 @@
     <div class="relative">
       <button
         @click="toggleDropdown"
-        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#281c11] hover:text-[#a7674d] focus:outline-none transition ease-in-out duration-150"
+        class="inline-flex items-center px-3 py-2 border border-gray-200 text-sm leading-4 font-medium rounded-lg text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 hover:border-emerald-200 focus:outline-none transition-all duration-200 relative bg-white shadow-sm"
+        title="Message Notifications - Click to view messages"
       >
-        <svg
-          class="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-          ></path>
-        </svg>
-        <span v-if="unreadCount > 0" class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-          {{ unreadCount }}
-        </span>
+                  <svg
+            class="w-5 h-5 text-emerald-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+            ></path>
+          </svg>
+          <span v-if="unreadCount > 0" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow-lg">
+            {{ unreadCount }}
+          </span>
       </button>
 
       <!-- Dropdown Menu -->
@@ -58,7 +59,7 @@
         class="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg py-1 z-50"
       >
         <div class="px-4 py-2 border-b border-gray-200">
-          <h3 class="text-sm font-semibold text-[#543434]">Messages</h3>
+          <h3 class="text-sm font-semibold text-emerald-800">Messages</h3>
         </div>
         <div class="max-h-60 overflow-y-auto">
           <div v-if="notifications.length === 0" class="px-4 py-2 text-sm text-gray-500">
@@ -68,16 +69,16 @@
             <div
               v-for="notification in notifications"
               :key="notification.id"
-              class="px-4 py-2 hover:bg-gray-50 cursor-pointer"
+              class="px-4 py-2 hover:bg-emerald-50 cursor-pointer"
               @click="markAsRead(notification)"
             >
               <div class="flex items-start">
                 <div class="flex-1">
-                  <p class="text-sm font-medium text-[#543434]">{{ notification.sender }}</p>
-                  <p class="text-sm text-gray-500 truncate">{{ notification.message }}</p>
+                  <p class="text-sm font-medium text-emerald-800">{{ notification.sender }}</p>
+                  <p class="text-sm text-gray-600 truncate">{{ notification.message }}</p>
                   <p class="text-xs text-gray-400">{{ notification.time }}</p>
                 </div>
-                <div v-if="!notification.read" class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <div v-if="!notification.read" class="w-2 h-2 bg-emerald-500 rounded-full"></div>
               </div>
             </div>
           </template>
@@ -85,7 +86,7 @@
         <div class="px-4 py-2 border-t border-gray-200">
           <Link
             :href="route('chat.list')"
-            class="text-sm text-[#c58a61] hover:text-[#a7674d] font-medium"
+            class="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
           >
             View all messages
           </Link>

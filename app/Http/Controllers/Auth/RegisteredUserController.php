@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -48,12 +49,20 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        // Send email verification notification
-        $user->sendEmailVerificationNotification();
+        // Try to send email verification notification, but don't fail registration if it fails
+        try {
+            $user->sendEmailVerificationNotification();
+        } catch (\Exception $e) {
+            // Log the error but continue with registration
+            Log::error('Failed to send email verification: ' . $e->getMessage());
+            
+            // Set a session flash message about email verification failure
+            session()->flash('email_verification_failed', true);
+        }
 
         // Redirect to email verification notice if email is not verified
         if (!$user->hasVerifiedEmail()) {
-            return redirect()->route('verification.notice');
+            return redirect()->route('verification.notice')->with('message', 'Please verify your email address. Check your inbox for a verification link.');
         }
 
         if ($user->role == 'farmer') {

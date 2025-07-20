@@ -2,36 +2,58 @@
   <div>
     <AuthenticatedLayout>
       <template #header>
-        <h2 class="font-semibold text-xl text-[#543434] leading-tight">Pig Information</h2>
+        <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 -mx-6 -mt-6 px-6 pt-6 pb-8 rounded-b-2xl shadow-lg">
+          <h2 class="font-bold text-2xl text-white leading-tight flex items-center">
+            <span class="text-3xl mr-3">🐷</span>
+            Livestock Management
+          </h2>
+          <p class="text-emerald-100 mt-2">Manage your pig inventory and track their information</p>
+        </div>
       </template>
-      <main>
-        <div class="flex justify-center">
-          <div class="w-[75%]">
-            <div class="flex justify-between items-center mb-6">
-              <h2 class="text-2xl font-bold text-[#543434]">Pig Inventory</h2>
-              <button 
-                @click="showModal = true" 
-                class="flex items-center gap-2 bg-[#281c11] text-white px-4 py-2.5 rounded-lg hover:bg-[#3a2a1a] transition-colors duration-200 focus:ring-4 focus:ring-[#c58a61] focus:ring-opacity-50"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Add Pig
-              </button>
+      <main class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="mb-8">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+              <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                  <div class="bg-emerald-100 p-3 rounded-xl">
+                    <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 class="text-2xl font-bold text-gray-800">Pig Inventory</h2>
+                    <p class="text-gray-600">{{ pigs.length }} pigs in your farm</p>
+                  </div>
+                </div>
+                <button 
+                  @click="showModal = true" 
+                  class="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-6 py-3 rounded-xl hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-medium"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                  </svg>
+                  Add New Pig
+                </button>
+              </div>
             </div>
+          </div>
             
-            <!-- Table View for Desktop -->
-            <div class="hidden md:block bg-white rounded-lg shadow-md overflow-hidden mb-6">
-              <div class="p-4 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-[#543434] flex items-center gap-2">
-                  <svg class="w-5 h-5 text-[#c58a61]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <!-- Table View for Desktop -->
+          <div class="hidden md:block bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-8">
+            <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-emerald-50 to-green-50">
+              <h3 class="text-xl font-bold text-emerald-800 flex items-center gap-3">
+                <div class="bg-emerald-100 p-2 rounded-lg">
+                  <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
-                  Pig Inventory
-                </h3>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
+                </div>
+                Detailed Pig Inventory
+              </h3>
+              <p class="text-emerald-600 mt-1">Comprehensive view of all your livestock</p>
+            
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
                   <thead class="bg-gray-50">
                     <tr>
                       <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
@@ -49,19 +71,19 @@
                   <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="pig in pigs" :key="pig.pigId" class="hover:bg-gray-50 transition-colors duration-200">
                       <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-[#543434]">{{ pig.pigId }}</div>
+                        <div class="text-sm font-medium text-gray-700">{{ pig.pigId }}</div>
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-[#543434]">{{ pig.weight }} kg</div>
+                        <div class="text-sm text-gray-700">{{ pig.weight }} kg</div>
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-[#543434]">{{ pig.date_of_birth }}</div>
+                        <div class="text-sm text-gray-700">{{ pig.date_of_birth }}</div>
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-[#543434] capitalize">{{ pig.gender }}</div>
+                        <div class="text-sm text-gray-700 capitalize">{{ pig.gender }}</div>
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-[#543434]">{{ pig.breed }}</div>
+                        <div class="text-sm text-gray-700">{{ pig.breed }}</div>
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
                         <span :class="{
@@ -96,19 +118,19 @@
                         </template>
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-[#543434]">₱{{ pig.price_per_kilo }}</div>
+                        <div class="text-sm text-gray-700">₱{{ pig.price_per_kilo }}</div>
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div class="flex space-x-2">
                           <button 
                             @click="viewVaccinationRecords(pig.pigId)" 
-                            class="bg-[#a7674d] text-white px-3 py-2 rounded-lg hover:bg-[#8b5a43] transition-colors duration-200 focus:ring-2 focus:ring-[#c58a61] focus:ring-opacity-50"
+                            class="bg-emerald-100 text-emerald-600 px-3 py-2 rounded-lg hover:bg-emerald-200 transition-colors duration-200 focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50"
                           >
                             Vaccination
                           </button>
                           <button 
                             @click="openEditModal(pig.pigId, pig.weight, pig.price_per_kilo, pig.status, pig.breed)" 
-                            class="bg-[#c58a61] text-white px-3 py-2 rounded-lg hover:bg-[#b37a50] transition-colors duration-200 focus:ring-2 focus:ring-[#c58a61] focus:ring-opacity-50"
+                            class="bg-emerald-100 text-emerald-600 px-3 py-2 rounded-lg hover:bg-emerald-200 transition-colors duration-200 focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50"
                           >
                             Edit
                           </button>
@@ -132,7 +154,7 @@
                       @click="showEnlargedImage(`/storage/${pig.image}`, 'Pig Image')"
                     >
                     <div>
-                      <h3 class="text-lg font-semibold text-[#543434]">ID: {{ pig.pigId }}</h3>
+                      <h3 class="text-lg font-semibold text-gray-700">ID: {{ pig.pigId }}</h3>
                       <span :class="{
                         'px-2 inline-flex text-xs leading-5 font-semibold rounded-full mt-1': true,
                         'bg-green-100 text-green-800': pig.status === 'healthy',
@@ -149,23 +171,23 @@
                   <div class="grid grid-cols-2 gap-4">
                     <div>
                       <p class="text-sm font-medium text-gray-500">Weight</p>
-                      <p class="text-sm text-[#543434]">{{ pig.weight }} kg</p>
+                      <p class="text-sm text-gray-700">{{ pig.weight }} kg</p>
                     </div>
                     <div>
                       <p class="text-sm font-medium text-gray-500">Price per Kilo</p>
-                      <p class="text-sm text-[#543434]">₱{{ pig.price_per_kilo }}</p>
+                      <p class="text-sm text-gray-700">₱{{ pig.price_per_kilo }}</p>
                     </div>
                     <div>
                       <p class="text-sm font-medium text-gray-500">Date of Birth</p>
-                      <p class="text-sm text-[#543434]">{{ pig.date_of_birth }}</p>
+                      <p class="text-sm text-gray-700">{{ pig.date_of_birth }}</p>
                     </div>
                     <div>
                       <p class="text-sm font-medium text-gray-500">Gender</p>
-                      <p class="text-sm text-[#543434] capitalize">{{ pig.gender }}</p>
+                      <p class="text-sm text-gray-700 capitalize">{{ pig.gender }}</p>
                     </div>
                     <div>
                       <p class="text-sm font-medium text-gray-500">Breed</p>
-                      <p class="text-sm text-[#543434]">{{ pig.breed }}</p>
+                      <p class="text-sm text-gray-700">{{ pig.breed }}</p>
                     </div>
                     <div>
                       <p class="text-sm font-medium text-gray-500">Mark</p>
@@ -185,13 +207,13 @@
                   <div class="flex space-x-2 pt-2">
                     <button 
                       @click="viewVaccinationRecords(pig.pigId)" 
-                      class="flex-1 bg-[#a7674d] text-white px-3 py-2 rounded-lg hover:bg-[#8b5a43] transition-colors duration-200 focus:ring-2 focus:ring-[#c58a61] focus:ring-opacity-50"
+                      class="flex-1 bg-emerald-100 text-emerald-600 px-3 py-2 rounded-lg hover:bg-emerald-200 transition-colors duration-200 focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50"
                     >
                       Vaccination
                     </button>
                     <button 
                       @click="openEditModal(pig.pigId, pig.weight, pig.price_per_kilo, pig.status, pig.breed)" 
-                      class="flex-1 bg-[#c58a61] text-white px-3 py-2 rounded-lg hover:bg-[#b37a50] transition-colors duration-200 focus:ring-2 focus:ring-[#c58a61] focus:ring-opacity-50"
+                      class="flex-1 bg-emerald-100 text-emerald-600 px-3 py-2 rounded-lg hover:bg-emerald-200 transition-colors duration-200 focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50"
                     >
                       Edit
                     </button>
@@ -200,185 +222,451 @@
               </div>
             </div>
 
-            <!-- Add Pig Modal -->
-            <div v-if="showModal" class="modal">
-              <div class="modal-content">
-                <span class="close" @click="showModal = false">&times;</span>
-                <form @submit.prevent="submitForm">
-                  <div class="mb-4">
-                    <label for="weight" class="block text-sm font-medium text-[#543434]">Weight(kg)</label>
-                    <input type="number" step="0.01" id="weight" v-model="form.weight" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
+            <!-- Enhanced Add Pig Modal -->
+            <div v-if="showModal" class="fixed inset-0 z-50 overflow-y-auto">
+              <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm transition-opacity" aria-hidden="true" @click="showModal = false"></div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                
+                <div class="relative inline-block bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-gray-100">
+                  <!-- Modal Header -->
+                  <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-4">
+                    <div class="flex justify-between items-center">
+                      <h3 class="text-xl font-bold text-white flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Add New Pig
+                      </h3>
+                      <button @click="showModal = false" class="text-emerald-200 hover:text-white transition-colors duration-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
-                  <div class="mb-4">
-                    <label for="price_per_kilo" class="block text-sm font-medium text-[#543434]">Price per Kilogram</label>
-                    <input type="number" step="0.01" id="price_per_kilo" v-model="form.price_per_kilo" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
-                  </div>
-                  <div class="mb-4">
-                    <label for="date_of_birth" class="block text-sm font-medium text-[#543434]">Date of Birth</label>
-                    <input type="date" id="date_of_birth" v-model="form.date_of_birth" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
-                  </div>
-                  <div class="mb-4">
-                    <label for="gender" class="block text-sm font-medium text-[#543434]">Gender</label>
-                    <select id="gender" v-model="form.gender" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                    </select>
-                  </div>
-                  <div class="mb-4">
-                    <label for="breed" class="block text-sm font-medium text-[#543434]">Breed</label>
-                    <select id="breed" v-model="form.breed" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
-                      <option value="Large White (Yorkshire)">Large White (Yorkshire)</option>
-                      <option value="Landrace">Landrace</option>
-                      <option value="Duroc">Duroc</option>
-                      <option value="Hampshire">Hampshire</option>
-                      <option value="Pietrain">Pietrain</option>
-                      <option value="Berkshire">Berkshire</option>
-                      <option value="Chester White">Chester White</option>
-                      <option value="Tamworth">Tamworth</option>
-                    </select>
-                  </div>
-                  <div class="mb-4">
-                    <label for="image" class="block text-sm font-medium text-[#543434]">Image</label>
-                    <input type="file" id="image" @change="handlePigImageUpload" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
-                  </div>
-                  <div class="mb-4">
-                    <label for="mark" class="block text-sm font-medium text-[#543434]">Mark</label>
-                    <input type="file" id="mark" @change="handleMarkImageUpload" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]">
-                  </div>
-                  <button type="submit" class="w-full bg-[#281c11] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Submit</button>
-                </form>
-              </div>
-            </div>
+                  
+                  <!-- Modal Body -->
+                  <div class="bg-white px-6 py-6 max-h-[70vh] overflow-y-auto">
+                    <form @submit.prevent="submitForm" class="space-y-6">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Weight Field -->
+                        <div>
+                          <label for="weight" class="block text-sm font-medium text-gray-700 mb-2">Weight (kg)</label>
+                          <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16l3-3m-3 3l-3-3" />
+                              </svg>
+                            </div>
+                            <input type="number" step="0.01" id="weight" v-model="form.weight" 
+                                   class="block w-full pl-10 pr-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm" 
+                                   placeholder="Enter weight" required>
+                          </div>
+                        </div>
 
-            <!-- Edit Pig Modal -->
-            <div v-if="showEditModal" class="modal">
-              <div class="modal-content">
-                <span class="close" @click="showEditModal = false">&times;</span>
-                <form @submit.prevent="updatePigDetails">
-                  <div class="mb-4">
-                    <label for="editWeight" class="block text-sm font-medium text-[#543434]">Weight(kg)</label>
-                    <input type="number" step="0.01" id="editWeight" v-model="editForm.weight" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
-                  </div>
-                  <div class="mb-4">
-                    <label for="price_per_kilo" class="block text-sm font-medium text-[#543434]">Price per Kilogram</label>
-                    <input type="number" step="0.01" id="price_per_kilo" v-model="editForm.price_per_kilo" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
-                  </div>
-                  <div class="mb-4">
-                    <label for="editStatus" class="block text-sm font-medium text-[#543434]">Status</label>
-                    <select id="editStatus" v-model="editForm.status" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
-                      <option value="healthy">Healthy</option>
-                      <option value="sick">Sick</option>
-                      <option value="sold">Sold</option>
-                      <option value="dead">Dead</option>
-                    </select>
-                  </div>
-                  <div class="mb-4">
-                    <label for="editBreed" class="block text-sm font-medium text-[#543434]">Breed</label>
-                    <select id="editBreed" v-model="editForm.breed" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
-                      <option value="Large White (Yorkshire)">Large White (Yorkshire)</option>
-                      <option value="Landrace">Landrace</option>
-                      <option value="Duroc">Duroc</option>
-                      <option value="Hampshire">Hampshire</option>
-                      <option value="Pietrain">Pietrain</option>
-                      <option value="Berkshire">Berkshire</option>
-                      <option value="Chester White">Chester White</option>
-                      <option value="Tamworth">Tamworth</option>
-                    </select>
-                  </div>
-                  <div class="mb-4">
-                    <label for="editImage" class="block text-sm font-medium text-[#543434]">Image (optional)</label>
-                    <input type="file" id="editImage" @change="handleEditImageUpload" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]">
-                  </div>
-                  <button type="submit" class="w-full bg-[#281c11] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Update</button>
-                </form>
-              </div>
-            </div>
+                        <!-- Price per Kilo Field -->
+                        <div>
+                          <label for="price_per_kilo" class="block text-sm font-medium text-gray-700 mb-2">Price per Kilogram (₱)</label>
+                          <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <span class="text-gray-400 text-sm font-medium">₱</span>
+                            </div>
+                            <input type="number" step="0.01" id="price_per_kilo" v-model="form.price_per_kilo" 
+                                   class="block w-full pl-8 pr-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm" 
+                                   placeholder="0.00" required>
+                          </div>
+                        </div>
 
-            <!-- Vaccination Records Modal -->
-            <div v-if="showVaccinationModal" class="modal">
-              <div class="modal-content">
-                <span class="close" @click="closeVaccinationModal">&times;</span>
-                <h3 class="text-lg leading-6 font-medium text-[#543434]">Vaccination Records for Pig ID: {{ selectedPigId }}</h3>
-                <button @click="showAddVaccinationForm = true" class="mb-4 bg-[#281c11] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Add Vaccination Record</button>
+                        <!-- Date of Birth Field -->
+                        <div>
+                          <label for="date_of_birth" class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                          <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                            </div>
+                            <input type="date" id="date_of_birth" v-model="form.date_of_birth" 
+                                   class="block w-full pl-10 pr-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm" required>
+                          </div>
+                        </div>
 
-                <!-- Add Vaccination Record Form -->
-                <div v-if="showAddVaccinationForm" class="modal">
-                  <div class="modal-content">
-                    <span class="close" @click="closeAddVaccinationForm">&times;</span>
-                    <h3 class="text-lg leading-6 font-medium text-[#543434]">Add Vaccination Record</h3>
-                    <form @submit.prevent="addVaccinationRecord">
-                      <div class="mb-4">
-                        <label for="vaccineName" class="block text-sm font-medium text-[#543434]">Vaccine Name</label>
-                        <input type="text" id="vaccineName" v-model="vaccinationForm.vaccineName" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
+                        <!-- Gender Field -->
+                        <div>
+                          <label for="gender" class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                          <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                              </svg>
+                            </div>
+                            <select id="gender" v-model="form.gender" 
+                                    class="block w-full pl-10 pr-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm appearance-none" required>
+                              <option value="" disabled>Select gender</option>
+                              <option value="male">Male</option>
+                              <option value="female">Female</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div class="mb-4">
-                        <label for="vaccineType" class="block text-sm font-medium text-[#543434]">Vaccine Type</label>
-                        <input type="text" id="vaccineType" v-model="vaccinationForm.vaccineType" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
+
+                      <!-- Breed Field -->
+                      <div>
+                        <label for="breed" class="block text-sm font-medium text-gray-700 mb-2">Breed</label>
+                        <div class="relative">
+                          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg>
+                          </div>
+                          <select id="breed" v-model="form.breed" 
+                                  class="block w-full pl-10 pr-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm appearance-none" required>
+                            <option value="" disabled>Select breed</option>
+                            <option value="Large White">Large White</option>
+                            <option value="Landrace">Landrace</option>
+                            <option value="Duroc">Duroc</option>
+                            <option value="Hampshire">Hampshire</option>
+                            <option value="Yorkshire">Yorkshire</option>
+                            <option value="Pietrain">Pietrain</option>
+                            <option value="Tamworth">Tamworth</option>
+                            <option value="Gloucestershire Old Spot">Gloucestershire Old Spot</option>
+                            <option value="Mangalitsa">Mangalitsa</option>
+                            <option value="Ossabaw Hog">Ossabaw Hog</option>
+                            <option value="Kunekune">Kunekune</option>
+                            <option value="American Guinea Hog">American Guinea Hog</option>
+                            <option value="Mulefoot">Mulefoot</option>
+                            <option value="Large Black">Large Black</option>
+                            <option value="Hereford">Hereford</option>
+                            <option value="Chester White">Chester White</option>
+                            <option value="Poland China">Poland China</option>
+                            <option value="Spotted">Spotted</option>
+                            <option value="Crossbred">Crossbred</option>
+                            <option value="Other">Other</option>
+                          </select>
+                          <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </div>
+                        </div>
                       </div>
-                      <div class="mb-4">
-                        <label for="dateAdministered" class="block text-sm font-medium text-[#543434]">Date Administered</label>
-                        <input type="date" id="dateAdministered" v-model="vaccinationForm.dateAdministered" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" required>
+
+                      <!-- Image Upload Fields -->
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <label for="image" class="block text-sm font-medium text-gray-700 mb-2">Pig Image</label>
+                          <div class="relative">
+                            <input type="file" id="image" @change="handlePigImageUpload" 
+                                   class="block w-full px-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm" 
+                                   accept="image/*" required>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label for="mark" class="block text-sm font-medium text-gray-700 mb-2">Mark Image (Optional)</label>
+                          <div class="relative">
+                            <input type="file" id="mark" @change="handleMarkImageUpload" 
+                                   class="block w-full px-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm" 
+                                   accept="image/*">
+                          </div>
+                        </div>
                       </div>
-                      <div class="mb-4">
-                        <label for="vaccineImage" class="block text-sm font-medium text-[#543434]">Vaccine Image</label>
-                        <input type="file" id="vaccineImage" @change="handleImageUpload" class="mt-1 block w-full p-2.5 bg-[#c58a61] border border-[#c59461] text-[#543434] rounded-lg focus:ring-[#c58a61] focus:border-[#c58a61]" accept="image/*" required>
-                      </div>
-                      <button type="submit" class="w-full bg-[#281c11] text-white p-2.5 rounded-lg focus:ring-4 focus:ring-[#c58a61]">Submit</button>
                     </form>
                   </div>
-                </div>
 
-                <!-- Vaccination Records Table -->
-                <div v-if="vaccinationRecords.length > 0">
-                  <div class="overflow-x-auto hidden md:block">
-                    <table class="min-w-full divide-y divide-gray-200">
-                      <thead class="bg-[#281c11]">
-                        <tr>
-                          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Vaccine Name</th>
-                          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Vaccine Type</th>
-                          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Date Administered</th>
-                          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Vaccine Image</th>
-                          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#fefefe] uppercase tracking-wider">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody class="bg-[#fefefe] divide-y divide-gray-200">
-                        <tr v-for="record in vaccinationRecords" :key="record.id">
-                          <td class="px-6 py-4 whitespace-nowrap text-[#543434]">{{ record.vaccineName }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-[#543434]">{{ record.vaccineType }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-[#543434]">{{ record.dateAdministered }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap">
-                            <div v-if="record.vaccine_image">
-                              <img :src="`/storage/${record.vaccine_image}`" alt="Vaccine Image" class="w-32 h-32 object-cover">
+                  <!-- Modal Footer -->
+                  <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 space-y-3 space-y-reverse sm:space-y-0">
+                    <button @click="closeModal" type="button" 
+                            class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors duration-200">
+                      Cancel
+                    </button>
+                    <button @click="submitForm" type="submit" 
+                            class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all duration-200">
+                      Add Pig
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Enhanced Edit Pig Modal -->
+            <div v-if="showEditModal" class="fixed inset-0 z-50 overflow-y-auto">
+              <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm transition-opacity" aria-hidden="true" @click="showEditModal = false"></div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                
+                <div class="relative inline-block bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-gray-100">
+                  <!-- Modal Header -->
+                  <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-4">
+                    <div class="flex justify-between items-center">
+                      <h3 class="text-xl font-bold text-white flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Edit Pig Details
+                      </h3>
+                      <button @click="showEditModal = false" class="text-emerald-200 hover:text-white transition-colors duration-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <!-- Modal Body -->
+                  <div class="bg-white px-6 py-6 max-h-[70vh] overflow-y-auto">
+                    <form @submit.prevent="updatePigDetails" class="space-y-6">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Weight Field -->
+                        <div>
+                          <label for="editWeight" class="block text-sm font-medium text-gray-700 mb-2">Weight (kg)</label>
+                          <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16l3-3m-3 3l-3-3" />
+                              </svg>
                             </div>
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap">
-                            <button @click="deleteVaccinationRecord(record.id)" class="bg-red-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-red-300">Delete</button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                            <input type="number" step="0.01" id="editWeight" v-model="editForm.weight" 
+                                   class="block w-full pl-10 pr-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm" required>
+                          </div>
+                        </div>
+
+                        <!-- Price per Kilo Field -->
+                        <div>
+                          <label for="editPricePerKilo" class="block text-sm font-medium text-gray-700 mb-2">Price per Kilogram (₱)</label>
+                          <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <span class="text-gray-400 text-sm font-medium">₱</span>
+                            </div>
+                            <input type="number" step="0.01" id="editPricePerKilo" v-model="editForm.price_per_kilo" 
+                                   class="block w-full pl-8 pr-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm" required>
+                          </div>
+                        </div>
+
+                        <!-- Status Field -->
+                        <div>
+                          <label for="editStatus" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                          <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                            </div>
+                            <select id="editStatus" v-model="editForm.status" 
+                                    class="block w-full pl-10 pr-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm appearance-none" required>
+                              <option value="healthy">Healthy</option>
+                              <option value="sick">Sick</option>
+                              <option value="sold">Sold</option>
+                              <option value="dead">Dead</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Breed Field -->
+                        <div>
+                          <label for="editBreed" class="block text-sm font-medium text-gray-700 mb-2">Breed</label>
+                          <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                              </svg>
+                            </div>
+                            <select id="editBreed" v-model="editForm.breed" 
+                                    class="block w-full pl-10 pr-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm appearance-none" required>
+                              <option value="Large White">Large White</option>
+                              <option value="Landrace">Landrace</option>
+                              <option value="Duroc">Duroc</option>
+                              <option value="Hampshire">Hampshire</option>
+                              <option value="Yorkshire">Yorkshire</option>
+                              <option value="Pietrain">Pietrain</option>
+                              <option value="Tamworth">Tamworth</option>
+                              <option value="Gloucestershire Old Spot">Gloucestershire Old Spot</option>
+                              <option value="Mangalitsa">Mangalitsa</option>
+                              <option value="Ossabaw Hog">Ossabaw Hog</option>
+                              <option value="Kunekune">Kunekune</option>
+                              <option value="American Guinea Hog">American Guinea Hog</option>
+                              <option value="Mulefoot">Mulefoot</option>
+                              <option value="Large Black">Large Black</option>
+                              <option value="Hereford">Hereford</option>
+                              <option value="Chester White">Chester White</option>
+                              <option value="Poland China">Poland China</option>
+                              <option value="Spotted">Spotted</option>
+                              <option value="Crossbred">Crossbred</option>
+                              <option value="Other">Other</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Image Upload Field -->
+                      <div>
+                        <label for="editImage" class="block text-sm font-medium text-gray-700 mb-2">Update Image (Optional)</label>
+                        <div class="relative">
+                          <input type="file" id="editImage" @change="handleEditImageUpload" 
+                                 class="block w-full px-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm" 
+                                 accept="image/*">
+                        </div>
+                      </div>
+                    </form>
                   </div>
 
-                  <!-- Vaccination Records Cards for Mobile -->
-                  <div class="md:hidden">
-                    <div v-for="record in vaccinationRecords" :key="record.id" class="bg-[#fefefe] p-4 mb-4 rounded-lg shadow-md">
-                      <div class="mb-2">
-                        <span class="block text-sm font-medium text-[#543434]">Vaccine Name:</span>
-                        <span class="block text-sm text-[#543434]">{{ record.vaccineName }}</span>
+                  <!-- Modal Footer -->
+                  <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 space-y-3 space-y-reverse sm:space-y-0">
+                    <button @click="showEditModal = false" type="button" 
+                            class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors duration-200">
+                      Cancel
+                    </button>
+                    <button @click="updatePigDetails" type="submit" 
+                            class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all duration-200">
+                      Update Pig
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Enhanced Vaccination Records Modal -->
+            <div v-if="showVaccinationModal" class="fixed inset-0 z-50 overflow-y-auto">
+              <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm transition-opacity" aria-hidden="true" @click="closeVaccinationModal"></div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                
+                <div class="relative inline-block bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full border border-gray-100">
+                  <!-- Modal Header -->
+                  <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-4">
+                    <div class="flex justify-between items-center">
+                      <h3 class="text-xl font-bold text-white flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.414-4.414a2 2 0 112.828 2.828L12 20.414 5.586 14a2 2 0 012.828-2.828L10 12.586" />
+                        </svg>
+                        Vaccination Records - Pig ID: {{ selectedPigId }}
+                      </h3>
+                      <button @click="closeVaccinationModal" class="text-emerald-200 hover:text-white transition-colors duration-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <!-- Modal Body -->
+                  <div class="bg-white px-6 py-6 max-h-[70vh] overflow-y-auto">
+                    <div class="mb-6">
+                      <button @click="showAddVaccinationForm = true" 
+                              class="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-4 py-2 rounded-lg hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Add Vaccination Record
+                      </button>
+                    </div>
+
+                    <!-- Vaccination Records Table or Add Form -->
+                    <!-- Enhanced Add Vaccination Form Modal -->
+                    <div v-if="showAddVaccinationForm" class="fixed inset-0 z-60 overflow-y-auto">
+                      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm transition-opacity" aria-hidden="true" @click="closeAddVaccinationForm"></div>
+                        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                        
+                        <div class="relative inline-block bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-gray-100">
+                          <!-- Modal Header -->
+                          <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-4">
+                            <div class="flex justify-between items-center">
+                              <h3 class="text-xl font-bold text-white flex items-center">
+                                <svg class="w-6 h-6 mr-2 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                                Add Vaccination Record
+                              </h3>
+                              <button @click="closeAddVaccinationForm" class="text-emerald-200 hover:text-white transition-colors duration-200">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                          
+                          <!-- Modal Body -->
+                          <div class="bg-white px-6 py-6">
+                            <form @submit.prevent="submitVaccinationForm" class="space-y-6">
+                              <!-- Vaccine Name Field -->
+                              <div>
+                                <label for="vaccineName" class="block text-sm font-medium text-gray-700 mb-2">Vaccine Name</label>
+                                <div class="relative">
+                                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                    </svg>
+                                  </div>
+                                  <input type="text" id="vaccineName" v-model="vaccinationForm.vaccineName" 
+                                         class="block w-full pl-10 pr-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm" 
+                                         placeholder="Enter vaccine name" required>
+                                </div>
+                              </div>
+
+                              <!-- Vaccine Type Field -->
+                              <div>
+                                <label for="vaccineType" class="block text-sm font-medium text-gray-700 mb-2">Vaccine Type</label>
+                                <div class="relative">
+                                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                    </svg>
+                                  </div>
+                                  <input type="text" id="vaccineType" v-model="vaccinationForm.vaccineType" 
+                                         class="block w-full pl-10 pr-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm" 
+                                         placeholder="Enter vaccine type" required>
+                                </div>
+                              </div>
+
+                              <!-- Date Administered Field -->
+                              <div>
+                                <label for="dateAdministered" class="block text-sm font-medium text-gray-700 mb-2">Date Administered</label>
+                                <div class="relative">
+                                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                  </div>
+                                  <input type="date" id="dateAdministered" v-model="vaccinationForm.dateAdministered" 
+                                         class="block w-full pl-10 pr-3 py-3 border border-emerald-300 rounded-lg bg-emerald-100 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition-colors sm:text-sm" required>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+
+                          <!-- Modal Footer -->
+                          <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 space-y-3 space-y-reverse sm:space-y-0">
+                            <button @click="closeAddVaccinationForm" type="button" 
+                                    class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors duration-200">
+                              Cancel
+                            </button>
+                            <button @click="submitVaccinationForm" type="submit" 
+                                    class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all duration-200">
+                              Add Record
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div class="mb-2">
-                        <span class="block text-sm font-medium text-[#543434]">Date Administered:</span>
-                        <span class="block text-sm text-[#543434]">{{ record.dateAdministered }}</span>
-                      </div>
-                      <div class="mb-2" v-if="record.vaccine_image">
-                        <span class="block text-sm font-medium text-[#543434]">Vaccine Image:</span>
-                        <img :src="`/storage/${record.vaccine_image}`" alt="Vaccine Image" class="w-full h-32 object-cover mt-2">
-                      </div>
-                      <button @click="deleteVaccinationRecord(record.id)" class="bg-red-500 text-white p-2.5 rounded-lg focus:ring-4 focus:ring-red-300 mt-2">Delete</button>
                     </div>
                   </div>
                 </div>
-                <p v-else class="text-[#543434]">{{ noVaccinationRecordsMessage }}</p>
               </div>
             </div>
 
@@ -400,7 +688,7 @@
                     class="w-full h-auto max-h-[80vh] object-contain"
                   >
                   <div class="p-4 bg-white">
-                    <h3 class="text-lg font-semibold text-[#543434]">{{ enlargedImageTitle }}</h3>
+                    <h3 class="text-lg font-semibold text-gray-700">{{ enlargedImageTitle }}</h3>
                   </div>
                 </div>
               </div>
@@ -596,18 +884,17 @@ const viewVaccinationRecords = async (pigId) => {
   }
 };
 
-const addVaccinationRecord = async () => {
-  
+const submitVaccinationForm = async () => {
   try {
-    console.log(selectedPigId.value);
-    console.log(vaccinationForm);
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const formData = new FormData();
     formData.append('vaccineName', vaccinationForm.vaccineName);
     formData.append('vaccineType', vaccinationForm.vaccineType);
     formData.append('dateAdministered', vaccinationForm.dateAdministered);
-    formData.append('vaccineImage', vaccinationForm.vaccineImage);
+    if (vaccinationForm.vaccineImage) {
+      formData.append('vaccineImage', vaccinationForm.vaccineImage);
+    }
 
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const response = await fetch(`/api/pigs/${selectedPigId.value}/vaccination-records`, {
       method: 'POST',
       headers: {
@@ -618,8 +905,6 @@ const addVaccinationRecord = async () => {
     });
 
     if (!response.ok) {
-      console.error('Response status:', response.status);
-      console.error('Response status text:', response.statusText);
       throw new Error('Network response was not ok');
     }
 
@@ -629,6 +914,7 @@ const addVaccinationRecord = async () => {
     vaccinationForm.vaccineName = '';
     vaccinationForm.vaccineType = '';
     vaccinationForm.dateAdministered = '';
+    vaccinationForm.vaccineImage = null; // Clear image file input
     window.location.reload();
   } catch (error) {
     console.error('Error adding vaccination record:', error);
@@ -754,74 +1040,241 @@ onMounted(() => {
   fetchPigs();
 });
 </script>
-<style>
+<style scoped>
+/* Enhanced Modal Styles */
 .modal {
   display: block;
   position: fixed;
-  z-index: 1;
+  z-index: 50;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease-out;
 }
+
 .modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  color: #000;
+  background-color: #ffffff;
+  margin: 5% auto;
+  padding: 0;
+  border: none;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: slideIn 0.3s ease-out;
+  overflow: hidden;
 }
-.dark .modal-content {
-  background-color: #333;
-  color: #fff;
+
+.modal-content::-webkit-scrollbar {
+  width: 6px;
 }
+
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #10b981;
+  border-radius: 3px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #059669;
+}
+
 .close {
-  color: #aaa;
+  color: rgba(255, 255, 255, 0.7);
   float: right;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
+
 .close:hover,
 .close:focus {
-  color: black;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
   text-decoration: none;
   cursor: pointer;
+  transform: scale(1.1);
 }
-.hidden-mobile {
-  display: table;
+
+/* Dark mode styles */
+.dark .modal-content {
+  background-color: #1f2937;
+  color: #f9fafb;
 }
-.block-mobile {
-  display: none;
+
+.dark .modal-content::-webkit-scrollbar-track {
+  background: #374151;
 }
-@media (max-width: 768px) {
-  .hidden-mobile {
-    display: none;
+
+.dark .modal-content::-webkit-scrollbar-thumb {
+  background: #10b981;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  .block-mobile {
-    display: block;
+  to {
+    opacity: 1;
   }
 }
 
-/* Add styles for enlarged image modal */
-.enlarged-image-modal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-.enlarged-image-container {
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
+/* Enhanced form styles */
+.form-input {
+  transition: all 0.2s ease;
 }
 
-.enlarged-image {
-  max-width: 100%;
-  max-height: 90vh;
-  object-fit: contain;
+.form-input:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.1);
+}
+
+/* Button hover effects */
+.btn-primary {
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -8px rgba(16, 185, 129, 0.3);
+}
+
+/* Table styles */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+thead th {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.875rem;
+}
+
+tbody tr {
+  transition: all 0.2s ease;
+}
+
+tbody tr:hover {
+  background-color: rgba(16, 185, 129, 0.05);
+  transform: translateX(2px);
+}
+
+tbody td {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Card styles */
+.pig-card {
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+}
+
+.pig-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Status badges */
+.status-healthy {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-sick {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-sold {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-dead {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .modal-content {
+    margin: 2% auto;
+    width: 95%;
+  }
+  
+  .pig-card {
+    padding: 1rem;
+  }
+}
+
+/* Loading animations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.loading {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 </style>

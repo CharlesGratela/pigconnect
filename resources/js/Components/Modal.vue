@@ -8,7 +8,7 @@
       leave-from-class="opacity-100"
       leave-to-class="opacity-0"
     >
-      <div v-show="true" class="fixed inset-0 z-[999] overflow-y-auto">
+      <div v-show="show" class="fixed inset-0 z-[999] overflow-y-auto">
         <div class="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
           <div
             class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
@@ -57,9 +57,13 @@
 import { Teleport, Transition } from 'vue';
 
 defineProps({
+  show: {
+    type: Boolean,
+    default: false,
+  },
   title: {
     type: String,
-    required: true,
+    default: '',
   },
 });
 

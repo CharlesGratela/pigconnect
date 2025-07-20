@@ -33,10 +33,6 @@ import { Link } from '@inertiajs/vue3';
         
         <div class="mt-8 text-center text-sm text-gray-500">
             <p>© {{ new Date().getFullYear() }} PigConnect. All rights reserved.</p>
-            <div class="mt-2 space-x-4">
-                <Link :href="route('terms')" class="hover:text-emerald-600 transition-colors">Terms</Link>
-                <Link :href="route('privacy')" class="hover:text-emerald-600 transition-colors">Privacy</Link>
-            </div>
         </div>
     </div>
 </template>

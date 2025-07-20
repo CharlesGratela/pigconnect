@@ -52,14 +52,26 @@ class AuthenticatedSessionController extends Controller
 
         $user = auth()->user();
 
-        // // Check if the user's email is verified
+        // Check if the user's email is verified
         if (!$user->hasVerifiedEmail()) {
-        
-            return redirect()->route('verification.notice')->with('message', 'You need to verify your email address before logging in.');
+            // Store user email before logout
+            $userEmail = $user->email;
+            
+            // Logout the user since they're not verified
+            Auth::logout();
+            
+            // Invalidate the session
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            
+            return redirect()->route('login')->withErrors([
+                'email' => 'Your email address needs to be verified before you can login. Please check your email for a verification link.'
+            ])->with('status', 'verification-required')->with('unverified_email', $userEmail);
         }
-        if(auth()->user()->role != 'admin'){
+        
+        if($user->role != 'admin'){
             LoginHistory::create([
-                'user_id' => Auth::id(),
+                'user_id' => $user->id,
             ]);
         }
     

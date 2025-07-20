@@ -261,7 +261,7 @@
 
 
     <!-- Terms and Conditions Modal -->
-    <Modal v-if="showTermsModal" @close="showTermsModal = false" title="Terms and Conditions" class="max-w-3xl">
+    <Modal :show="showTermsModal" @close="showTermsModal = false" title="Terms and Conditions" class="max-w-3xl">
       <div class="space-y-6 max-h-[65vh] overflow-y-auto pr-4">
         <div class="bg-emerald-50 p-4 rounded-lg border border-emerald-100">
           <h4 class="font-semibold text-emerald-800 text-lg mb-2">1. Acceptance of Terms</h4>
@@ -356,7 +356,7 @@
     </Modal>
 
     <!-- Privacy Policy Modal -->
-    <Modal v-if="showPrivacyModal" @close="showPrivacyModal = false" title="Privacy Policy" class="max-w-3xl">
+    <Modal :show="showPrivacyModal" @close="showPrivacyModal = false" title="Privacy Policy" class="max-w-3xl">
       <div class="space-y-6 max-h-[65vh] overflow-y-auto pr-4">
         <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
           <h4 class="font-semibold text-blue-800 text-lg mb-2">1. Information We Collect</h4>
