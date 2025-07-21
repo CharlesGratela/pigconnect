@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
 use App\Models\LoginHistory;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -54,8 +55,9 @@ class AuthenticatedSessionController extends Controller
 
         // Check if the user's email is verified
         if (!$user->hasVerifiedEmail()) {
-            // Store user email before logout
+            // Store user information before logout
             $userEmail = $user->email;
+            $userName = $user->name;
             
             // Logout the user since they're not verified
             Auth::logout();
@@ -64,9 +66,19 @@ class AuthenticatedSessionController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
             
+            // Try to resend verification email
+            try {
+                $unverifiedUser = \App\Models\User::where('email', $userEmail)->first();
+                if ($unverifiedUser && !$unverifiedUser->hasVerifiedEmail()) {
+                    $unverifiedUser->sendEmailVerificationNotification();
+                }
+            } catch (\Exception $e) {
+                Log::error('Failed to resend verification email: ' . $e->getMessage());
+            }
+            
             return redirect()->route('login')->withErrors([
-                'email' => 'Your email address needs to be verified before you can login. Please check your email for a verification link.'
-            ])->with('status', 'verification-required')->with('unverified_email', $userEmail);
+                'email' => 'Your email address needs to be verified before you can login. We\'ve sent a new verification link to your email address.'
+            ])->with('status', 'verification-required')->with('unverified_email', $userEmail)->with('unverified_name', $userName);
         }
         
         if($user->role != 'admin'){

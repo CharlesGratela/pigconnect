@@ -35,7 +35,7 @@
             <p class="text-sm text-yellow-700 mt-2">
               Please verify your email address before logging in. Check your inbox for a verification link.
             </p>
-            <Link :href="route('verification.send')" method="post" :data="{ email: unverified_email }" 
+            <Link :href="route('verification.resend')" method="post" :data="{ email: unverified_email }" 
                   class="inline-flex items-center mt-3 px-3 py-2 bg-yellow-600 text-white text-sm font-medium rounded-md hover:bg-yellow-500 transition-colors">
               Resend verification email
             </Link>

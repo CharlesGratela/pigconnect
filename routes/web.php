@@ -40,9 +40,16 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     $user = $request->user();
     Log::info('User verified', ['user' => $user]);
 
-    // Log the user out and redirect to the login page
-    Auth::logout();
-    return redirect()->route('login')->with('message', 'Your email has been verified. Please log in.');
+    // Redirect based on user role after successful verification
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.dashboard')->with('message', 'Your email has been verified successfully! Welcome to PigConnect.');
+    } elseif ($user->role === 'farmer') {
+        return redirect()->route('farmer.dashboard')->with('message', 'Your email has been verified successfully! Welcome to PigConnect.');
+    } elseif ($user->role === 'buyer') {
+        return redirect()->route('buyer.dashboard')->with('message', 'Your email has been verified successfully! Welcome to PigConnect.');
+    } else {
+        return redirect()->route('dashboard')->with('message', 'Your email has been verified successfully! Welcome to PigConnect.');
+    }
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/resend', function (Request $request) {

@@ -49,21 +49,8 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        // Try to send email verification notification, but don't fail registration if it fails
-        try {
-            $user->sendEmailVerificationNotification();
-        } catch (\Exception $e) {
-            // Log the error but continue with registration
-            Log::error('Failed to send email verification: ' . $e->getMessage());
-            
-            // Set a session flash message about email verification failure
-            session()->flash('email_verification_failed', true);
-        }
-
-        // Redirect to email verification notice if email is not verified
-        if (!$user->hasVerifiedEmail()) {
-            return redirect()->route('verification.notice')->with('message', 'Please verify your email address. Check your inbox for a verification link.');
-        }
+        // Always redirect to email verification notice for new users
+        return redirect()->route('verification.notice')->with('success', 'Registration successful! Please check your email and click the verification link to activate your account.');
 
         if ($user->role == 'farmer') {
             return redirect(route('farmer.dashboard', absolute: false));
