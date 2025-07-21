@@ -1,1 +1,0 @@
-import{h as s,o as t,e as o,k as n}from"./app-DNIPENlQ.js";const r={class:"font-[sans-serif] min-h-screen flex flex-col items-center justify-center bg-gray-100"},_={__name:"LoginLayout",setup(a){return s(()=>{}),(e,c)=>(t(),o("div",r,[n(e.$slots,"default")]))}};export{_};
